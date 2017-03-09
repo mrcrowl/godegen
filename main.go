@@ -1,9 +1,9 @@
 package main
 
 import (
-	"codegen/cli"
 	"debug/pe"
 	"fmt"
+	"godegen/cli"
 )
 
 func main() {
@@ -21,5 +21,7 @@ func main() {
 	// hexString := strconv.FormatUint(uint64(magic), 16)
 	// fmt.Printf(hexString)
 
-	fmt.Printf("%v", metadata.Version)
+	for _, row := range metadata.Tables.GetRows(cli.TableIdxTypeRef) {
+		fmt.Println(row)
+	}
 }

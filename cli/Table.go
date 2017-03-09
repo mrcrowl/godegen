@@ -1,0 +1,33 @@
+package cli
+
+type Table struct {
+	tableIndex uint8
+	numRows    uint32
+	rows       []IRow
+}
+
+type RowReaderFn func(sr *ShapeReader, streams *MetadataStreams, tables *TableSet) IRow
+
+var rowReaderFns = [maxTableCount]RowReaderFn{
+	readModuleRefRow,
+	readTypeRefRow,
+}
+
+func NewTable(tableIndex uint8, numRows uint32) Table {
+	return Table{
+		tableIndex: tableIndex,
+		numRows:    numRows,
+		rows:       make([]IRow, numRows),
+	}
+}
+
+func (table Table) ReadRows(tr *ShapeReader, streams *MetadataStreams, tables *TableSet) {
+	readerFn := rowReaderFns[table.tableIndex]
+	if readerFn == nil {
+		return
+	}
+
+	for i := uint32(0); i < table.numRows; i++ {
+		table.rows[i] = readerFn(tr, streams, tables)
+	}
+}
