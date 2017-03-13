@@ -56,15 +56,13 @@ func (mr *ShapeReader) ReadUInt64() uint64 {
 
 // ReadUTF8 =
 func (mr *ShapeReader) ReadUTF8(length uint32) string {
-	buffer := make([]byte, length)
-	mr.reader.Read(buffer)
+	buffer := mr.ReadBytes(length)
 	return string(buffer)
 }
 
 // ReadGuid =
 func (mr *ShapeReader) ReadGuid() Guid {
-	buffer := make([]byte, 16)
-	mr.reader.Read(buffer)
+	buffer := mr.ReadBytes(16)
 	return NewGuid(buffer)
 }
 
@@ -85,6 +83,13 @@ func (mr *ShapeReader) ReadString(maxLength uint32) string {
 	}
 
 	return string(buffer)
+}
+
+// ReadBytes =
+func (mr *ShapeReader) ReadBytes(length uint32) []byte {
+	buffer := make([]byte, length)
+	mr.reader.Read(buffer)
+	return buffer
 }
 
 // Skip =

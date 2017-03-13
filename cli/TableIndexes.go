@@ -5,8 +5,19 @@ type CodedIndex struct {
 	Tag   uint8
 }
 
+func ReadSimpleIndex(reader *ShapeReader, tables *TableSet, tableIndex TableIdx) uint32 {
+	useBigIndex := tables.useBigIndex(tableIndex)
+	var simpleIndex uint32
+	if useBigIndex {
+		simpleIndex = reader.ReadUInt32()
+	} else {
+		simpleIndex = uint32(reader.ReadUInt16())
+	}
+	return simpleIndex
+}
+
 func ReadCodedIndex(reader *ShapeReader, tables *TableSet, tableIndexes ...TableIdx) CodedIndex {
-	readInfo := tables.GetTableReadInfo(tableIndexes)
+	readInfo := tables.getTableReadInfo(tableIndexes)
 	var codedIndex uint32
 	if readInfo.UseBigIndex {
 		codedIndex = reader.ReadUInt32()

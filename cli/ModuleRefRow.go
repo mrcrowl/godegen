@@ -1,21 +1,20 @@
 package cli
 
-type ModuleRef struct {
+type ModuleRefRow struct {
 	Name string
 	Mvid Guid
 }
 
-func (row *ModuleRef) String() string {
+func (row *ModuleRefRow) String() string {
 	return row.Name
 }
 
-func readModuleRefRow(sr *ShapeReader, streams *MetadataStreams,
-	_ *TableSet) IRow {
+func readModuleRefRow(sr *ShapeReader, streams *MetadataStreams, _ *TableSet) IRow {
 	sr.Skip(2)
 	name := streams.stringHeap.ReadString(sr)
 	mvid := streams.guidHeap.ReadGuid(sr)
 	sr.Skip(streams.stringHeap.GetIndexSizeInBytes())
-	return &ModuleRef{
+	return &ModuleRefRow{
 		Name: name,
 		Mvid: mvid,
 	}

@@ -21,7 +21,22 @@ func main() {
 	// hexString := strconv.FormatUint(uint64(magic), 16)
 	// fmt.Printf(hexString)
 
-	for _, row := range metadata.Tables.GetRows(cli.TableIdxTypeRef) {
+	// fmt.Println("--TYPEDEF--")
+	// for _, row := range metadata.Tables.GetRows(cli.TableIdxTypeDef) {
+	// 	fmt.Println(row)
+	// }
+
+	// fmt.Println()
+	// fmt.Println("--FIELD--")
+
+	// for _, row := range metadata.Tables.GetRows(cli.TableIdxField) {
+	// 	fmt.Println(row)
+	// }
+
+	fmt.Println()
+	fmt.Println("--METHODDEF--")
+
+	for _, row := range metadata.Tables.GetRows(cli.TableIdxMethodDef) {
 		fmt.Println(row)
 	}
 }

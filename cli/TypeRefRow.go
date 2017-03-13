@@ -1,12 +1,12 @@
 package cli
 
-type TypeRef struct {
+type TypeRefRow struct {
 	ScopeIndex    ResolutionScopeIndex
 	TypeName      string
 	TypeNamespace string
 }
 
-func (row *TypeRef) String() string {
+func (row *TypeRefRow) String() string {
 	return row.TypeNamespace + "::" + row.TypeName
 }
 
@@ -40,7 +40,7 @@ func readTypeRefRow(
 	scopeIndex := NewResolutionScopeIndex(codedIndex)
 	typeName := streams.stringHeap.ReadString(sr)
 	typeNamespace := streams.stringHeap.ReadString(sr)
-	return &TypeRef{
+	return &TypeRefRow{
 		ScopeIndex:    scopeIndex,
 		TypeName:      typeName,
 		TypeNamespace: typeNamespace,

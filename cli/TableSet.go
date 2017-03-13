@@ -71,7 +71,7 @@ func NewTableSet(streams *MetadataStreams) *TableSet {
 			presentRowCountsIndex++
 		}
 
-		table := NewTable(tableIndex, rowCount)
+		table := newTable(tableIndex, rowCount)
 
 		tables[tableIndex] = table
 		tableIndex++
@@ -83,37 +83,90 @@ func NewTableSet(streams *MetadataStreams) *TableSet {
 	}
 }
 
-func (set *TableSet) ReadAll(streams *MetadataStreams) {
+func (set *TableSet) readAll(streams *MetadataStreams) {
 	tablesReader := streams.tildeStream.GetTablesReader()
 	for _, table := range set.tables {
-		table.ReadRows(tablesReader, streams, set)
+		table.readRows(tablesReader, streams, set)
+	}
+
+	set.postRead()
+}
+
+func (set *TableSet) postRead() {
+	set.collectTypeDefRanges()
+	set.collectMethodDefParamRange()
+}
+
+func (set *TableSet) getTable(index TableIdx) Table {
+	return set.tables[index]
+}
+
+func (set *TableSet) collectTypeDefRanges() {
+	typeDefTable := set.getTable(TableIdxTypeDef)
+	methodDefTable := set.getTable(TableIdxMethodDef)
+	fieldTable := set.getTable(TableIdxField)
+	rows := typeDefTable.rows
+	numTypes := typeDefTable.numRows
+	for i := uint32(0); i < numTypes; i++ {
+		row := getTypeDefRow(rows, i)
+		isLastRow := (i + 1) == numTypes
+		if !isLastRow {
+			nextRow := getTypeDefRow(rows, i+1)
+			row.methodRowRange.to = nextRow.methodRowRange.from
+			row.fieldRowRange.to = nextRow.fieldRowRange.from
+		} else {
+			row.methodRowRange.to = methodDefTable.numRows + 1
+			row.fieldRowRange.to = fieldTable.numRows + 1
+		}
 	}
 }
 
-type TableReadInfo struct {
+func (set *TableSet) collectMethodDefParamRange() {
+	methodDefTable := set.getTable(TableIdxMethodDef)
+	paramTable := set.getTable(TableIdxParam)
+	rows := methodDefTable.rows
+	numMethodRows := methodDefTable.numRows
+	for i := uint32(0); i < numMethodRows; i++ {
+		row := getMethodDefRow(rows, i)
+		row.paramTable = &paramTable
+		isLastRow := (i + 1) == numMethodRows
+		if !isLastRow {
+			nextRow := getMethodDefRow(rows, i+1)
+			row.paramRowRange.to = nextRow.paramRowRange.from
+		} else {
+			row.paramRowRange.to = paramTable.numRows + 1
+		}
+	}
+}
+
+type tableReadInfo struct {
 	UseBigIndex bool
 	NumTagBits  uint8
 }
 
-func (tables *TableSet) GetTableReadInfo(tableIndexes []TableIdx) TableReadInfo {
+func (set *TableSet) getTableReadInfo(tableIndexes []TableIdx) tableReadInfo {
 	maxRowCount := uint32(0)
 	numTables := float64(len(tableIndexes))
 	bitsRequiredForTables := uint8(math.Ceil(math.Log2(numTables)))
 	upperRowLimit := uint32(1 << (16 - bitsRequiredForTables))
 	for _, tableIndex := range tableIndexes {
-		rowCount := tables.GetRowCount(tableIndex)
+		rowCount := set.GetRowCount(tableIndex)
 		if rowCount > maxRowCount {
 			maxRowCount = rowCount
 			if maxRowCount >= upperRowLimit {
-				return TableReadInfo{NumTagBits: bitsRequiredForTables, UseBigIndex: true}
+				return tableReadInfo{NumTagBits: bitsRequiredForTables, UseBigIndex: true}
 			}
 		}
 	}
 
-	return TableReadInfo{
+	return tableReadInfo{
 		NumTagBits:  bitsRequiredForTables,
 		UseBigIndex: false,
 	}
+}
+
+func (tables *TableSet) useBigIndex(tableIndex TableIdx) bool {
+	return tables.tables[tableIndex].numRows >= 0x10000
 }
 
 func (tables *TableSet) GetRowCount(tableIndex TableIdx) uint32 {

@@ -6,14 +6,30 @@ type Table struct {
 	rows       []IRow
 }
 
+type RowRange struct {
+	from uint32
+	to   uint32
+}
+
+func (rng RowRange) count() uint32 {
+	return rng.to - rng.from
+}
+
 type RowReaderFn func(sr *ShapeReader, streams *MetadataStreams, tables *TableSet) IRow
 
 var rowReaderFns = [maxTableCount]RowReaderFn{
 	readModuleRefRow,
 	readTypeRefRow,
+	readTypeDefRow,
+	nil,
+	readFieldRow,
+	nil,
+	readMethodDefRow,
+	nil,
+	readParamRow,
 }
 
-func NewTable(tableIndex uint8, numRows uint32) Table {
+func newTable(tableIndex uint8, numRows uint32) Table {
 	return Table{
 		tableIndex: tableIndex,
 		numRows:    numRows,
@@ -21,7 +37,7 @@ func NewTable(tableIndex uint8, numRows uint32) Table {
 	}
 }
 
-func (table Table) ReadRows(tr *ShapeReader, streams *MetadataStreams, tables *TableSet) {
+func (table Table) readRows(tr *ShapeReader, streams *MetadataStreams, tables *TableSet) {
 	readerFn := rowReaderFns[table.tableIndex]
 	if readerFn == nil {
 		return

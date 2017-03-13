@@ -26,6 +26,7 @@ type MetadataStreams struct {
 	tildeStream *TildeStream
 	stringHeap  *StringHeap
 	guidHeap    *GuidHeap
+	blobHeap    *BlobHeap
 }
 
 func calcSkipBytes(n uint32, multiple uint32) int32 {
@@ -67,9 +68,10 @@ func NewMetadata(textSection *TextSection, metadataRVA RVA) *Metadata {
 		tildeStream: md.getTildeStream(textSection),
 		stringHeap:  md.getStringHeap(textSection),
 		guidHeap:    md.getGuidHeap(textSection),
+		blobHeap:    md.getBlobHeap(textSection),
 	}
 	md.Tables = NewTableSet(&streams)
-	md.Tables.ReadAll(&streams)
+	md.Tables.readAll(&streams)
 
 	return md
 }
@@ -126,6 +128,17 @@ func (md *Metadata) getGuidHeap(textSection *TextSection) *GuidHeap {
 		sr := NewShapeReader(heapReader)
 		useBigIndex := header.size >= smallHeapSize
 		return NewGuidHeap(sr, useBigIndex)
+	}
+
+	return nil
+}
+
+func (md *Metadata) getBlobHeap(textSection *TextSection) *BlobHeap {
+	if header, ok := md.getStreamHeader("#Blob"); ok {
+		heapReader := textSection.GetReaderAt(md.baseAddress + header.offset)
+		sr := NewShapeReader(heapReader)
+		useBigIndex := header.size >= smallHeapSize
+		return NewBlobHeap(sr, useBigIndex)
 	}
 
 	return nil
