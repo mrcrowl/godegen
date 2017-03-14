@@ -119,8 +119,10 @@ func (sig *SignatureReader) ReadTypeWithID(id byte) Type {
 	switch id {
 	case ELEMENT_TYPE_CLASS:
 		return sig.ReadClassType()
+
 	case ELEMENT_TYPE_VALUETYPE:
 		return sig.ReadValueType()
+
 	case ELEMENT_TYPE_GENERICINST:
 		return sig.ReadGenericInstType()
 	}
@@ -128,15 +130,13 @@ func (sig *SignatureReader) ReadTypeWithID(id byte) Type {
 }
 
 func (sig *SignatureReader) ReadClassType() Type {
-	// TODO
-	sig.ReadTypeDefOrRefOrSpecEncoded()
-	return nil
+	typeIndex := sig.ReadTypeDefOrRefOrSpecEncoded()
+	typ := sig.assembly.getTypeByIndex(typeIndex)
+	return typ
 }
 
 func (sig *SignatureReader) ReadValueType() Type {
-	// TODO
-	sig.ReadTypeDefOrRefOrSpecEncoded()
-	return nil
+	return sig.ReadClassType()
 }
 
 func (sig *SignatureReader) ReadGenericInstType() Type {

@@ -17,9 +17,14 @@ func (typ BaseType) Namespace() string {
 	return typ.namespace
 }
 
+func (typ BaseType) FullName() string {
+	return typ.Namespace() + "." + typ.Name()
+}
+
 type Type interface {
 	Name() string
 	Namespace() string
+	FullName() string
 }
 
 type TypeRef struct {

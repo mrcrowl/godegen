@@ -94,8 +94,9 @@ func (sr *ShapeReader) ReadCompressedUInt() uint32 {
 
 	b2 := sr.ReadByte()
 	if (b1 & 0xC0) == 0x80 {
-		b1Shifted := uint16(b1&0x3f) << 8
-		return uint32(b1Shifted & uint16(b2))
+		i1 := uint32(b1&0x3f) << 8
+		i2 := uint32(b2)
+		return i1 | i2
 	}
 
 	u1 := uint32(b1&0x3f) << 24

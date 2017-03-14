@@ -19,8 +19,8 @@ const (
 )
 
 type TypeDefOrRefIndex struct {
-	Index uint32
-	Type  TypeDefOrRefType
+	Row  uint32
+	Type TypeDefOrRefType
 }
 
 // public static async Task<TasksForUserReturnObject> GetCurrentTasksForUser(LPSession session)
@@ -32,8 +32,8 @@ type TypeDefOrRefIndex struct {
 
 func NewTypeDefOrRefIndex(codedIndex CodedIndex) TypeDefOrRefIndex {
 	return TypeDefOrRefIndex{
-		Index: codedIndex.Index,
-		Type:  TypeDefOrRefType(codedIndex.Tag),
+		Row:  codedIndex.Index,
+		Type: TypeDefOrRefType(codedIndex.Tag),
 	}
 }
 

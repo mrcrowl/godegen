@@ -38,10 +38,33 @@ func (asm *Assembly) GetTypeRowNumber(name string) uint32 {
 	return 0
 }
 
-func (asm *Assembly) GetTypeByRow(row uint32) Type {
-	table := asm.metadata.Tables.GetTable(cli.TableIdxTypeDef)
-	row2 := table.GetRow(row).(*cli.TypeDefRow)
-	return newTypeFromDef(row2, asm)
+func (asm *Assembly) getTypeByIndex(index cli.TypeDefOrRefIndex) Type {
+	var typ Type
+
+	switch index.Type {
+	case cli.TDORTypeDef:
+		table := asm.metadata.Tables.GetTable(cli.TableIdxTypeDef)
+		tdrow := table.GetRow(index.Row).(*cli.TypeDefRow)
+		typ = newTypeFromDef(tdrow, asm)
+
+	case cli.TDORTypeRef:
+		table := asm.metadata.Tables.GetTable(cli.TableIdxTypeRef)
+		trrow := table.GetRow(index.Row).(*cli.TypeRefRow)
+		typ = newTypeFromRef(trrow, asm)
+
+	case cli.TDORTypeSpec:
+		// TODO:
+		typ = nil
+		// table := asm.metadata.Tables.GetTable(cli.TableIdxTypeSpec)
+		// trrow := table.GetRow(index.Row).(*cli.TypeSpRow)
+		// typ = newTypeFromRef(trrow, asm)
+	}
+
+	if typ != nil {
+		asm.typeCache.set(typ.FullName(), typ)
+	}
+
+	return typ
 }
 
 func (asm *Assembly) loadType(name string) Type {
