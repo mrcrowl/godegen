@@ -7,7 +7,11 @@ type TypeRefRow struct {
 }
 
 func (row *TypeRefRow) String() string {
-	return row.TypeNamespace + "::" + row.TypeName
+	return row.FullName()
+}
+
+func (row *TypeRefRow) FullName() string {
+	return row.TypeNamespace + "." + row.TypeName
 }
 
 type ResolutionScopeType uint8

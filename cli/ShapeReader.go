@@ -26,52 +26,52 @@ func (sr *ShapeReader) Seek(offset int64) error {
 	return err
 }
 
-// ReadUInt8 =
-func (mr *ShapeReader) ReadUInt8() uint8 {
+// ReadByte =
+func (sr *ShapeReader) ReadByte() byte {
 	var u uint8
-	binary.Read(mr.reader, binary.LittleEndian, &u)
+	binary.Read(sr.reader, binary.LittleEndian, &u)
 	return u
 }
 
 // ReadUInt16 =
-func (mr *ShapeReader) ReadUInt16() uint16 {
+func (sr *ShapeReader) ReadUInt16() uint16 {
 	var u uint16
-	binary.Read(mr.reader, binary.LittleEndian, &u)
+	binary.Read(sr.reader, binary.LittleEndian, &u)
 	return u
 }
 
 // ReadUInt32 =
-func (mr *ShapeReader) ReadUInt32() uint32 {
+func (sr *ShapeReader) ReadUInt32() uint32 {
 	var u uint32
-	binary.Read(mr.reader, binary.LittleEndian, &u)
+	binary.Read(sr.reader, binary.LittleEndian, &u)
 	return u
 }
 
 // ReadUInt64 =
-func (mr *ShapeReader) ReadUInt64() uint64 {
+func (sr *ShapeReader) ReadUInt64() uint64 {
 	var u uint64
-	binary.Read(mr.reader, binary.LittleEndian, &u)
+	binary.Read(sr.reader, binary.LittleEndian, &u)
 	return u
 }
 
 // ReadUTF8 =
-func (mr *ShapeReader) ReadUTF8(length uint32) string {
-	buffer := mr.ReadBytes(length)
+func (sr *ShapeReader) ReadUTF8(length uint32) string {
+	buffer := sr.ReadBytes(length)
 	return string(buffer)
 }
 
-// ReadGuid =
-func (mr *ShapeReader) ReadGuid() Guid {
-	buffer := mr.ReadBytes(16)
+// ReadGUID =
+func (sr *ShapeReader) ReadGUID() Guid {
+	buffer := sr.ReadBytes(16)
 	return NewGuid(buffer)
 }
 
 // ReadString =
-func (mr *ShapeReader) ReadString(maxLength uint32) string {
+func (sr *ShapeReader) ReadString(maxLength uint32) string {
 	buffer := make([]byte, 0, 128)
 	i := uint32(0)
 	for {
-		c, _ := mr.reader.ReadByte()
+		c, _ := sr.reader.ReadByte()
 		if c == 0 {
 			break
 		}
@@ -85,14 +85,34 @@ func (mr *ShapeReader) ReadString(maxLength uint32) string {
 	return string(buffer)
 }
 
+// ReadCompressedUInt =
+func (sr *ShapeReader) ReadCompressedUInt() uint32 {
+	b1 := sr.ReadByte()
+	if (b1 & 0x80) == 0x0 {
+		return uint32(b1)
+	}
+
+	b2 := sr.ReadByte()
+	if (b1 & 0xC0) == 0x80 {
+		b1Shifted := uint16(b1&0x3f) << 8
+		return uint32(b1Shifted & uint16(b2))
+	}
+
+	u1 := uint32(b1&0x3f) << 24
+	u2 := uint32(b2) << 16
+	u3 := uint32(sr.ReadByte()) << 8
+	u4 := uint32(sr.ReadByte())
+	return u1 | u2 | u3 | u4
+}
+
 // ReadBytes =
-func (mr *ShapeReader) ReadBytes(length uint32) []byte {
+func (sr *ShapeReader) ReadBytes(length uint32) []byte {
 	buffer := make([]byte, length)
-	mr.reader.Read(buffer)
+	sr.reader.Read(buffer)
 	return buffer
 }
 
 // Skip =
-func (mr *ShapeReader) Skip(numBytes int32) {
-	mr.reader.Seek(int64(numBytes), io.SeekCurrent)
+func (sr *ShapeReader) Skip(numBytes int32) {
+	sr.reader.Seek(int64(numBytes), io.SeekCurrent)
 }

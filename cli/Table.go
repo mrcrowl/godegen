@@ -47,3 +47,38 @@ func (table Table) readRows(tr *ShapeReader, streams *MetadataStreams, tables *T
 		table.rows[i] = readerFn(tr, streams, tables)
 	}
 }
+
+func (table Table) Where(condition func(IRow) bool) []IRow {
+	matches := make([]IRow, 0, 128)
+	for _, row := range table.rows {
+		if condition(row) {
+			matches = append(matches, row)
+		}
+	}
+	return matches
+}
+
+func (table Table) First(condition func(IRow) bool) IRow {
+	for _, row := range table.rows {
+		if condition(row) {
+			return row
+		}
+	}
+	return nil
+}
+
+func (table Table) RowNumberWhere(condition func(IRow) bool) uint32 {
+	for i, row := range table.rows {
+		if condition(row) {
+			return uint32(i + 1)
+		}
+	}
+	return 0
+}
+
+func (table Table) GetRow(rowNumber uint32) IRow {
+	if rowNumber > 0 && rowNumber <= table.numRows {
+		return table.rows[rowNumber-1]
+	}
+	return nil
+}

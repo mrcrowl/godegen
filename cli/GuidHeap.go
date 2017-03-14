@@ -29,7 +29,7 @@ func (heap *GuidHeap) ReadGuid(sr *ShapeReader) Guid {
 
 func (heap *GuidHeap) ReadGuidAtIndex(index uint32) Guid {
 	if err := heap.reader.Seek(int64(index)); err == nil {
-		return heap.reader.ReadGuid()
+		return heap.reader.ReadGUID()
 	}
 
 	return ZeroGuid()

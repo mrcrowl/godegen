@@ -2,13 +2,12 @@ package cli
 
 // Metadata =
 type Metadata struct {
-	Signature     uint32
-	MajorVersion  uint16
-	MinorVersion  uint16
-	Reserved      uint32
-	VersionLength uint32
-	Version       string
-	Tables        *TableSet
+	signature    uint32
+	majorVersion uint16
+	minorVersion uint16
+	reserved     uint32
+	version      string
+	Tables       *TableSet
 
 	baseAddress   uint32
 	streamHeaders []streamHeader
@@ -42,20 +41,20 @@ func calcSkipBytes(n uint32, multiple uint32) int32 {
 	return int32(multiple - remainder)
 }
 
-// NewMetadata =
-func NewMetadata(textSection *TextSection, metadataRVA RVA) *Metadata {
+func newMetadata(textSection *TextSection, metadataRVA RVA) *Metadata {
 	metaDataReader := textSection.GetReaderAt(metadataRVA.VirtualAddress)
 	mr := NewShapeReader(metaDataReader)
 
 	md := new(Metadata)
 	md.baseAddress = metadataRVA.VirtualAddress
-	md.Signature = mr.ReadUInt32()
-	md.MajorVersion = mr.ReadUInt16()
-	md.MinorVersion = mr.ReadUInt16()
-	md.Reserved = mr.ReadUInt32()
-	md.VersionLength = mr.ReadUInt32()
-	md.Version = mr.ReadUTF8(md.VersionLength)
-	skipOffset1 := calcSkipBytes(md.VersionLength, 4)
+	md.signature = mr.ReadUInt32()
+	md.majorVersion = mr.ReadUInt16()
+	md.minorVersion = mr.ReadUInt16()
+	md.reserved = mr.ReadUInt32()
+
+	versionLength := mr.ReadUInt32()
+	md.version = mr.ReadUTF8(versionLength)
+	skipOffset1 := calcSkipBytes(versionLength, 4)
 	mr.Skip(skipOffset1)
 	mr.Skip(2)
 

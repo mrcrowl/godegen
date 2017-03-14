@@ -19,8 +19,7 @@ type Header struct {
 	ManagedNativeHeader     RVA
 }
 
-// NewHeader =
-func NewHeader(textSection *TextSection, cliDD pe.DataDirectory) *Header {
+func newHeader(textSection *TextSection, cliDD pe.DataDirectory) *Header {
 	cliHeaderBuffer := textSection.GetRange(cliDD.VirtualAddress, cliDD.Size)
 	cliHeader := new(Header)
 	binary.Read(cliHeaderBuffer, binary.LittleEndian, cliHeader)

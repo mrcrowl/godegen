@@ -12,8 +12,7 @@ type TextSection struct {
 	size   uint32
 }
 
-// NewTextSection is
-func NewTextSection(section *pe.Section) *TextSection {
+func newTextSection(section *pe.Section) *TextSection {
 	textSection := &TextSection{
 		buffer: make([]byte, section.Size),
 		rva:    section.VirtualAddress,

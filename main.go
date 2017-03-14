@@ -1,25 +1,32 @@
 package main
 
 import (
-	"debug/pe"
+	"bytes"
 	"fmt"
 	"godegen/cli"
+	"godegen/reflect"
 )
 
 func main() {
-	file, _ := pe.Open(`C:\WF\LP\server\EBS_Deployment\bin\Classes.dll`)
-	//is32Bit := (0x2000 & file.Characteristics) > 0
-	optionalHeader, _ := file.OptionalHeader.(*pe.OptionalHeader32)
-	cliDD := optionalHeader.DataDirectory[14]
-	fmt.Printf("%v", cliDD.VirtualAddress)
-	rawTextSection := file.Sections[0]
+	assemblyFile := reflect.LoadAssemblyFile(`C:\WF\LP\server\EBS_Deployment\bin\Classes.dll`)
 
-	textSection := cli.NewTextSection(rawTextSection)
-	cliHeader := cli.NewHeader(textSection, cliDD)
-	metadata := cli.NewMetadata(textSection, cliHeader.Metadata)
-	// magic := binary.LittleEndian.Uint32(metaDataBuffer.Bytes())
-	// hexString := strconv.FormatUint(uint64(magic), 16)
-	// fmt.Printf(hexString)
+	utp := assemblyFile.GetType("nz.co.LanguagePerfect.Services.UserTasks.Managers.UserTaskManager").(*reflect.TypeDef)
+
+	methods := utp.GetMethods()
+	firstMethod := methods[0]
+	fmt.Println(firstMethod.Blob)
+
+	type1 := assemblyFile.GetTypeByRow(529)  //529)
+	type2 := assemblyFile.GetTypeByRow(1135) //1135)
+	fmt.Println(type1)
+	fmt.Println(type2)
+
+	row1 := assemblyFile.GetTypeRowNumber("nz.co.LanguagePerfect.Services.Sessions.BusinessObjects.LPSession")
+	fmt.Println(row1)
+
+	sr := cli.NewShapeReader(bytes.NewReader([]byte{0xC0, 00, 0x40, 00}))
+	test := sr.ReadCompressedUInt()
+	fmt.Printf("0x%x", test)
 
 	// fmt.Println("--TYPEDEF--")
 	// for _, row := range metadata.Tables.GetRows(cli.TableIdxTypeDef) {
@@ -33,10 +40,10 @@ func main() {
 	// 	fmt.Println(row)
 	// }
 
-	fmt.Println()
-	fmt.Println("--METHODDEF--")
+	// fmt.Println()
+	// fmt.Println("--METHODDEF--")
 
-	for _, row := range metadata.Tables.GetRows(cli.TableIdxMethodDef) {
-		fmt.Println(row)
-	}
+	// for _, row := range assemblyFile.Tables.GetRows(cli.TableIdxMethodDef) {
+	// 	fmt.Println(row)
+	// }
 }

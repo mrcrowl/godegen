@@ -1,6 +1,6 @@
 package cli
 
-type HeapFlag uint8
+type HeapFlag byte
 
 const (
 	StringHeapFlag HeapFlag = 0x1
@@ -12,7 +12,7 @@ type TildeStream struct {
 	heapSizes    HeapFlag
 	ValidTables  uint64
 	sortedTables uint64
-	numTables    uint8
+	numTables    byte
 	RawRowCounts []uint32
 	tablesReader *ShapeReader
 }
@@ -21,7 +21,7 @@ type TildeStream struct {
 func NewTildeStream(sr *ShapeReader) *TildeStream {
 	tilde := new(TildeStream)
 	sr.Skip(6)
-	tilde.heapSizes = HeapFlag(sr.ReadUInt8())
+	tilde.heapSizes = HeapFlag(sr.ReadByte())
 	sr.Skip(1)
 	tilde.ValidTables = sr.ReadUInt64()
 	tilde.sortedTables = sr.ReadUInt64()

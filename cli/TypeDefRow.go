@@ -23,6 +23,13 @@ type TypeDefOrRefIndex struct {
 	Type  TypeDefOrRefType
 }
 
+// public static async Task<TasksForUserReturnObject> GetCurrentTasksForUser(LPSession session)
+// {13 [0 1 21 18 128 225 1 18 148 164 18 145 188]}
+//      DEFAULT   TR: TASK  CLASS      CLASS
+//        ONE PARAM       GENARGS		  TD: 3876---
+//          GENINST            TD: 529
+//             CLASS
+
 func NewTypeDefOrRefIndex(codedIndex CodedIndex) TypeDefOrRefIndex {
 	return TypeDefOrRefIndex{
 		Index: codedIndex.Index,
@@ -31,7 +38,20 @@ func NewTypeDefOrRefIndex(codedIndex CodedIndex) TypeDefOrRefIndex {
 }
 
 func (row *TypeDefRow) String() string {
-	return row.TypeNamespace + "::" + row.TypeName
+	return row.FullName()
+}
+
+func (row *TypeDefRow) FullName() string {
+	return row.TypeNamespace + "." + row.TypeName
+}
+
+func (row *TypeDefRow) GetMethodRows(set *TableSet) []*MethodDefRow {
+	rowRange := row.methodRowRange
+	startIndex := rowRange.from - 1
+	endIndex := rowRange.to - 1
+	rows := set.GetTable(TableIdxMethodDef).rows
+	params := getMethodsInRange(rows, startIndex, endIndex)
+	return params
 }
 
 func readTypeDefRow(

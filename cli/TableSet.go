@@ -53,10 +53,6 @@ type TableSet struct {
 	tables []Table
 }
 
-func (set *TableSet) GetRows(tableIndex TableIdx) []IRow {
-	return set.tables[tableIndex].rows
-}
-
 func NewTableSet(streams *MetadataStreams) *TableSet {
 	tableIndex := uint8(0)
 	tildeStream := streams.tildeStream
@@ -83,6 +79,10 @@ func NewTableSet(streams *MetadataStreams) *TableSet {
 	}
 }
 
+func (set *TableSet) GetRows(tableIndex TableIdx) []IRow {
+	return set.tables[tableIndex].rows
+}
+
 func (set *TableSet) readAll(streams *MetadataStreams) {
 	tablesReader := streams.tildeStream.GetTablesReader()
 	for _, table := range set.tables {
@@ -97,14 +97,14 @@ func (set *TableSet) postRead() {
 	set.collectMethodDefParamRange()
 }
 
-func (set *TableSet) getTable(index TableIdx) Table {
+func (set *TableSet) GetTable(index TableIdx) Table {
 	return set.tables[index]
 }
 
 func (set *TableSet) collectTypeDefRanges() {
-	typeDefTable := set.getTable(TableIdxTypeDef)
-	methodDefTable := set.getTable(TableIdxMethodDef)
-	fieldTable := set.getTable(TableIdxField)
+	typeDefTable := set.GetTable(TableIdxTypeDef)
+	methodDefTable := set.GetTable(TableIdxMethodDef)
+	fieldTable := set.GetTable(TableIdxField)
 	rows := typeDefTable.rows
 	numTypes := typeDefTable.numRows
 	for i := uint32(0); i < numTypes; i++ {
@@ -122,13 +122,12 @@ func (set *TableSet) collectTypeDefRanges() {
 }
 
 func (set *TableSet) collectMethodDefParamRange() {
-	methodDefTable := set.getTable(TableIdxMethodDef)
-	paramTable := set.getTable(TableIdxParam)
+	methodDefTable := set.GetTable(TableIdxMethodDef)
+	paramTable := set.GetTable(TableIdxParam)
 	rows := methodDefTable.rows
 	numMethodRows := methodDefTable.numRows
 	for i := uint32(0); i < numMethodRows; i++ {
 		row := getMethodDefRow(rows, i)
-		row.paramTable = &paramTable
 		isLastRow := (i + 1) == numMethodRows
 		if !isLastRow {
 			nextRow := getMethodDefRow(rows, i+1)
@@ -165,10 +164,10 @@ func (set *TableSet) getTableReadInfo(tableIndexes []TableIdx) tableReadInfo {
 	}
 }
 
-func (tables *TableSet) useBigIndex(tableIndex TableIdx) bool {
-	return tables.tables[tableIndex].numRows >= 0x10000
+func (set *TableSet) useBigIndex(tableIndex TableIdx) bool {
+	return set.tables[tableIndex].numRows >= 0x10000
 }
 
-func (tables *TableSet) GetRowCount(tableIndex TableIdx) uint32 {
-	return tables.tables[tableIndex].numRows
+func (set *TableSet) GetRowCount(tableIndex TableIdx) uint32 {
+	return set.tables[tableIndex].numRows
 }
