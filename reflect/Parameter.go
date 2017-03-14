@@ -1,12 +1,13 @@
 package reflect
 
 type Parameter struct {
-	name string
-	typ  Type
+	name  string
+	typ   Type
+	flags uint16
 }
 
 func newParameter(name string, typ Type) *Parameter {
-	return &Parameter{name, typ}
+	return &Parameter{name, typ, 0}
 }
 
 func (param *Parameter) Name() string {

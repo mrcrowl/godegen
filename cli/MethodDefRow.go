@@ -13,7 +13,7 @@ func (row *MethodDefRow) String() string {
 	return row.Name
 }
 
-func (row *MethodDefRow) GetSignature() Blob {
+func (row *MethodDefRow) GetSignatureBlob() Blob {
 	return row.signatureBlob
 }
 

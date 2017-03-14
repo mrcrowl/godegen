@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"godegen/cli"
 	"godegen/reflect"
 )
 
@@ -14,19 +12,10 @@ func main() {
 
 	methods := utp.GetMethods()
 	firstMethod := methods[0]
-	fmt.Println(firstMethod.Blob)
-
-	type1 := assemblyFile.GetTypeByRow(529)  //529)
-	type2 := assemblyFile.GetTypeByRow(1135) //1135)
-	fmt.Println(type1)
-	fmt.Println(type2)
+	fmt.Println(firstMethod)
 
 	row1 := assemblyFile.GetTypeRowNumber("nz.co.LanguagePerfect.Services.Sessions.BusinessObjects.LPSession")
 	fmt.Println(row1)
-
-	sr := cli.NewShapeReader(bytes.NewReader([]byte{0xC0, 00, 0x40, 00}))
-	test := sr.ReadCompressedUInt()
-	fmt.Printf("0x%x", test)
 
 	// fmt.Println("--TYPEDEF--")
 	// for _, row := range metadata.Tables.GetRows(cli.TableIdxTypeDef) {

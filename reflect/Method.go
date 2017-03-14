@@ -5,13 +5,17 @@ import "godegen/cli"
 type Method struct {
 	Name       string
 	ReturnType *Type
-	Blob       cli.Blob
+	Signature  *MethodSig
 }
 
 func newMethod(methodDefRow *cli.MethodDefRow, asm *Assembly) *Method {
+	sigBlob := methodDefRow.GetSignatureBlob()
+	sigReader := NewSignatureReader(sigBlob, asm)
+	paramRows := methodDefRow.GetParams(asm.metadata.Tables)
+
 	return &Method{
 		Name:       methodDefRow.Name,
-		Blob:       methodDefRow.GetSignature(),
+		Signature:  sigReader.ReadMethodSignature(paramRows),
 		ReturnType: nil,
 	}
 }

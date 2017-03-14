@@ -12,6 +12,13 @@ func newTypeCache() *typeCache {
 	}
 }
 
+func (cache *typeCache) getBuiltIn(id byte) Type {
+	if id >= 0 && id <= 0x1c {
+		return cache.builtInTypes[id]
+	}
+	return nil
+}
+
 func (cache *typeCache) get(name string) Type {
 	if value, ok := cache.typesByName[name]; ok {
 		return value
