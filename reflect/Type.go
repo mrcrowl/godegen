@@ -159,11 +159,16 @@ func newTypeFromRef(typeRow *cli.TypeRefRow, asm *Assembly) Type {
 
 func (typ *TypeDef) GetMethods() []*Method {
 	rows := typ.row.GetMethodRows(typ.assembly.metadata.Tables)
-	methods := make([]*Method, len(rows))
-	for i, row := range rows {
-		methods[i] = newMethod(row, typ.assembly)
+	methods := make([]*Method, 0, len(rows))
+	count := 0
+	for _, row := range rows {
+		method := newMethod(row, typ.assembly)
+		if method.memberAccess == Public {
+			methods = append(methods, method)
+			count++
+		}
 	}
-	return methods
+	return methods[:count]
 }
 
 func splitFullname(name string) (string, string, bool) {

@@ -8,7 +8,7 @@ import (
 func main() {
 	assemblyFile := reflect.LoadAssemblyFile(`C:\WF\LP\server\EBS_Deployment\bin\Classes.dll`)
 
-	utp := assemblyFile.GetType("nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.UserTasksPortal").(*reflect.TypeDef)
+	utp := assemblyFile.GetType("nz.co.LanguagePerfect.Services.Sessions.BusinessObjects.LPSession").(*reflect.TypeDef)
 
 	methods := utp.GetMethods()
 	for _, method := range methods {
