@@ -15,7 +15,7 @@ func (rng RowRange) count() uint32 {
 	return rng.to - rng.from
 }
 
-type RowReaderFn func(sr *ShapeReader, streams *MetadataStreams, tables *TableSet) IRow
+type RowReaderFn func(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow
 
 var rowReaderFns = [maxTableCount]RowReaderFn{
 	readModuleRefRow,
@@ -44,7 +44,7 @@ func (table Table) readRows(tr *ShapeReader, streams *MetadataStreams, tables *T
 	}
 
 	for i := uint32(0); i < table.numRows; i++ {
-		table.rows[i] = readerFn(tr, streams, tables)
+		table.rows[i] = readerFn(tr, i+1, streams, tables)
 	}
 }
 

@@ -1,6 +1,7 @@
 package cli
 
 type MethodDefRow struct {
+	rowNumber     uint32
 	RVA           uint32
 	ImplFlags     uint16
 	Flags         uint16
@@ -11,6 +12,10 @@ type MethodDefRow struct {
 
 func (row *MethodDefRow) String() string {
 	return row.Name
+}
+
+func (row *MethodDefRow) RowNumber() uint32 {
+	return row.rowNumber
 }
 
 func (row *MethodDefRow) GetSignatureBlob() Blob {
@@ -26,7 +31,7 @@ func (row *MethodDefRow) GetParams(set *TableSet) []*ParamRow {
 	return params
 }
 
-func readMethodDefRow(sr *ShapeReader, streams *MetadataStreams, tables *TableSet) IRow {
+func readMethodDefRow(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
 	rva := sr.ReadUInt32()
 	implFlags := sr.ReadUInt16()
 	flags := sr.ReadUInt16()
@@ -34,7 +39,7 @@ func readMethodDefRow(sr *ShapeReader, streams *MetadataStreams, tables *TableSe
 	signatureBlob := *streams.blobHeap.ReadBlob(sr)
 	paramFromIndex := ReadSimpleIndex(sr, tables, TableIdxMethodDef)
 	paramRowRange := RowRange{paramFromIndex, paramFromIndex}
-	return &MethodDefRow{rva, implFlags, flags, name, signatureBlob, paramRowRange}
+	return &MethodDefRow{rowNumber, rva, implFlags, flags, name, signatureBlob, paramRowRange}
 }
 
 func getMethodDefRow(rows []IRow, index uint32) *MethodDefRow {

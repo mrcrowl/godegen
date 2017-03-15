@@ -1,6 +1,7 @@
 package cli
 
 type TypeRefRow struct {
+	rowNumber     uint32
 	ScopeIndex    ResolutionScopeIndex
 	TypeName      string
 	TypeNamespace string
@@ -8,6 +9,10 @@ type TypeRefRow struct {
 
 func (row *TypeRefRow) String() string {
 	return row.FullName()
+}
+
+func (row *TypeRefRow) RowNumber() uint32 {
+	return row.rowNumber
 }
 
 func (row *TypeRefRow) FullName() string {
@@ -37,6 +42,7 @@ func NewResolutionScopeIndex(codedIndex CodedIndex) ResolutionScopeIndex {
 
 func readTypeRefRow(
 	sr *ShapeReader,
+	rowNumber uint32,
 	streams *MetadataStreams,
 	tables *TableSet,
 ) IRow {
@@ -45,6 +51,7 @@ func readTypeRefRow(
 	typeName := streams.stringHeap.ReadString(sr)
 	typeNamespace := streams.stringHeap.ReadString(sr)
 	return &TypeRefRow{
+		rowNumber:     rowNumber,
 		ScopeIndex:    scopeIndex,
 		TypeName:      typeName,
 		TypeNamespace: typeNamespace,

@@ -1,6 +1,7 @@
 package cli
 
 type TypeDefRow struct {
+	rowNumber     uint32
 	Flags         uint32
 	TypeName      string
 	TypeNamespace string
@@ -8,6 +9,10 @@ type TypeDefRow struct {
 
 	fieldRowRange  RowRange
 	methodRowRange RowRange
+}
+
+func (row *TypeDefRow) RowNumber() uint32 {
+	return row.rowNumber
 }
 
 type TypeDefOrRefType uint8
@@ -56,10 +61,12 @@ func (row *TypeDefRow) GetMethodRows(set *TableSet) []*MethodDefRow {
 
 func readTypeDefRow(
 	sr *ShapeReader,
+	rowNumber uint32,
 	streams *MetadataStreams,
 	tables *TableSet,
 ) IRow {
 	return &TypeDefRow{
+		rowNumber:      rowNumber,
 		Flags:          sr.ReadUInt32(),
 		TypeName:       streams.stringHeap.ReadString(sr),
 		TypeNamespace:  streams.stringHeap.ReadString(sr),
