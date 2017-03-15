@@ -141,13 +141,14 @@ func (sig *SignatureReader) ReadValueType() Type {
 
 func (sig *SignatureReader) ReadGenericInstType() Type {
 	sig.shape.ReadByte()
-	sig.ReadTypeDefOrRefOrSpecEncoded()
+	typeIndex := sig.ReadTypeDefOrRefOrSpecEncoded()
+	typ := sig.assembly.getTypeByIndex(typeIndex)
 	genArgCount := sig.shape.ReadCompressedUInt()
+	genArgs := make([]Type, genArgCount)
 	for i := uint32(0); i < genArgCount; i++ {
-		sig.ReadType()
+		genArgs[i] = sig.ReadType()
 	}
-	// TODO
-	return nil
+	return newGenericType(typ.Name(), typ.Namespace(), genArgs, sig.assembly)
 }
 
 func (sig *SignatureReader) ReadParam(name string) *Parameter {

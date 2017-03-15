@@ -8,11 +8,12 @@ import (
 func main() {
 	assemblyFile := reflect.LoadAssemblyFile(`C:\WF\LP\server\EBS_Deployment\bin\Classes.dll`)
 
-	utp := assemblyFile.GetType("nz.co.LanguagePerfect.Services.UserTasks.Managers.UserTaskManager").(*reflect.TypeDef)
+	utp := assemblyFile.GetType("nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.UserTasksPortal").(*reflect.TypeDef)
 
 	methods := utp.GetMethods()
-	firstMethod := methods[0]
-	fmt.Println(firstMethod)
+	for _, method := range methods {
+		fmt.Println(method)
+	}
 
 	row1 := assemblyFile.GetTypeRowNumber("nz.co.LanguagePerfect.Services.Sessions.BusinessObjects.LPSession")
 	fmt.Println(row1)
