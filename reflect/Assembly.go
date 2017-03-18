@@ -5,11 +5,17 @@ import "godegen/cli"
 type Assembly struct {
 	metadata  *cli.Metadata
 	typeCache *typeCache
+	loader    *AssemblyLoader
 }
 
-func LoadAssemblyFile(filepath string) *Assembly {
-	assemblyPEFile := cli.OpenAssemblyPEFile(filepath)
-	return &Assembly{assemblyPEFile.Metadata, newTypeCache()}
+func (asm *Assembly) LoadReferencedAssembly(assemblyName string) (*Assembly, error) {
+	return asm.loader.Load(assemblyName)
+}
+
+func (asm *Assembly) Blah() []cli.IRow {
+	table := asm.metadata.Tables.GetTable(cli.TableIdxAssembly)
+	rows := table.Where(func(_ cli.IRow) bool { return true })
+	return rows
 }
 
 func (asm *Assembly) GetType(name string) Type {
@@ -45,12 +51,24 @@ func (asm *Assembly) getTypeByIndex(index cli.TypeDefOrRefIndex) Type {
 	case cli.TDORTypeDef:
 		table := asm.metadata.Tables.GetTable(cli.TableIdxTypeDef)
 		tdrow := table.GetRow(index.Row).(*cli.TypeDefRow)
-		typ = newTypeFromDef(tdrow, asm)
+		fullName := tdrow.FullName()
+		if typ = asm.typeCache.get(fullName); typ == nil {
+			typ = newTypeFromDef(tdrow, asm)
+			if typ != nil {
+				asm.typeCache.set(typ.FullName(), typ)
+			}
+		}
 
 	case cli.TDORTypeRef:
 		table := asm.metadata.Tables.GetTable(cli.TableIdxTypeRef)
 		trrow := table.GetRow(index.Row).(*cli.TypeRefRow)
-		typ = newTypeFromRef(trrow, asm)
+		fullName := trrow.FullName()
+		if typ = asm.typeCache.get(fullName); typ == nil {
+			typ = loadTypeFromRef(trrow, asm)
+			if typ != nil {
+				asm.typeCache.set(typ.FullName(), typ)
+			}
+		}
 
 	case cli.TDORTypeSpec:
 		// TODO:
@@ -58,10 +76,6 @@ func (asm *Assembly) getTypeByIndex(index cli.TypeDefOrRefIndex) Type {
 		// table := asm.metadata.Tables.GetTable(cli.TableIdxTypeSpec)
 		// trrow := table.GetRow(index.Row).(*cli.TypeSpRow)
 		// typ = newTypeFromRef(trrow, asm)
-	}
-
-	if typ != nil {
-		asm.typeCache.set(typ.FullName(), typ)
 	}
 
 	return typ
@@ -87,7 +101,7 @@ func (asm *Assembly) loadType(name string) Type {
 	}
 	if row := typeRefTable.First(typeRefWithNameFn); row != nil {
 		typeRefRow := row.(*cli.TypeRefRow)
-		return newTypeFromRef(typeRefRow, asm)
+		return loadTypeFromRef(typeRefRow, asm)
 	}
 
 	return nil

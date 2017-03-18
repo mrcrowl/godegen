@@ -15,6 +15,10 @@ func (row *FieldRow) RowNumber() uint32 {
 	return row.rowNumber
 }
 
+func (row *FieldRow) GetSignatureBlob() Blob {
+	return row.signatureBlob
+}
+
 func readFieldRow(
 	sr *ShapeReader,
 	rowNumber uint32,

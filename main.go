@@ -2,21 +2,30 @@ package main
 
 import (
 	"fmt"
+	"godegen/description"
 	"godegen/reflect"
 )
 
 func main() {
-	assemblyFile := reflect.LoadAssemblyFile(`C:\WF\LP\server\EBS_Deployment\bin\Classes.dll`)
+	loader := reflect.NewAssemblyLoader(`C:\WF\LP\server\EBS_Deployment\bin`)
+	assemblyFile, _ := loader.Load("Classes")
+	//assemblyFile, _ := loader.Load("LiteCASClient")
 
-	utp := assemblyFile.GetType("nz.co.LanguagePerfect.Services.Sessions.BusinessObjects.LPSession").(*reflect.TypeDef)
-
-	methods := utp.GetMethods()
-	for _, method := range methods {
-		fmt.Println(method)
+	// type1 := assemblyFile.GetType("nz.co.LanguagePerfect.Services.Classes.BusinessObjects.ClassDescription")
+	str := description.NewServiceTypesResolver(assemblyFile)
+	// ssoRego := assemblyFile.GetType("nz.co.LanguagePerfect.Services.LPLogin.Managers.SSORegistrationManager")
+	ssoRego := assemblyFile.GetType("nz.co.LanguagePerfect.Services.Portals.ControlPanel.ContentPortal")
+	resolvedTypes := str.Resolve(ssoRego)
+	for _, t := range resolvedTypes {
+		fmt.Println(t.FullName())
 	}
 
-	row1 := assemblyFile.GetTypeRowNumber("nz.co.LanguagePerfect.Services.Sessions.BusinessObjects.LPSession")
-	fmt.Println(row1)
+	// utp := assemblyFile.GetType("nz.co.LanguagePerfect.Services.Sessions.BusinessObjects.LPSession").(*reflect.TypeDef)
+
+	// methods := utp.GetMethods()
+	// for _, method := range methods {
+	// 	fmt.Println(method)
+	// }
 
 	// fmt.Println("--TYPEDEF--")
 	// for _, row := range metadata.Tables.GetRows(cli.TableIdxTypeDef) {

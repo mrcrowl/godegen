@@ -55,3 +55,13 @@ func getMethodsInRange(rows []IRow, fromIndex uint32, toIndex uint32) []*MethodD
 	}
 	return methodRows
 }
+
+func getFieldsInRange(rows []IRow, fromIndex uint32, toIndex uint32) []*FieldRow {
+	numParams := toIndex - fromIndex
+	fieldRows := make([]*FieldRow, numParams)
+	selectedRows := rows[fromIndex:toIndex]
+	for i, row := range selectedRows {
+		fieldRows[i] = row.(*FieldRow)
+	}
+	return fieldRows
+}

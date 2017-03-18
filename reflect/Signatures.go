@@ -105,6 +105,19 @@ func (sig *SignatureReader) ReadMethodSignature(paramRows []*cli.ParamRow) *Meth
 	}
 }
 
+type FieldSig struct {
+	fieldType Type
+}
+
+func (sig *SignatureReader) ReadFieldSignature() *FieldSig {
+	sig.shape.ReadByte()
+	fieldType := sig.ReadType()
+
+	return &FieldSig{
+		fieldType,
+	}
+}
+
 func (sig *SignatureReader) ReadType() Type {
 	id := sig.shape.ReadByte()
 	return sig.ReadTypeWithID(id)
@@ -148,7 +161,7 @@ func (sig *SignatureReader) ReadGenericInstType() Type {
 	for i := uint32(0); i < genArgCount; i++ {
 		genArgs[i] = sig.ReadType()
 	}
-	return newGenericType(typ.Name(), typ.Namespace(), genArgs, sig.assembly)
+	return newGenericType(typ, genArgs, sig.assembly)
 }
 
 func (sig *SignatureReader) ReadParam(name string) *Parameter {

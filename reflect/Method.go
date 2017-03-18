@@ -62,6 +62,10 @@ func (method *Method) ReturnType() Type {
 	return method.signature.returnType
 }
 
+func (method *Method) Parameters() []*Parameter {
+	return method.signature.parameters
+}
+
 func (method *Method) String() string {
 	var buffer bytes.Buffer
 	memberAccessName := memberAccessNames[method.memberAccess]

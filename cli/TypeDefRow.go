@@ -55,8 +55,17 @@ func (row *TypeDefRow) GetMethodRows(set *TableSet) []*MethodDefRow {
 	startIndex := rowRange.from - 1
 	endIndex := rowRange.to - 1
 	rows := set.GetTable(TableIdxMethodDef).rows
-	params := getMethodsInRange(rows, startIndex, endIndex)
-	return params
+	methods := getMethodsInRange(rows, startIndex, endIndex)
+	return methods
+}
+
+func (row *TypeDefRow) GetFieldRows(set *TableSet) []*FieldRow {
+	rowRange := row.fieldRowRange
+	startIndex := rowRange.from - 1
+	endIndex := rowRange.to - 1
+	rows := set.GetTable(TableIdxField).rows
+	fields := getFieldsInRange(rows, startIndex, endIndex)
+	return fields
 }
 
 func readTypeDefRow(
@@ -65,14 +74,20 @@ func readTypeDefRow(
 	streams *MetadataStreams,
 	tables *TableSet,
 ) IRow {
+	flags := sr.ReadUInt32()
+	typeName := streams.stringHeap.ReadString(sr)
+	typeNamespace := streams.stringHeap.ReadString(sr)
+	codedIndex := ReadCodedIndex(sr, tables, TableIdxTypeDef, TableIdxTypeRef, TableIdxTypeSpec)
+	fieldFrom := ReadSimpleIndex(sr, tables, TableIdxField)
+	methodFrom := ReadSimpleIndex(sr, tables, TableIdxMethodDef)
 	return &TypeDefRow{
 		rowNumber:      rowNumber,
-		Flags:          sr.ReadUInt32(),
-		TypeName:       streams.stringHeap.ReadString(sr),
-		TypeNamespace:  streams.stringHeap.ReadString(sr),
-		Extends:        NewTypeDefOrRefIndex(ReadCodedIndex(sr, tables, TableIdxTypeDef, TableIdxTypeRef, TableIdxTypeSpec)),
-		fieldRowRange:  RowRange{from: ReadSimpleIndex(sr, tables, TableIdxField)},
-		methodRowRange: RowRange{from: ReadSimpleIndex(sr, tables, TableIdxMethodDef)},
+		Flags:          flags,
+		TypeName:       typeName,
+		TypeNamespace:  typeNamespace,
+		Extends:        NewTypeDefOrRefIndex(codedIndex),
+		fieldRowRange:  RowRange{from: fieldFrom},
+		methodRowRange: RowRange{from: methodFrom},
 	}
 }
 
