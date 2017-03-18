@@ -14,7 +14,7 @@ func main() {
 	// type1 := assemblyFile.GetType("nz.co.LanguagePerfect.Services.Classes.BusinessObjects.ClassDescription")
 	str := description.NewServiceTypesResolver(assemblyFile)
 	// ssoRego := assemblyFile.GetType("nz.co.LanguagePerfect.Services.LPLogin.Managers.SSORegistrationManager")
-	ssoRego := assemblyFile.GetType("nz.co.LanguagePerfect.Services.Portals.ControlPanel.ContentPortal")
+	ssoRego := assemblyFile.GetType("nz.co.LanguagePerfect.Services.Portals.ControlPanel.LanguageDataPortal")
 	resolvedTypes := str.Resolve(ssoRego)
 	for _, t := range resolvedTypes {
 		fmt.Println(t.FullName())

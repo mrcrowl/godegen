@@ -138,8 +138,31 @@ func (sig *SignatureReader) ReadTypeWithID(id byte) Type {
 
 	case ELEMENT_TYPE_GENERICINST:
 		return sig.ReadGenericInstType()
+
+	case ELEMENT_TYPE_SZARRAY:
+		return sig.ReadSZArrayType()
+
+	case ELEMENT_TYPE_ARRAY:
+		return sig.ReadArrayType()
+
 	}
 	return nil
+}
+
+func (sig *SignatureReader) ReadArrayType() Type {
+	valueType := sig.ReadType()
+	sig.readArrayShape() // does nothing for now
+
+	return newArrayType(valueType, sig.assembly)
+}
+
+func (sig *SignatureReader) readArrayShape() {
+	// rank := sig.shape.ReadCompressedUInt()
+}
+
+func (sig *SignatureReader) ReadSZArrayType() Type {
+	valueType := sig.ReadType()
+	return newArrayType(valueType, sig.assembly)
 }
 
 func (sig *SignatureReader) ReadClassType() Type {
