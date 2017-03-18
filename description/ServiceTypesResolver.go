@@ -1,10 +1,14 @@
 package description
 
-import "godegen/reflect"
+import (
+	"godegen/reflect"
+
+	"github.com/bradfitz/slice"
+)
 
 var includedGenerics = map[string]bool{
 	"System.Nullable`1":                 false, // don't resolve int? for example, but process the "int" part
-	"System.Collections.Generic.List`1": true,  // include lists
+	"System.Collections.Generic.List`1": false, // include lists
 }
 
 type ServiceTypesResolver struct {
@@ -53,6 +57,11 @@ func (res *ServiceTypesResolver) innerResolve(targetType reflect.Type) {
 		}
 	}
 
+	// exclude arrays
+	if _, isArray := targetType.(*reflect.ArrayType); isArray {
+		include = false
+	}
+
 	typeName := targetType.FullName()
 	if res.typesByName[typeName] != nil {
 		return
@@ -68,6 +77,11 @@ func (res *ServiceTypesResolver) innerResolve(targetType reflect.Type) {
 		for _, argType := range genericType.ArgumentTypes() {
 			res.innerResolve(argType)
 		}
+	}
+
+	// array value type
+	if array, isArray := targetType.(*reflect.ArrayType); isArray {
+		res.innerResolve(array.ValueType())
 	}
 
 	// methods
@@ -96,23 +110,23 @@ func (res *ServiceTypesResolver) innerResolve(targetType reflect.Type) {
 }
 
 func (res *ServiceTypesResolver) outputTypesAsSlice() []reflect.Type {
-	return res.typesFindOrder
+	//return res.typesFindOrder
 
-	// values := make([]reflect.Type, len(res.typesByName))
-	// i := 0
-	// for _, value := range res.typesByName {
-	// 	values[i] = value
-	// 	i++
-	// }
+	values := make([]reflect.Type, len(res.typesByName))
+	i := 0
+	for _, value := range res.typesByName {
+		values[i] = value
+		i++
+	}
 
-	// slice.Sort(values, func(i, j int) bool {
-	// 	typeI := values[i]
-	// 	typeJ := values[j]
-	// 	if typeI.FullName() < typeJ.FullName() {
-	// 		return true
-	// 	}
-	// 	return false
-	// })
+	slice.Sort(values, func(i, j int) bool {
+		typeI := values[i]
+		typeJ := values[j]
+		if typeI.FullName() < typeJ.FullName() {
+			return true
+		}
+		return false
+	})
 
-	// return values
+	return values
 }

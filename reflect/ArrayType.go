@@ -30,6 +30,10 @@ func (array *ArrayType) FullName() string {
 	return array.namespace + "." + array.Name()
 }
 
+func (array *ArrayType) ValueType() Type {
+	return array.valueType
+}
+
 func (array *ArrayType) GetMethods() []*Method {
 	return []*Method{}
 }

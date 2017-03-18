@@ -18,7 +18,10 @@ func main() {
 	ssoRego := assemblyFile.GetType("nz.co.LanguagePerfect.Services.Portals.ControlPanel.LanguageDataPortal")
 	resolvedTypes := str.Resolve(ssoRego)
 	for _, t := range resolvedTypes {
-		fmt.Println(t.FullName())
+		fmt.Println(t.FullName() + ":")
+		for _, field := range t.GetFields() {
+			fmt.Println("\t" + field.Name() + ": " + field.Type().FullName())
+		}
 	}
 
 	// utp := assemblyFile.GetType("nz.co.LanguagePerfect.Services.Sessions.BusinessObjects.LPSession").(*reflect.TypeDef)
