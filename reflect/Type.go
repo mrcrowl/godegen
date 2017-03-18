@@ -16,7 +16,8 @@ type Type interface {
 	FullName() string
 	GetMethods() []*Method
 	GetFields() []*Field
-	rowNumber() uint32
+	GetProperties() []*Property
+	RowNumber() uint32
 }
 
 func loadTypeFromRef(typeRefRow *cli.TypeRefRow, asm *Assembly) Type {

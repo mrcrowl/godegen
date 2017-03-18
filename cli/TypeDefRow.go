@@ -68,6 +68,29 @@ func (row *TypeDefRow) GetFieldRows(set *TableSet) []*FieldRow {
 	return fields
 }
 
+func (row *TypeDefRow) GetPropertyRows(set *TableSet) []*PropertyRow {
+	// find the property map row
+	propertyMapTable := set.GetTable(TableIdxPropertyMap)
+	typeDefRowNumber := row.RowNumber()
+	selectedMapIRow := propertyMapTable.BinarySearchRows(func(row IRow) bool {
+		propertyMapRow := row.(*PropertyMapRow)
+		return propertyMapRow.Parent >= typeDefRowNumber
+	})
+	if selectedMapIRow == nil || selectedMapIRow.(*PropertyMapRow).Parent != typeDefRowNumber {
+		return []*PropertyRow{}
+	}
+
+	// select the property rows (using the property map's range)
+	selectedMapRow := selectedMapIRow.(*PropertyMapRow)
+	rowRange := selectedMapRow.propertyRowRange
+	startIndex := rowRange.from - 1
+	endIndex := rowRange.to - 1
+	propertyRows := set.GetTable(TableIdxProperty).rows
+	properties := getPropertyRowsInRange(propertyRows, startIndex, endIndex)
+
+	return properties
+}
+
 func readTypeDefRow(
 	sr *ShapeReader,
 	rowNumber uint32,

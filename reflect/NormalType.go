@@ -12,7 +12,7 @@ type NormalType struct {
 	row *cli.TypeDefRow
 }
 
-func (def *NormalType) rowNumber() uint32 {
+func (def *NormalType) RowNumber() uint32 {
 	return def.row.RowNumber()
 }
 
@@ -54,6 +54,28 @@ func (typ *NormalType) GetFields() []*Field {
 		}
 	}
 	return fields[:count]
+}
+
+func (typ *NormalType) GetProperties() []*Property {
+	rows := typ.row.GetPropertyRows(typ.assembly.metadata.Tables)
+	numRows := len(rows)
+	if numRows > 0 {
+		propRowRange := cli.NewRowRange(rows[0].RowNumber(), rows[numRows-1].RowNumber()+1)
+		semanticRows := typ.assembly.metadata.GetMethodSemanticsRowsForProps(propRowRange)
+
+		properties := make([]*Property, 0, len(rows))
+		count := 0
+		for _, row := range rows {
+			property := newProperty(row, semanticRows, typ.assembly)
+			if property.HasPublicGetter() {
+				properties = append(properties, property)
+				count++
+			}
+		}
+		return properties[:count]
+	}
+
+	return []*Property{}
 }
 
 func splitFullname(name string) (string, string, bool) {

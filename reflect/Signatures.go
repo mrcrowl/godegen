@@ -111,10 +111,38 @@ type FieldSig struct {
 
 func (sig *SignatureReader) ReadFieldSignature() *FieldSig {
 	sig.shape.ReadByte()
-	fieldType := sig.ReadType()
+	elementTypeID := sig.BypassCustomMods()
+	fieldType := sig.ReadTypeWithID(elementTypeID)
 
 	return &FieldSig{
 		fieldType,
+	}
+}
+
+type PropertySig struct {
+	propertyType Type
+	hasThis      bool
+	numParams    uint32
+	params       []*Parameter
+}
+
+func (sig *SignatureReader) ReadPropertySignature() *PropertySig {
+	propertyByte := sig.shape.ReadByte()
+	hasThis := (propertyByte & HASTHIS) > 0
+	paramCount := sig.shape.ReadCompressedUInt()
+	elementTypeID := sig.BypassCustomMods()
+	propertyType := sig.ReadTypeWithID(elementTypeID)
+
+	params := make([]*Parameter, paramCount)
+	for i := uint32(0); i < paramCount; i++ {
+		params[i] = sig.ReadParam("")
+	}
+
+	return &PropertySig{
+		propertyType,
+		hasThis,
+		paramCount,
+		nil,
 	}
 }
 
@@ -143,13 +171,19 @@ func (sig *SignatureReader) ReadTypeWithID(id byte) Type {
 		return sig.ReadSZArrayType()
 
 	case ELEMENT_TYPE_ARRAY:
-		return sig.ReadArrayType()
-
+		return sig.ReadShapedArrayType()
 	}
+
 	return nil
 }
 
-func (sig *SignatureReader) ReadArrayType() Type {
+func (sig *SignatureReader) ReadSZArrayType() Type {
+	elementTypeID := sig.BypassCustomMods()
+	valueType := sig.ReadTypeWithID(elementTypeID)
+	return newArrayType(valueType, sig.assembly)
+}
+
+func (sig *SignatureReader) ReadShapedArrayType() Type {
 	valueType := sig.ReadType()
 	sig.readArrayShape() // does nothing for now
 
@@ -158,11 +192,6 @@ func (sig *SignatureReader) ReadArrayType() Type {
 
 func (sig *SignatureReader) readArrayShape() {
 	// rank := sig.shape.ReadCompressedUInt()
-}
-
-func (sig *SignatureReader) ReadSZArrayType() Type {
-	valueType := sig.ReadType()
-	return newArrayType(valueType, sig.assembly)
 }
 
 func (sig *SignatureReader) ReadClassType() Type {
@@ -187,29 +216,34 @@ func (sig *SignatureReader) ReadGenericInstType() Type {
 	return newGenericType(typ, genArgs, sig.assembly)
 }
 
-func (sig *SignatureReader) ReadParam(name string) *Parameter {
-	var byref bool
-	var typ Type
-
+func (sig *SignatureReader) BypassCustomMods() byte {
 	b := sig.shape.ReadByte()
 	for isCustomMod(b) {
 		sig.ReadTypeDefOrRefOrSpecEncoded()
 		b = sig.shape.ReadByte()
 	}
+	return b
+}
 
-	if b == ELEMENT_TYPE_TYPEDBYREF {
+func (sig *SignatureReader) ReadParam(name string) *Parameter {
+	var byref bool
+	var typ Type
+
+	elementTypeID := sig.BypassCustomMods()
+
+	if elementTypeID == ELEMENT_TYPE_TYPEDBYREF {
 		typ = sig.assembly.typeCache.builtInTypes[ELEMENT_TYPE_TYPEDBYREF]
 	} else {
-		if b == ELEMENT_TYPE_BYREF {
+		if elementTypeID == ELEMENT_TYPE_BYREF {
 			byref = true
-			b = sig.shape.ReadByte()
+			elementTypeID = sig.shape.ReadByte()
 		}
 
-		typ = sig.ReadTypeWithID(b)
+		typ = sig.ReadTypeWithID(elementTypeID)
 	}
 
 	if byref {
-
+		// TODO: byref... does it matter?
 	}
 
 	return newParameter(name, typ)

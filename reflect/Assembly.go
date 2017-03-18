@@ -1,6 +1,7 @@
 package reflect
 
 import "godegen/cli"
+import "fmt"
 
 type Assembly struct {
 	metadata  *cli.Metadata
@@ -26,6 +27,17 @@ func (asm *Assembly) GetType(name string) Type {
 		}
 	}
 	return t
+}
+
+func (asm *Assembly) Test() {
+	asm.metadata.Tables.GetTable(cli.TableIdxMethodSemantics).ForEach(func(row cli.IRow) {
+		semRow := row.(*cli.MethodSemanticsRow)
+		var text = "Prop "
+		if semRow.Association.Type == 0 {
+			return
+		}
+		fmt.Printf("%v\t%v\tKind\t%v\tMeth\t%v\n", text, semRow.Association.Row, semRow.Semantics, semRow.MethodRowNumber)
+	})
 }
 
 func (asm *Assembly) GetTypeRowNumber(name string) uint32 {

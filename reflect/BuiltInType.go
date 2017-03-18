@@ -40,10 +40,14 @@ func (bi *BuiltInType) FullName() string {
 	return bi.BaseType.FullName()
 }
 
-func (bi *BuiltInType) rowNumber() uint32 {
+func (bi *BuiltInType) RowNumber() uint32 {
 	return 0
 }
 
 func (bi *BuiltInType) GetMethods() []*Method {
 	return []*Method{}
+}
+
+func (bi *BuiltInType) GetProperties() []*Property {
+	return []*Property{}
 }

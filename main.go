@@ -9,6 +9,7 @@ import (
 func main() {
 	loader := reflect.NewAssemblyLoader(`C:\WF\LP\server\EBS_Deployment\bin`)
 	assemblyFile, _ := loader.Load("Classes")
+	// assemblyFile.Test()
 	//assemblyFile, _ := loader.Load("LiteCASClient")
 
 	// type1 := assemblyFile.GetType("nz.co.LanguagePerfect.Services.Classes.BusinessObjects.ClassDescription")

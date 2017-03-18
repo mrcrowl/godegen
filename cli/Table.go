@@ -1,5 +1,7 @@
 package cli
 
+import "sort"
+
 type Table struct {
 	tableIndex uint8
 	numRows    uint32
@@ -9,6 +11,10 @@ type Table struct {
 type RowRange struct {
 	from uint32
 	to   uint32
+}
+
+func NewRowRange(from uint32, to uint32) RowRange {
+	return RowRange{from, to}
 }
 
 func (rng RowRange) count() uint32 {
@@ -42,19 +48,20 @@ var rowReaderFns = [maxTableCount]RowReaderFn{
 	0x11: createPlaceholderReaderOfSize(4),             // StandAloneSig
 	0x12: createPlaceholderReaderOfSize(2 + 2),         // EventMap/
 	0x14: createPlaceholderReaderOfSize(2 + 4 + 2),     // Event/
-	0x15: createPlaceholderReaderOfSize(2 + 2),         // PropertyMap/
-	0x17: createPlaceholderReaderOfSize(2 + 4 + 4),     // Property/
-	0x18: createPlaceholderReaderOfSize(2 + 2 + 2),     // MethodSemantics/
+	0x15: readPropertyMapRow,                           // PropertyMap/
+	0x17: readPropertyRow,                              // Property/
+	0x18: readMethodSemanticsRow,                       // MethodSemantics
 	0x19: createPlaceholderReaderOfSize(2 + 2 + 2),     // MethodImpl/
 	0x1A: createPlaceholderReaderOfSize(4),             // ModuleRef/
 	0x1B: createPlaceholderReaderOfSize(4),             // TypeSpec/
 	0x1C: createPlaceholderReaderOfSize(2 + 4 + 4 + 2), // ImplMap	?2nd=2?
 	0x1D: createPlaceholderReaderOfSize(4 + 2),         // FieldRVA
+	0x20: readAssemblyRow,                              // Assembly
+	0x21: createPlaceholderReaderOfSize(4),             // AssemblyProcessor
+	0x22: createPlaceholderReaderOfSize(4 + 4 + 4),     // AssemblyOS
+	0x23: readAssemblyRefRow,                           // AssemblyRef
+	// 0x18: createPlaceholderReaderOfSize(2 + 2 + 2),     // MethodSemantics/
 	// 0x20: createPlaceholderReaderOfSize(4 + 8 + 4 + 4 + 4), // Assembly
-	0x20: readAssemblyRow,
-	0x21: createPlaceholderReaderOfSize(4),         // AssemblyProcessor
-	0x22: createPlaceholderReaderOfSize(4 + 4 + 4), // AssemblyOS
-	0x23: readAssemblyRefRow,
 }
 
 func newTable(tableIndex uint8, numRows uint32) Table {
@@ -73,6 +80,12 @@ func (table Table) readRows(tr *ShapeReader, streams *MetadataStreams, tables *T
 
 	for i := uint32(0); i < table.numRows; i++ {
 		table.rows[i] = readerFn(tr, i+1, streams, tables)
+	}
+}
+
+func (table Table) ForEach(action func(IRow)) {
+	for _, row := range table.rows {
+		action(row)
 	}
 }
 
@@ -107,6 +120,19 @@ func (table Table) RowNumberWhere(condition func(IRow) bool) uint32 {
 func (table Table) GetRow(rowNumber uint32) IRow {
 	if rowNumber > 0 && rowNumber <= table.numRows {
 		return table.rows[rowNumber-1]
+	}
+	return nil
+}
+
+func (table Table) BinarySearchRows(condition func(row IRow) bool) IRow {
+	searchCriteriaFn := func(i int) bool {
+		row := table.rows[i]
+		return condition(row)
+	}
+
+	rowIndex := uint32(sort.Search(int(table.numRows), searchCriteriaFn))
+	if rowIndex < table.numRows {
+		return table.rows[rowIndex]
 	}
 	return nil
 }

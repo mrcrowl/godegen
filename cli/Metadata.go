@@ -142,3 +142,21 @@ func (md *Metadata) getBlobHeap(textSection *TextSection) *BlobHeap {
 
 	return nil
 }
+
+func (md *Metadata) GetMethodSemanticsRowsForProps(propRowRange RowRange) map[uint32][]*MethodSemanticsRow {
+	rowsByProp := make(map[uint32][]*MethodSemanticsRow, propRowRange.count())
+	for _, row := range md.Tables.GetTable(TableIdxMethodSemantics).rows {
+		methodSemRow := row.(*MethodSemanticsRow)
+		association := methodSemRow.Association
+		if association.Type == AssociationProperty && association.Row >= propRowRange.from && association.Row < propRowRange.to {
+			var existingMethodSemRows []*MethodSemanticsRow
+			if existingMethodSemRows = rowsByProp[association.Row]; existingMethodSemRows == nil {
+				existingMethodSemRows = make([]*MethodSemanticsRow, 0, 2)
+				rowsByProp[association.Row] = append(existingMethodSemRows, methodSemRow)
+			} else {
+				rowsByProp[association.Row] = append(existingMethodSemRows, methodSemRow)
+			}
+		}
+	}
+	return rowsByProp
+}

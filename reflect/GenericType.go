@@ -8,7 +8,7 @@ import (
 type GenericType struct {
 	BaseType
 	templateType Type
-	numArgs      int
+	numArgs      uint32
 	argTypes     []Type
 }
 
@@ -20,7 +20,7 @@ func newGenericType(templateType Type, argTypes []Type, asm *Assembly) Type {
 			assembly:  asm,
 		},
 		templateType,
-		len(argTypes),
+		uint32(len(argTypes)),
 		argTypes,
 	}
 }
@@ -32,7 +32,7 @@ func (gen *GenericType) Name() string {
 	buffer.WriteByte('<')
 	for i, arg := range gen.argTypes {
 		buffer.WriteString(arg.FullName())
-		if (i + 1) < gen.numArgs {
+		if uint32(i+1) < gen.numArgs {
 			buffer.WriteByte(',')
 		}
 	}
@@ -65,7 +65,7 @@ func (gen *GenericType) ArgumentTypes() []Type {
 	return gen.argTypes
 }
 
-func (gen *GenericType) rowNumber() uint32 {
+func (gen *GenericType) RowNumber() uint32 {
 	return 0
 }
 
@@ -75,4 +75,8 @@ func (gen *GenericType) GetMethods() []*Method {
 
 func (gen *GenericType) GetFields() []*Field {
 	return gen.templateType.GetFields()
+}
+
+func (gen *GenericType) GetProperties() []*Property {
+	return gen.templateType.GetProperties()
 }

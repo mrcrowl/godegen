@@ -17,7 +17,7 @@ func newArrayType(valueType Type, asm *Assembly) Type {
 	}
 }
 
-func (array *ArrayType) rowNumber() uint32 {
+func (array *ArrayType) RowNumber() uint32 {
 	return 0
 }
 
@@ -36,4 +36,8 @@ func (array *ArrayType) GetMethods() []*Method {
 
 func (array *ArrayType) GetFields() []*Field {
 	return []*Field{}
+}
+
+func (array *ArrayType) GetProperties() []*Property {
+	return []*Property{}
 }

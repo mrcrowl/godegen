@@ -95,6 +95,7 @@ func (set *TableSet) readAll(streams *MetadataStreams) {
 func (set *TableSet) postRead() {
 	set.collectTypeDefRanges()
 	set.collectMethodDefParamRange()
+	set.collectPropertyMapRanges()
 }
 
 func (set *TableSet) GetTable(index TableIdx) Table {
@@ -134,6 +135,23 @@ func (set *TableSet) collectMethodDefParamRange() {
 			row.paramRowRange.to = nextRow.paramRowRange.from
 		} else {
 			row.paramRowRange.to = paramTable.numRows + 1
+		}
+	}
+}
+
+func (set *TableSet) collectPropertyMapRanges() {
+	propertyMapTable := set.GetTable(TableIdxPropertyMap)
+	propertyTable := set.GetTable(TableIdxProperty)
+	rows := propertyMapTable.rows
+	numPropertyMapRows := propertyMapTable.numRows
+	for i := uint32(0); i < numPropertyMapRows; i++ {
+		row := getPropertyMapRow(rows, i)
+		isLastRow := (i + 1) == numPropertyMapRows
+		if !isLastRow {
+			nextRow := getPropertyMapRow(rows, i+1)
+			row.propertyRowRange.to = nextRow.propertyRowRange.from
+		} else {
+			row.propertyRowRange.to = propertyTable.numRows + 1
 		}
 	}
 }

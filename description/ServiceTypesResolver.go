@@ -86,6 +86,13 @@ func (res *ServiceTypesResolver) innerResolve(targetType reflect.Type) {
 		fieldType := field.Type()
 		res.innerResolve(fieldType)
 	}
+
+	// properties
+	properties := targetType.GetProperties()
+	for _, prop := range properties {
+		propType := prop.Type()
+		res.innerResolve(propType)
+	}
 }
 
 func (res *ServiceTypesResolver) outputTypesAsSlice() []reflect.Type {
