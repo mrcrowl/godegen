@@ -5,7 +5,7 @@ type TypeDefRow struct {
 	Flags         uint32
 	TypeName      string
 	TypeNamespace string
-	Extends       TypeDefOrRefIndex
+	ExtendsIndex  TypeDefOrRefIndex
 
 	fieldRowRange  RowRange
 	methodRowRange RowRange
@@ -108,7 +108,7 @@ func readTypeDefRow(
 		Flags:          flags,
 		TypeName:       typeName,
 		TypeNamespace:  typeNamespace,
-		Extends:        NewTypeDefOrRefIndex(codedIndex),
+		ExtendsIndex:   NewTypeDefOrRefIndex(codedIndex),
 		fieldRowRange:  RowRange{from: fieldFrom},
 		methodRowRange: RowRange{from: methodFrom},
 	}

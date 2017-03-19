@@ -9,20 +9,26 @@ const CONSTRUCTOR_NAME = ".ctor"
 
 type NormalType struct {
 	BaseType
-	row *cli.TypeDefRow
+	extends Type
+	row     *cli.TypeDefRow
 }
 
 func (def *NormalType) RowNumber() uint32 {
 	return def.row.RowNumber()
 }
 
-func newTypeFromDef(typeRow *cli.TypeDefRow, asm *Assembly) Type {
+func (def *NormalType) ExtendsType() Type {
+	return def.extends
+}
+
+func newTypeFromDef(typeRow *cli.TypeDefRow, extendsType Type, asm *Assembly) Type {
 	return &NormalType{
 		BaseType{
 			name:      typeRow.TypeName,
 			namespace: typeRow.TypeNamespace,
 			assembly:  asm,
 		},
+		extendsType,
 		typeRow,
 	}
 }

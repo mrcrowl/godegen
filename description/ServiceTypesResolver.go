@@ -13,21 +13,28 @@ var includedGenerics = map[string]bool{
 
 type ServiceTypesResolver struct {
 	assembly       *reflect.Assembly
+	serviceType    reflect.Type
 	typesByName    map[string]reflect.Type
 	typesFindOrder []reflect.Type
 }
 
-func NewServiceTypesResolver(sourceAssembly *reflect.Assembly) *ServiceTypesResolver {
+func ResolveServiceDependencyTypes(sourceAssembly *reflect.Assembly, serviceType reflect.Type) []reflect.Type {
+	resolver := newServiceTypesResolver(sourceAssembly, serviceType)
+	return resolver.resolve()
+}
+
+func newServiceTypesResolver(sourceAssembly *reflect.Assembly, serviceType reflect.Type) *ServiceTypesResolver {
 	typesByName := map[string]reflect.Type{}
 	return &ServiceTypesResolver{
 		sourceAssembly,
+		serviceType,
 		typesByName,
 		make([]reflect.Type, 0, 1024),
 	}
 }
 
-func (res *ServiceTypesResolver) Resolve(serviceType reflect.Type) []reflect.Type {
-	res.innerResolve(serviceType)
+func (res *ServiceTypesResolver) resolve() []reflect.Type {
+	res.innerResolve(res.serviceType)
 	return res.outputTypesAsSlice()
 }
 
@@ -38,7 +45,7 @@ func includeGeneric(generic *reflect.GenericType) bool {
 }
 
 func (res *ServiceTypesResolver) innerResolve(targetType reflect.Type) {
-	include := true
+	include := targetType != res.serviceType
 
 	// exclude nil types
 	if targetType == nil {

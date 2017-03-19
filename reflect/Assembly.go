@@ -65,7 +65,8 @@ func (asm *Assembly) getTypeByIndex(index cli.TypeDefOrRefIndex) Type {
 		tdrow := table.GetRow(index.Row).(*cli.TypeDefRow)
 		fullName := tdrow.FullName()
 		if typ = asm.typeCache.get(fullName); typ == nil {
-			typ = newTypeFromDef(tdrow, asm)
+			extendsType := asm.getTypeByIndex(tdrow.ExtendsIndex)
+			typ = newTypeFromDef(tdrow, extendsType, asm)
 			if typ != nil {
 				asm.typeCache.set(typ.FullName(), typ)
 			}
@@ -102,7 +103,8 @@ func (asm *Assembly) loadType(name string) Type {
 	}
 	if row := typeDefTable.First(typeWithNameFn); row != nil {
 		typeDefRow := row.(*cli.TypeDefRow)
-		return newTypeFromDef(typeDefRow, asm)
+		extendsType := asm.getTypeByIndex(typeDefRow.ExtendsIndex)
+		return newTypeFromDef(typeDefRow, extendsType, asm)
 	}
 
 	// type ref

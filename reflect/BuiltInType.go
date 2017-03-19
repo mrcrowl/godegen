@@ -34,9 +34,9 @@ func newBuiltInTypeWithoutAlias(fullname string) Type {
 }
 
 func (bi *BuiltInType) FullName() string {
-	if len(bi.shortName) > 0 {
-		return bi.shortName
-	}
+	// if len(bi.shortName) > 0 {
+	// 	return bi.shortName
+	// }
 	return bi.BaseType.FullName()
 }
 
