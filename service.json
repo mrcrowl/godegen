@@ -1,2310 +1,1220 @@
 {
   "Namespaces": [
     {
-      "name": "nz",
-      "qualifiedName": "nz",
+      "name": "services",
       "namespaces": [
         {
-          "name": "co",
-          "qualifiedName": "nz.co",
+          "name": "BaseClasses",
           "namespaces": [
             {
-              "name": "LanguagePerfect",
-              "qualifiedName": "nz.co.LanguagePerfect",
-              "namespaces": [
+              "name": "ReturnObjects",
+              "dataTypes": [
                 {
-                  "name": "Services",
-                  "qualifiedName": "nz.co.LanguagePerfect.Services",
-                  "namespaces": [
+                  "name": "ReturnObject",
+                  "namespace": "services.BaseClasses.ReturnObjects",
+                  "fields": [
                     {
-                      "name": "BaseClasses",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.BaseClasses",
-                      "namespaces": [
-                        {
-                          "name": "ReturnObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.BaseClasses.ReturnObjects"
-                        }
-                      ]
+                      "name": "Success",
+                      "type": "bool"
                     },
                     {
-                      "name": "Content",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.Content",
-                      "namespaces": [
-                        {
-                          "name": "BusinessObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.Content.BusinessObjects",
-                          "dataTypes": [
-                            {
-                              "name": "ContentTranslation",
-                              "namespace": "nz.co.LanguagePerfect.Services.Content.BusinessObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Content.BusinessObjects.ContentTranslation",
-                              "fields": [
-                                {
-                                  "name": "TYPE_BASE",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "TYPE_TARGET",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "ID",
-                                  "type": {
-                                    "name": "Int32",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32"
-                                  }
-                                },
-                                {
-                                  "name": "BaseLanguage",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                },
-                                {
-                                  "name": "TargetLanguage",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                },
-                                {
-                                  "name": "BaseDefinitions",
-                                  "type": {
-                                    "name": "Collections.Generic.List<nz.co.LanguagePerfect.Services.Content.BusinessObjects.ContentDefinition>",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Collections.Generic.List<nz.co.LanguagePerfect.Services.Content.BusinessObjects.ContentDefinition>",
-                                    "elementType": {
-                                      "name": "ContentDefinition",
-                                      "namespace": "nz.co.LanguagePerfect.Services.Content.BusinessObjects",
-                                      "qualifiedName": "nz.co.LanguagePerfect.Services.Content.BusinessObjects.ContentDefinition"
-                                    }
-                                  }
-                                },
-                                {
-                                  "name": "TargetDefinitions",
-                                  "type": {
-                                    "name": "Collections.Generic.List<nz.co.LanguagePerfect.Services.Content.BusinessObjects.ContentDefinition>",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Collections.Generic.List<nz.co.LanguagePerfect.Services.Content.BusinessObjects.ContentDefinition>",
-                                    "elementType": {
-                                      "name": "ContentDefinition",
-                                      "namespace": "nz.co.LanguagePerfect.Services.Content.BusinessObjects",
-                                      "qualifiedName": "nz.co.LanguagePerfect.Services.Content.BusinessObjects.ContentDefinition"
-                                    }
-                                  }
-                                },
-                                {
-                                  "name": "Tag",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "CreatorID",
-                                  "type": {
-                                    "name": "Int32",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32"
-                                  }
-                                },
-                                {
-                                  "name": "HasBeenReported",
-                                  "type": {
-                                    "name": "Boolean",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Boolean"
-                                  }
-                                },
-                                {
-                                  "name": "ContentType",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "name": "SoundInfo",
-                              "namespace": "nz.co.LanguagePerfect.Services.Content.BusinessObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Content.BusinessObjects.SoundInfo",
-                              "fields": [
-                                {
-                                  "name": "ID",
-                                  "type": {
-                                    "name": "Int32",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32"
-                                  }
-                                },
-                                {
-                                  "name": "DefinitionID",
-                                  "type": {
-                                    "name": "Int32",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32"
-                                  }
-                                },
-                                {
-                                  "name": "Speaker",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "URL",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "IsHumanVoice",
-                                  "type": {
-                                    "name": "Boolean",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Boolean"
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "ContentTemplates",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates",
-                      "namespaces": [
-                        {
-                          "name": "BusinessObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects",
-                          "dataTypes": [
-                            {
-                              "name": "ModuleContentTemplate",
-                              "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects.ModuleContentTemplate",
-                              "fields": [
-                                {
-                                  "name": "Selected",
-                                  "type": {
-                                    "name": "Boolean",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Boolean"
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "ReturnObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects",
-                          "dataTypes": [
-                            {
-                              "name": "ContentTemplatesReturnObject",
-                              "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects.ContentTemplatesReturnObject",
-                              "fields": [
-                                {
-                                  "name": "Templates",
-                                  "type": {
-                                    "name": "ContentTemplate[]",
-                                    "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects.ContentTemplate[]",
-                                    "elementType": {
-                                      "name": "ContentTemplate",
-                                      "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects",
-                                      "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects.ContentTemplate"
-                                    }
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "name": "ModuleContentTemplatesReturnObject",
-                              "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects.ModuleContentTemplatesReturnObject",
-                              "fields": [
-                                {
-                                  "name": "Templates",
-                                  "type": {
-                                    "name": "ModuleContentTemplate[]",
-                                    "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects.ModuleContentTemplate[]",
-                                    "elementType": {
-                                      "name": "ModuleContentTemplate",
-                                      "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects",
-                                      "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects.ModuleContentTemplate"
-                                    }
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "name": "TemplateModuleIDsReturnObject",
-                              "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects.TemplateModuleIDsReturnObject",
-                              "fields": [
-                                {
-                                  "name": "TemplateID",
-                                  "type": {
-                                    "name": "Int32",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32"
-                                  }
-                                },
-                                {
-                                  "name": "ModuleIDs",
-                                  "type": {
-                                    "name": "Int32[]",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32[]",
-                                    "elementType": {
-                                      "name": "Int32",
-                                      "namespace": "System",
-                                      "qualifiedName": "System.Int32"
-                                    }
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ],
-                      "dataTypes": [
-                        {
-                          "name": "ContentTemplateReturnObject",
-                          "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects.ContentTemplateReturnObject",
-                          "fields": [
-                            {
-                              "name": "Template",
-                              "type": {
-                                "name": "ContentTemplate",
-                                "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects",
-                                "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects.ContentTemplate"
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "Languages",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.Languages",
-                      "namespaces": [
-                        {
-                          "name": "BusinessObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects",
-                          "dataTypes": [
-                            {
-                              "name": "Language",
-                              "namespace": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects.Language",
-                              "fields": [
-                                {
-                                  "name": "ID",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                },
-                                {
-                                  "name": "Name",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "Abbreviation",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "EP",
-                                  "type": {
-                                    "name": "Boolean",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Boolean"
-                                  }
-                                },
-                                {
-                                  "name": "Department",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "ReturnObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects",
-                          "dataTypes": [
-                            {
-                              "name": "LanguagePairReturnObject",
-                              "namespace": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects.LanguagePairReturnObject",
-                              "fields": [
-                                {
-                                  "name": "TheLanguagePair",
-                                  "type": {
-                                    "name": "ContentLanguagePair",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects.ContentLanguagePair"
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "name": "LanguagesReturnObject",
-                              "namespace": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects.LanguagesReturnObject",
-                              "fields": [
-                                {
-                                  "name": "Languages",
-                                  "type": {
-                                    "name": "Language[]",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects.Language[]",
-                                    "elementType": {
-                                      "name": "Language",
-                                      "namespace": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects",
-                                      "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects.Language"
-                                    }
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ],
-                      "dataTypes": [
-                        {
-                          "name": "DatasetTargetSubjectsReturnObject",
-                          "namespace": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects.DatasetTargetSubjectsReturnObject",
-                          "fields": [
-                            {
-                              "name": "TargetLanguages",
-                              "type": {
-                                "name": "Language[]",
-                                "namespace": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects",
-                                "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects.Language[]",
-                                "elementType": {
-                                  "name": "Language",
-                                  "namespace": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects",
-                                  "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects.Language"
-                                }
-                              }
-                            },
-                            {
-                              "name": "DatasetID",
-                              "type": {
-                                "name": "Int32",
-                                "namespace": "System",
-                                "qualifiedName": "System.Int32"
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "Modules",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.Modules",
-                      "namespaces": [
-                        {
-                          "name": "BusinessObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.Modules.BusinessObjects",
-                          "dataTypes": [
-                            {
-                              "name": "ModuleInfoWithLanguages",
-                              "namespace": "nz.co.LanguagePerfect.Services.Modules.BusinessObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Modules.BusinessObjects.ModuleInfoWithLanguages",
-                              "fields": [
-                                {
-                                  "name": "ID",
-                                  "type": {
-                                    "name": "Int32",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32"
-                                  }
-                                },
-                                {
-                                  "name": "Title",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "Creator",
-                                  "type": {
-                                    "name": "Int32",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32"
-                                  }
-                                },
-                                {
-                                  "name": "BaseLanguageID",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                },
-                                {
-                                  "name": "BaseLanguage",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "TargetLanguageID",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                },
-                                {
-                                  "name": "TargetLanguage",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "DateCreated",
-                                  "type": {
-                                    "name": "DateTime",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.DateTime"
-                                  }
-                                },
-                                {
-                                  "name": "SchoolOwner",
-                                  "type": {
-                                    "name": "Int32",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32"
-                                  }
-                                },
-                                {
-                                  "name": "Highlighted",
-                                  "type": {
-                                    "name": "Boolean",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Boolean"
-                                  }
-                                },
-                                {
-                                  "name": "VisibleToStudents",
-                                  "type": {
-                                    "name": "Boolean",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Boolean"
-                                  }
-                                },
-                                {
-                                  "name": "ContainsFolders",
-                                  "type": {
-                                    "name": "Boolean",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Boolean"
-                                  }
-                                },
-                                {
-                                  "name": "ModuleType",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                },
-                                {
-                                  "name": "Featured",
-                                  "type": {
-                                    "name": "Boolean",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Boolean"
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "ReturnObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.Modules.ReturnObjects",
-                          "dataTypes": [
-                            {
-                              "name": "ModulesInfoWithLanguagesReturnObject",
-                              "namespace": "nz.co.LanguagePerfect.Services.Modules.ReturnObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Modules.ReturnObjects.ModulesInfoWithLanguagesReturnObject",
-                              "fields": [
-                                {
-                                  "name": "Modules",
-                                  "type": {
-                                    "name": "ModuleInfoWithLanguages[]",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Modules.BusinessObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Modules.BusinessObjects.ModuleInfoWithLanguages[]",
-                                    "elementType": {
-                                      "name": "ModuleInfoWithLanguages",
-                                      "namespace": "nz.co.LanguagePerfect.Services.Modules.BusinessObjects",
-                                      "qualifiedName": "nz.co.LanguagePerfect.Services.Modules.BusinessObjects.ModuleInfoWithLanguages"
-                                    }
-                                  }
-                                },
-                                {
-                                  "name": "ClassLicenceClash",
-                                  "type": {
-                                    "name": "Boolean",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Boolean"
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ],
-                      "dataTypes": [
-                        {
-                          "name": "ModuleInfoReturnObject",
-                          "namespace": "nz.co.LanguagePerfect.Services.Modules.ReturnObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.Modules.ReturnObjects.ModuleInfoReturnObject",
-                          "fields": [
-                            {
-                              "name": "Module",
-                              "type": {
-                                "name": "ModuleInfo",
-                                "namespace": "nz.co.LanguagePerfect.Services.Modules.BusinessObjects",
-                                "qualifiedName": "nz.co.LanguagePerfect.Services.Modules.BusinessObjects.ModuleInfo"
-                              }
-                            },
-                            {
-                              "name": "Progress",
-                              "type": {
-                                "name": "String",
-                                "namespace": "System",
-                                "qualifiedName": "System.String"
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "TranslationLists",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.TranslationLists",
-                      "namespaces": [
-                        {
-                          "name": "BusinessObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.TranslationLists.BusinessObjects"
-                        },
-                        {
-                          "name": "ReturnObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.TranslationLists.ReturnObjects"
-                        }
-                      ],
-                      "dataTypes": [
-                        {
-                          "name": "TranslationListTitlesReturnObject",
-                          "namespace": "nz.co.LanguagePerfect.Services.TranslationLists.ReturnObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.TranslationLists.ReturnObjects.TranslationListTitlesReturnObject",
-                          "fields": [
-                            {
-                              "name": "Lists",
-                              "type": {
-                                "name": "TranslationListTitle[]",
-                                "namespace": "nz.co.LanguagePerfect.Services.TranslationLists.BusinessObjects",
-                                "qualifiedName": "nz.co.LanguagePerfect.Services.TranslationLists.BusinessObjects.TranslationListTitle[]",
-                                "elementType": {
-                                  "name": "TranslationListTitle",
-                                  "namespace": "nz.co.LanguagePerfect.Services.TranslationLists.BusinessObjects",
-                                  "qualifiedName": "nz.co.LanguagePerfect.Services.TranslationLists.BusinessObjects.TranslationListTitle"
-                                }
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "Translations",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.Translations",
-                      "namespaces": [
-                        {
-                          "name": "BusinessObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                          "dataTypes": [
-                            {
-                              "name": "TopTranslationList",
-                              "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TopTranslationList",
-                              "fields": [
-                                {
-                                  "name": "Title",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "Creator",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "name": "TranslationDirection",
-                              "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationDirection",
-                              "fields": [
-                                {
-                                  "name": "ID",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                },
-                                {
-                                  "name": "Name",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "Explanation",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "RequiresSoundFiles",
-                                  "type": {
-                                    "name": "Boolean",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Boolean"
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "name": "TranslationForCreation",
-                              "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationForCreation",
-                              "fields": [
-                                {
-                                  "name": "CreationID",
-                                  "type": {
-                                    "name": "Int32",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32"
-                                  }
-                                },
-                                {
-                                  "name": "ID",
-                                  "type": {
-                                    "name": "Int32",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32"
-                                  }
-                                },
-                                {
-                                  "name": "BaseLanguage",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                },
-                                {
-                                  "name": "TargetLanguage",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                },
-                                {
-                                  "name": "Definitions",
-                                  "type": {
-                                    "name": "DefinitionForCreation[]",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.DefinitionForCreation[]",
-                                    "elementType": {
-                                      "name": "DefinitionForCreation",
-                                      "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                      "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.DefinitionForCreation"
-                                    }
-                                  }
-                                },
-                                {
-                                  "name": "ListsToAddTo",
-                                  "type": {
-                                    "name": "String[]",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String[]",
-                                    "elementType": {
-                                      "name": "String",
-                                      "namespace": "System",
-                                      "qualifiedName": "System.String"
-                                    }
-                                  }
-                                },
-                                {
-                                  "name": "ContentType",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "name": "TranslationSuggestionAggregate",
-                              "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationSuggestionAggregate",
-                              "fields": [
-                                {
-                                  "name": "TranslationID",
-                                  "type": {
-                                    "name": "Int32",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32"
-                                  }
-                                },
-                                {
-                                  "name": "Suggestion",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "Votes",
-                                  "type": {
-                                    "name": "Int32",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32"
-                                  }
-                                },
-                                {
-                                  "name": "FromLanguage",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "ToLanguage",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "ToLanguageID",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                },
-                                {
-                                  "name": "FromDefinitions",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "ToDefinitions",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "ContentType",
-                                  "type": {
-                                    "name": "Int16",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int16"
-                                  }
-                                },
-                                {
-                                  "name": "Comment",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "name": "TranslationSuggestionsGroup",
-                              "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationSuggestionsGroup",
-                              "fields": [
-                                {
-                                  "name": "FromLanguage",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "ToLanguage",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "Label",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                },
-                                {
-                                  "name": "Suggestions",
-                                  "type": {
-                                    "name": "TranslationSuggestionAggregate[]",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationSuggestionAggregate[]",
-                                    "elementType": {
-                                      "name": "TranslationSuggestionAggregate",
-                                      "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                      "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationSuggestionAggregate"
-                                    }
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "name": "TranslationValidationResult",
-                              "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationValidationResult",
-                              "fields": [
-                                {
-                                  "name": "Errors",
-                                  "type": {
-                                    "name": "Collections.Generic.List<System.String>",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Collections.Generic.List<System.String>",
-                                    "elementType": {
-                                      "name": "String",
-                                      "namespace": "System",
-                                      "qualifiedName": "System.String"
-                                    }
-                                  }
-                                },
-                                {
-                                  "name": "TranslationCreationID",
-                                  "type": {
-                                    "name": "Int32",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Int32"
-                                  }
-                                },
-                                {
-                                  "name": "CombinedErrorMessage",
-                                  "type": {
-                                    "name": "String",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.String"
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "name": "ReturnObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects",
-                          "dataTypes": [
-                            {
-                              "name": "TranslationDirectionsReturnObject",
-                              "namespace": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects.TranslationDirectionsReturnObject",
-                              "fields": [
-                                {
-                                  "name": "Directions",
-                                  "type": {
-                                    "name": "TranslationDirection[]",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationDirection[]",
-                                    "elementType": {
-                                      "name": "TranslationDirection",
-                                      "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                      "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationDirection"
-                                    }
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "name": "TranslationMatchesReturnObject",
-                              "namespace": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects.TranslationMatchesReturnObject",
-                              "fields": [
-                                {
-                                  "name": "MatchedTranslations",
-                                  "type": {
-                                    "name": "Collections.Generic.List<nz.co.LanguagePerfect.Services.Content.BusinessObjects.ContentTranslation>",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Collections.Generic.List<nz.co.LanguagePerfect.Services.Content.BusinessObjects.ContentTranslation>",
-                                    "elementType": {
-                                      "name": "ContentTranslation",
-                                      "namespace": "nz.co.LanguagePerfect.Services.Content.BusinessObjects",
-                                      "qualifiedName": "nz.co.LanguagePerfect.Services.Content.BusinessObjects.ContentTranslation"
-                                    }
-                                  }
-                                },
-                                {
-                                  "name": "ValidationResults",
-                                  "type": {
-                                    "name": "Collections.Generic.List<nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationValidationResult>",
-                                    "namespace": "System",
-                                    "qualifiedName": "System.Collections.Generic.List<nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationValidationResult>",
-                                    "elementType": {
-                                      "name": "TranslationValidationResult",
-                                      "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                      "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationValidationResult"
-                                    }
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "name": "TranslationSuggestionsReturnObject",
-                              "namespace": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects.TranslationSuggestionsReturnObject",
-                              "fields": [
-                                {
-                                  "name": "SuggestionGroups",
-                                  "type": {
-                                    "name": "TranslationSuggestionsGroup[]",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationSuggestionsGroup[]",
-                                    "elementType": {
-                                      "name": "TranslationSuggestionsGroup",
-                                      "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                      "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationSuggestionsGroup"
-                                    }
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ],
-                      "dataTypes": [
-                        {
-                          "name": "TopTranslationListsReturnObject",
-                          "namespace": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects.TopTranslationListsReturnObject",
-                          "fields": [
-                            {
-                              "name": "Lists",
-                              "type": {
-                                "name": "Collections.Generic.List<nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TopTranslationList>",
-                                "namespace": "System",
-                                "qualifiedName": "System.Collections.Generic.List<nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TopTranslationList>",
-                                "elementType": {
-                                  "name": "TopTranslationList",
-                                  "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                  "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TopTranslationList"
-                                }
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "Portals",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.Portals",
-                      "namespaces": [
-                        {
-                          "name": "ControlPanel",
-                          "qualifiedName": "nz.co.LanguagePerfect.Services.Portals.ControlPanel",
-                          "services": [
-                            {
-                              "name": "LanguageDataPortal",
-                              "namespace": "nz.co.LanguagePerfect.Services.Portals.ControlPanel",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Portals.ControlPanel.LanguageDataPortal",
-                              "methods": [
-                                {
-                                  "name": "GetAllLanguages",
-                                  "type": {
-                                    "name": "LanguagesReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects.LanguagesReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetAllLanguagesOnly",
-                                  "type": {
-                                    "name": "LanguagesReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects.LanguagesReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetSubjectsForSchool",
-                                  "type": {
-                                    "name": "LanguagesReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects.LanguagesReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "sessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "schoolID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetModulesWithLanguagesForSchool",
-                                  "type": {
-                                    "name": "ModulesInfoWithLanguagesReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Modules.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Modules.ReturnObjects.ModulesInfoWithLanguagesReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "SchoolID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetContentListSummariesForModule",
-                                  "type": {
-                                    "name": "TranslationListTitlesReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.TranslationLists.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.TranslationLists.ReturnObjects.TranslationListTitlesReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "ModuleID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetTranslationDirections",
-                                  "type": {
-                                    "name": "TranslationDirectionsReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects.TranslationDirectionsReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "BaseLanguage",
-                                      "type": {
-                                        "name": "Int16",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int16"
-                                      }
-                                    },
-                                    {
-                                      "name": "TargetLanguage",
-                                      "type": {
-                                        "name": "Int16",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int16"
-                                      }
-                                    },
-                                    {
-                                      "name": "Abbreviate",
-                                      "type": {
-                                        "name": "Boolean",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Boolean"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "CreateNewModule",
-                                  "type": {
-                                    "name": "ModuleInfoReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Modules.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Modules.ReturnObjects.ModuleInfoReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "SchoolID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    },
-                                    {
-                                      "name": "Title",
-                                      "type": {
-                                        "name": "String",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.String"
-                                      }
-                                    },
-                                    {
-                                      "name": "Description",
-                                      "type": {
-                                        "name": "String",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.String"
-                                      }
-                                    },
-                                    {
-                                      "name": "BaseLanguage",
-                                      "type": {
-                                        "name": "Int16",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int16"
-                                      }
-                                    },
-                                    {
-                                      "name": "TargetLanguage",
-                                      "type": {
-                                        "name": "Int16",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int16"
-                                      }
-                                    },
-                                    {
-                                      "name": "NewTranslations",
-                                      "type": {
-                                        "name": "TranslationForCreation[]",
-                                        "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                        "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationForCreation[]",
-                                        "elementType": {
-                                          "name": "TranslationForCreation",
-                                          "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                          "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationForCreation"
-                                        }
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "AddTranslationsToExistingModule",
-                                  "type": {
-                                    "name": "ReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.BaseClasses.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.BaseClasses.ReturnObjects.ReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "SchoolID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    },
-                                    {
-                                      "name": "ModuleID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    },
-                                    {
-                                      "name": "NewTranslations",
-                                      "type": {
-                                        "name": "TranslationForCreation[]",
-                                        "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                        "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationForCreation[]",
-                                        "elementType": {
-                                          "name": "TranslationForCreation",
-                                          "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                          "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationForCreation"
-                                        }
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "AddTranslationsToExistingModule2",
-                                  "type": {
-                                    "name": "ReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.BaseClasses.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.BaseClasses.ReturnObjects.ReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "SchoolID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    },
-                                    {
-                                      "name": "ModuleID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    },
-                                    {
-                                      "name": "folderPath",
-                                      "type": {
-                                        "name": "String",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.String"
-                                      }
-                                    },
-                                    {
-                                      "name": "NewTranslations",
-                                      "type": {
-                                        "name": "TranslationForCreation[]",
-                                        "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                        "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationForCreation[]",
-                                        "elementType": {
-                                          "name": "TranslationForCreation",
-                                          "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                          "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationForCreation"
-                                        }
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "FindOrCreateTranslationsAndDefinitions",
-                                  "type": {
-                                    "name": "TranslationMatchesReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects.TranslationMatchesReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "Translations",
-                                      "type": {
-                                        "name": "TranslationForCreation[]",
-                                        "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                        "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationForCreation[]",
-                                        "elementType": {
-                                          "name": "TranslationForCreation",
-                                          "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                          "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationForCreation"
-                                        }
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetTranslationSuggestions",
-                                  "type": {
-                                    "name": "TranslationSuggestionsReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects.TranslationSuggestionsReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "sessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "minVotes",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "TopListsTranslationIsIn",
-                                  "type": {
-                                    "name": "TopTranslationListsReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.ReturnObjects.TopTranslationListsReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "sessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "contentID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "AcceptSuggestions",
-                                  "type": {
-                                    "name": "ReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.BaseClasses.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.BaseClasses.ReturnObjects.ReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "sessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "suggestions",
-                                      "type": {
-                                        "name": "TranslationSuggestionAggregate[]",
-                                        "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                        "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationSuggestionAggregate[]",
-                                        "elementType": {
-                                          "name": "TranslationSuggestionAggregate",
-                                          "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                          "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationSuggestionAggregate"
-                                        }
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "DeclineSuggestions",
-                                  "type": {
-                                    "name": "ReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.BaseClasses.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.BaseClasses.ReturnObjects.ReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "sessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "suggestions",
-                                      "type": {
-                                        "name": "TranslationSuggestionAggregate[]",
-                                        "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                        "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationSuggestionAggregate[]",
-                                        "elementType": {
-                                          "name": "TranslationSuggestionAggregate",
-                                          "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                                          "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.TranslationSuggestionAggregate"
-                                        }
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetContentTemplates",
-                                  "type": {
-                                    "name": "ContentTemplatesReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects.ContentTemplatesReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetContentTemplatesForSchool",
-                                  "type": {
-                                    "name": "ContentTemplatesReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects.ContentTemplatesReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "SchoolID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetModuleContentTemplates",
-                                  "type": {
-                                    "name": "ModuleContentTemplatesReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects.ModuleContentTemplatesReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "sessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "moduleID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetModuleIDsInTemplate",
-                                  "type": {
-                                    "name": "TemplateModuleIDsReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects.TemplateModuleIDsReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "TemplateID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "CreateContentTemplate",
-                                  "type": {
-                                    "name": "ContentTemplateReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects.ContentTemplateReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "Name",
-                                      "type": {
-                                        "name": "String",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.String"
-                                      }
-                                    },
-                                    {
-                                      "name": "Description",
-                                      "type": {
-                                        "name": "String",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.String"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "EditContentTemplate",
-                                  "type": {
-                                    "name": "ContentTemplateReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.ReturnObjects.ContentTemplateReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "SessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "TemplateID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    },
-                                    {
-                                      "name": "Name",
-                                      "type": {
-                                        "name": "String",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.String"
-                                      }
-                                    },
-                                    {
-                                      "name": "Description",
-                                      "type": {
-                                        "name": "String",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.String"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetLanguagePair",
-                                  "type": {
-                                    "name": "LanguagePairReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects.LanguagePairReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "sessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "baseLanguage",
-                                      "type": {
-                                        "name": "Int16",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int16"
-                                      }
-                                    },
-                                    {
-                                      "name": "targetLanguage",
-                                      "type": {
-                                        "name": "Int16",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int16"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetLanguagePairForTranslationID",
-                                  "type": {
-                                    "name": "LanguagePairReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects.LanguagePairReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "sessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "translationID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetDatasetTargetSubjects",
-                                  "type": {
-                                    "name": "DatasetTargetSubjectsReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.ReturnObjects.DatasetTargetSubjectsReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "sessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "datasetID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "name": "GetModulesWithLanguagesForSchoolAndClasses",
-                                  "type": {
-                                    "name": "ModulesInfoWithLanguagesReturnObject",
-                                    "namespace": "nz.co.LanguagePerfect.Services.Modules.ReturnObjects",
-                                    "qualifiedName": "nz.co.LanguagePerfect.Services.Modules.ReturnObjects.ModulesInfoWithLanguagesReturnObject"
-                                  },
-                                  "args": [
-                                    {
-                                      "name": "sessionID",
-                                      "type": {
-                                        "name": "Int64",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int64"
-                                      }
-                                    },
-                                    {
-                                      "name": "schoolID",
-                                      "type": {
-                                        "name": "Int32",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32"
-                                      }
-                                    },
-                                    {
-                                      "name": "classIDs",
-                                      "type": {
-                                        "name": "Int32[]",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Int32[]",
-                                        "elementType": {
-                                          "name": "Int32",
-                                          "namespace": "System",
-                                          "qualifiedName": "System.Int32"
-                                        }
-                                      }
-                                    },
-                                    {
-                                      "name": "modulesAvailableToAllClasses",
-                                      "type": {
-                                        "name": "Boolean",
-                                        "namespace": "System",
-                                        "qualifiedName": "System.Boolean"
-                                      }
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ],
-                  "dataTypes": [
-                    {
-                      "name": "ContentDefinition",
-                      "namespace": "nz.co.LanguagePerfect.Services.Content.BusinessObjects",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.Content.BusinessObjects.ContentDefinition",
-                      "fields": [
-                        {
-                          "name": "ID",
-                          "type": {
-                            "name": "Int32",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int32"
-                          }
-                        },
-                        {
-                          "name": "Language",
-                          "type": {
-                            "name": "Int16",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int16"
-                          }
-                        },
-                        {
-                          "name": "Text",
-                          "type": {
-                            "name": "String",
-                            "namespace": "System",
-                            "qualifiedName": "System.String"
-                          }
-                        },
-                        {
-                          "name": "DisplayIndex",
-                          "type": {
-                            "name": "Byte",
-                            "namespace": "System",
-                            "qualifiedName": "System.Byte"
-                          }
-                        },
-                        {
-                          "name": "DisplayAsAnswer",
-                          "type": {
-                            "name": "Boolean",
-                            "namespace": "System",
-                            "qualifiedName": "System.Boolean"
-                          }
-                        },
-                        {
-                          "name": "Comment",
-                          "type": {
-                            "name": "String",
-                            "namespace": "System",
-                            "qualifiedName": "System.String"
-                          }
-                        },
-                        {
-                          "name": "SoundFileURLs",
-                          "type": {
-                            "name": "Collections.Generic.List<System.String>",
-                            "namespace": "System",
-                            "qualifiedName": "System.Collections.Generic.List<System.String>",
-                            "elementType": {
-                              "name": "String",
-                              "namespace": "System",
-                              "qualifiedName": "System.String"
-                            }
-                          }
-                        },
-                        {
-                          "name": "Sounds",
-                          "type": {
-                            "name": "Collections.Generic.List<nz.co.LanguagePerfect.Services.Content.BusinessObjects.SoundInfo>",
-                            "namespace": "System",
-                            "qualifiedName": "System.Collections.Generic.List<nz.co.LanguagePerfect.Services.Content.BusinessObjects.SoundInfo>",
-                            "elementType": {
-                              "name": "SoundInfo",
-                              "namespace": "nz.co.LanguagePerfect.Services.Content.BusinessObjects",
-                              "qualifiedName": "nz.co.LanguagePerfect.Services.Content.BusinessObjects.SoundInfo"
-                            }
-                          }
-                        },
-                        {
-                          "name": "Romanisations",
-                          "type": {
-                            "name": "Collections.Generic.List<System.String>",
-                            "namespace": "System",
-                            "qualifiedName": "System.Collections.Generic.List<System.String>",
-                            "elementType": {
-                              "name": "String",
-                              "namespace": "System",
-                              "qualifiedName": "System.String"
-                            }
-                          }
-                        },
-                        {
-                          "name": "TypeCode",
-                          "type": {
-                            "name": "String",
-                            "namespace": "System",
-                            "qualifiedName": "System.String"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "name": "ContentTemplate",
-                      "namespace": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.ContentTemplates.BusinessObjects.ContentTemplate",
-                      "fields": [
-                        {
-                          "name": "ID",
-                          "type": {
-                            "name": "Int32",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int32"
-                          }
-                        },
-                        {
-                          "name": "Name",
-                          "type": {
-                            "name": "String",
-                            "namespace": "System",
-                            "qualifiedName": "System.String"
-                          }
-                        },
-                        {
-                          "name": "Description",
-                          "type": {
-                            "name": "String",
-                            "namespace": "System",
-                            "qualifiedName": "System.String"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "name": "ContentLanguagePair",
-                      "namespace": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.Languages.BusinessObjects.ContentLanguagePair",
-                      "fields": [
-                        {
-                          "name": "BaseLanguageID",
-                          "type": {
-                            "name": "Int16",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int16"
-                          }
-                        },
-                        {
-                          "name": "BaseLanguageName",
-                          "type": {
-                            "name": "String",
-                            "namespace": "System",
-                            "qualifiedName": "System.String"
-                          }
-                        },
-                        {
-                          "name": "TargetLanguageID",
-                          "type": {
-                            "name": "Int16",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int16"
-                          }
-                        },
-                        {
-                          "name": "TargetLanguageName",
-                          "type": {
-                            "name": "String",
-                            "namespace": "System",
-                            "qualifiedName": "System.String"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "name": "ModuleInfo",
-                      "namespace": "nz.co.LanguagePerfect.Services.Modules.BusinessObjects",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.Modules.BusinessObjects.ModuleInfo",
-                      "fields": [
-                        {
-                          "name": "ID",
-                          "type": {
-                            "name": "Int32",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int32"
-                          }
-                        },
-                        {
-                          "name": "Title",
-                          "type": {
-                            "name": "String",
-                            "namespace": "System",
-                            "qualifiedName": "System.String"
-                          }
-                        },
-                        {
-                          "name": "Description",
-                          "type": {
-                            "name": "String",
-                            "namespace": "System",
-                            "qualifiedName": "System.String"
-                          }
-                        },
-                        {
-                          "name": "Creator",
-                          "type": {
-                            "name": "Int32",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int32"
-                          }
-                        },
-                        {
-                          "name": "SchoolOwner",
-                          "type": {
-                            "name": "Int32",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int32"
-                          }
-                        },
-                        {
-                          "name": "BaseLanguage",
-                          "type": {
-                            "name": "Int16",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int16"
-                          }
-                        },
-                        {
-                          "name": "TargetLanguage",
-                          "type": {
-                            "name": "Int16",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int16"
-                          }
-                        },
-                        {
-                          "name": "AppID",
-                          "type": {
-                            "name": "Int32",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int32"
-                          }
-                        },
-                        {
-                          "name": "DateCreated",
-                          "type": {
-                            "name": "DateTime",
-                            "namespace": "System",
-                            "qualifiedName": "System.DateTime"
-                          }
-                        },
-                        {
-                          "name": "Ancestor",
-                          "type": {
-                            "name": "Nullable<System.Int32>",
-                            "namespace": "System",
-                            "qualifiedName": "System.Nullable<System.Int32>"
-                          }
-                        },
-                        {
-                          "name": "CascadeSourceModuleChanges",
-                          "type": {
-                            "name": "Boolean",
-                            "namespace": "System",
-                            "qualifiedName": "System.Boolean"
-                          }
-                        },
-                        {
-                          "name": "VisibleToStudents",
-                          "type": {
-                            "name": "Boolean",
-                            "namespace": "System",
-                            "qualifiedName": "System.Boolean"
-                          }
-                        },
-                        {
-                          "name": "Highlighted",
-                          "type": {
-                            "name": "Boolean",
-                            "namespace": "System",
-                            "qualifiedName": "System.Boolean"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "name": "TranslationListTitle",
-                      "namespace": "nz.co.LanguagePerfect.Services.TranslationLists.BusinessObjects",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.TranslationLists.BusinessObjects.TranslationListTitle",
-                      "fields": [
-                        {
-                          "name": "ID",
-                          "type": {
-                            "name": "Int32",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int32"
-                          }
-                        },
-                        {
-                          "name": "Title",
-                          "type": {
-                            "name": "String",
-                            "namespace": "System",
-                            "qualifiedName": "System.String"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "name": "DefinitionForCreation",
-                      "namespace": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects",
-                      "qualifiedName": "nz.co.LanguagePerfect.Services.Translations.BusinessObjects.DefinitionForCreation",
-                      "fields": [
-                        {
-                          "name": "CreationID",
-                          "type": {
-                            "name": "Int32",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int32"
-                          }
-                        },
-                        {
-                          "name": "ID",
-                          "type": {
-                            "name": "Int32",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int32"
-                          }
-                        },
-                        {
-                          "name": "Language",
-                          "type": {
-                            "name": "Int16",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int16"
-                          }
-                        },
-                        {
-                          "name": "Text",
-                          "type": {
-                            "name": "String",
-                            "namespace": "System",
-                            "qualifiedName": "System.String"
-                          }
-                        },
-                        {
-                          "name": "Comment",
-                          "type": {
-                            "name": "String",
-                            "namespace": "System",
-                            "qualifiedName": "System.String"
-                          }
-                        },
-                        {
-                          "name": "ScriptID",
-                          "type": {
-                            "name": "Int16",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int16"
-                          }
-                        },
-                        {
-                          "name": "DisplayIndex",
-                          "type": {
-                            "name": "Int16",
-                            "namespace": "System",
-                            "qualifiedName": "System.Int16"
-                          }
-                        },
-                        {
-                          "name": "DisplayAsAnswer",
-                          "type": {
-                            "name": "Boolean",
-                            "namespace": "System",
-                            "qualifiedName": "System.Boolean"
-                          }
-                        },
-                        {
-                          "name": "Romanisations",
-                          "type": {
-                            "name": "String[]",
-                            "namespace": "System",
-                            "qualifiedName": "System.String[]",
-                            "elementType": {
-                              "name": "String",
-                              "namespace": "System",
-                              "qualifiedName": "System.String"
-                            }
-                          }
-                        },
-                        {
-                          "name": "TypeCode",
-                          "type": {
-                            "name": "String",
-                            "namespace": "System",
-                            "qualifiedName": "System.String"
-                          }
-                        }
-                      ]
+                      "name": "Fault",
+                      "type": "string"
                     }
                   ]
                 }
               ]
             }
           ]
-        }
-      ],
-      "dataTypes": [
+        },
         {
-          "name": "ReturnObject",
-          "namespace": "nz.co.LanguagePerfect.Services.BaseClasses.ReturnObjects",
-          "qualifiedName": "nz.co.LanguagePerfect.Services.BaseClasses.ReturnObjects.ReturnObject",
-          "fields": [
+          "name": "Content",
+          "namespaces": [
             {
-              "name": "Success",
-              "type": {
-                "name": "Boolean",
-                "namespace": "System",
-                "qualifiedName": "System.Boolean"
-              }
+              "name": "BusinessObjects",
+              "dataTypes": [
+                {
+                  "name": "ContentDefinition",
+                  "namespace": "services.Content.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "ID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Language",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Text",
+                      "type": "string"
+                    },
+                    {
+                      "name": "DisplayIndex",
+                      "type": "number"
+                    },
+                    {
+                      "name": "DisplayAsAnswer",
+                      "type": "bool"
+                    },
+                    {
+                      "name": "Comment",
+                      "type": "string"
+                    },
+                    {
+                      "name": "SoundFileURLs",
+                      "type": "string[]"
+                    },
+                    {
+                      "name": "Sounds",
+                      "type": "services.Content.BusinessObjects.SoundInfo[]"
+                    },
+                    {
+                      "name": "Romanisations",
+                      "type": "string[]"
+                    },
+                    {
+                      "name": "TypeCode",
+                      "type": "string"
+                    }
+                  ]
+                },
+                {
+                  "name": "ContentTranslation",
+                  "namespace": "services.Content.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "TYPE_BASE",
+                      "type": "string"
+                    },
+                    {
+                      "name": "TYPE_TARGET",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "BaseLanguage",
+                      "type": "number"
+                    },
+                    {
+                      "name": "TargetLanguage",
+                      "type": "number"
+                    },
+                    {
+                      "name": "BaseDefinitions",
+                      "type": "services.Content.BusinessObjects.ContentDefinition[]"
+                    },
+                    {
+                      "name": "TargetDefinitions",
+                      "type": "services.Content.BusinessObjects.ContentDefinition[]"
+                    },
+                    {
+                      "name": "Tag",
+                      "type": "string"
+                    },
+                    {
+                      "name": "CreatorID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "HasBeenReported",
+                      "type": "bool"
+                    },
+                    {
+                      "name": "ContentType",
+                      "type": "number"
+                    }
+                  ]
+                },
+                {
+                  "name": "SoundInfo",
+                  "namespace": "services.Content.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "ID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "DefinitionID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Speaker",
+                      "type": "string"
+                    },
+                    {
+                      "name": "URL",
+                      "type": "string"
+                    },
+                    {
+                      "name": "IsHumanVoice",
+                      "type": "bool"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ContentTemplates",
+          "namespaces": [
+            {
+              "name": "BusinessObjects",
+              "dataTypes": [
+                {
+                  "name": "ContentTemplate",
+                  "namespace": "services.ContentTemplates.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "ID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Name",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Description",
+                      "type": "string"
+                    }
+                  ]
+                },
+                {
+                  "name": "ModuleContentTemplate",
+                  "namespace": "services.ContentTemplates.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "Selected",
+                      "type": "bool"
+                    }
+                  ]
+                }
+              ]
             },
             {
-              "name": "Fault",
-              "type": {
-                "name": "String",
-                "namespace": "System",
-                "qualifiedName": "System.String"
-              }
+              "name": "ReturnObjects",
+              "dataTypes": [
+                {
+                  "name": "ContentTemplateReturnObject",
+                  "namespace": "services.ContentTemplates.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "Template",
+                      "type": "services.ContentTemplates.BusinessObjects.ContentTemplate"
+                    }
+                  ]
+                },
+                {
+                  "name": "ContentTemplatesReturnObject",
+                  "namespace": "services.ContentTemplates.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "Templates",
+                      "type": "services.ContentTemplates.BusinessObjects.ContentTemplate[]"
+                    }
+                  ]
+                },
+                {
+                  "name": "ModuleContentTemplatesReturnObject",
+                  "namespace": "services.ContentTemplates.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "Templates",
+                      "type": "services.ContentTemplates.BusinessObjects.ModuleContentTemplate[]"
+                    }
+                  ]
+                },
+                {
+                  "name": "TemplateModuleIDsReturnObject",
+                  "namespace": "services.ContentTemplates.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "TemplateID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "ModuleIDs",
+                      "type": "number[]"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Languages",
+          "namespaces": [
+            {
+              "name": "BusinessObjects",
+              "dataTypes": [
+                {
+                  "name": "ContentLanguagePair",
+                  "namespace": "services.Languages.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "BaseLanguageID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "BaseLanguageName",
+                      "type": "string"
+                    },
+                    {
+                      "name": "TargetLanguageID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "TargetLanguageName",
+                      "type": "string"
+                    }
+                  ]
+                },
+                {
+                  "name": "Language",
+                  "namespace": "services.Languages.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "ID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Name",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Abbreviation",
+                      "type": "string"
+                    },
+                    {
+                      "name": "EP",
+                      "type": "bool"
+                    },
+                    {
+                      "name": "Department",
+                      "type": "number"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "ReturnObjects",
+              "dataTypes": [
+                {
+                  "name": "DatasetTargetSubjectsReturnObject",
+                  "namespace": "services.Languages.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "TargetLanguages",
+                      "type": "services.Languages.BusinessObjects.Language[]"
+                    },
+                    {
+                      "name": "DatasetID",
+                      "type": "number"
+                    }
+                  ]
+                },
+                {
+                  "name": "LanguagePairReturnObject",
+                  "namespace": "services.Languages.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "TheLanguagePair",
+                      "type": "services.Languages.BusinessObjects.ContentLanguagePair"
+                    }
+                  ]
+                },
+                {
+                  "name": "LanguagesReturnObject",
+                  "namespace": "services.Languages.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "Languages",
+                      "type": "services.Languages.BusinessObjects.Language[]"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Modules",
+          "namespaces": [
+            {
+              "name": "BusinessObjects",
+              "dataTypes": [
+                {
+                  "name": "ModuleInfo",
+                  "namespace": "services.Modules.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "ID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Title",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Description",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Creator",
+                      "type": "number"
+                    },
+                    {
+                      "name": "SchoolOwner",
+                      "type": "number"
+                    },
+                    {
+                      "name": "BaseLanguage",
+                      "type": "number"
+                    },
+                    {
+                      "name": "TargetLanguage",
+                      "type": "number"
+                    },
+                    {
+                      "name": "AppID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "DateCreated",
+                      "type": "Date"
+                    },
+                    {
+                      "name": "Ancestor",
+                      "type": "(number | null)"
+                    },
+                    {
+                      "name": "CascadeSourceModuleChanges",
+                      "type": "bool"
+                    },
+                    {
+                      "name": "VisibleToStudents",
+                      "type": "bool"
+                    },
+                    {
+                      "name": "Highlighted",
+                      "type": "bool"
+                    }
+                  ]
+                },
+                {
+                  "name": "ModuleInfoWithLanguages",
+                  "namespace": "services.Modules.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "ID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Title",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Creator",
+                      "type": "number"
+                    },
+                    {
+                      "name": "BaseLanguageID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "BaseLanguage",
+                      "type": "string"
+                    },
+                    {
+                      "name": "TargetLanguageID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "TargetLanguage",
+                      "type": "string"
+                    },
+                    {
+                      "name": "DateCreated",
+                      "type": "Date"
+                    },
+                    {
+                      "name": "SchoolOwner",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Highlighted",
+                      "type": "bool"
+                    },
+                    {
+                      "name": "VisibleToStudents",
+                      "type": "bool"
+                    },
+                    {
+                      "name": "ContainsFolders",
+                      "type": "bool"
+                    },
+                    {
+                      "name": "ModuleType",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Featured",
+                      "type": "bool"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "ReturnObjects",
+              "dataTypes": [
+                {
+                  "name": "ModuleInfoReturnObject",
+                  "namespace": "services.Modules.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "Module",
+                      "type": "services.Modules.BusinessObjects.ModuleInfo"
+                    },
+                    {
+                      "name": "Progress",
+                      "type": "string"
+                    }
+                  ]
+                },
+                {
+                  "name": "ModulesInfoWithLanguagesReturnObject",
+                  "namespace": "services.Modules.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "Modules",
+                      "type": "services.Modules.BusinessObjects.ModuleInfoWithLanguages[]"
+                    },
+                    {
+                      "name": "ClassLicenceClash",
+                      "type": "bool"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TranslationLists",
+          "namespaces": [
+            {
+              "name": "BusinessObjects",
+              "dataTypes": [
+                {
+                  "name": "TranslationListTitle",
+                  "namespace": "services.TranslationLists.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "ID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Title",
+                      "type": "string"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "ReturnObjects",
+              "dataTypes": [
+                {
+                  "name": "TranslationListTitlesReturnObject",
+                  "namespace": "services.TranslationLists.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "Lists",
+                      "type": "services.TranslationLists.BusinessObjects.TranslationListTitle[]"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Translations",
+          "namespaces": [
+            {
+              "name": "BusinessObjects",
+              "dataTypes": [
+                {
+                  "name": "DefinitionForCreation",
+                  "namespace": "services.Translations.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "CreationID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "ID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Language",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Text",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Comment",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ScriptID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "DisplayIndex",
+                      "type": "number"
+                    },
+                    {
+                      "name": "DisplayAsAnswer",
+                      "type": "bool"
+                    },
+                    {
+                      "name": "Romanisations",
+                      "type": "string[]"
+                    },
+                    {
+                      "name": "TypeCode",
+                      "type": "string"
+                    }
+                  ]
+                },
+                {
+                  "name": "TopTranslationList",
+                  "namespace": "services.Translations.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "Title",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Creator",
+                      "type": "string"
+                    }
+                  ]
+                },
+                {
+                  "name": "TranslationDirection",
+                  "namespace": "services.Translations.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "ID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Name",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Explanation",
+                      "type": "string"
+                    },
+                    {
+                      "name": "RequiresSoundFiles",
+                      "type": "bool"
+                    }
+                  ]
+                },
+                {
+                  "name": "TranslationForCreation",
+                  "namespace": "services.Translations.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "CreationID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "ID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "BaseLanguage",
+                      "type": "number"
+                    },
+                    {
+                      "name": "TargetLanguage",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Definitions",
+                      "type": "services.Translations.BusinessObjects.DefinitionForCreation[]"
+                    },
+                    {
+                      "name": "ListsToAddTo",
+                      "type": "string[]"
+                    },
+                    {
+                      "name": "ContentType",
+                      "type": "number"
+                    }
+                  ]
+                },
+                {
+                  "name": "TranslationSuggestionAggregate",
+                  "namespace": "services.Translations.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "TranslationID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Suggestion",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Votes",
+                      "type": "number"
+                    },
+                    {
+                      "name": "FromLanguage",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ToLanguage",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ToLanguageID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "FromDefinitions",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ToDefinitions",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ContentType",
+                      "type": "number"
+                    },
+                    {
+                      "name": "Comment",
+                      "type": "string"
+                    }
+                  ]
+                },
+                {
+                  "name": "TranslationSuggestionsGroup",
+                  "namespace": "services.Translations.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "FromLanguage",
+                      "type": "string"
+                    },
+                    {
+                      "name": "ToLanguage",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Label",
+                      "type": "string"
+                    },
+                    {
+                      "name": "Suggestions",
+                      "type": "services.Translations.BusinessObjects.TranslationSuggestionAggregate[]"
+                    }
+                  ]
+                },
+                {
+                  "name": "TranslationValidationResult",
+                  "namespace": "services.Translations.BusinessObjects",
+                  "fields": [
+                    {
+                      "name": "Errors",
+                      "type": "string[]"
+                    },
+                    {
+                      "name": "TranslationCreationID",
+                      "type": "number"
+                    },
+                    {
+                      "name": "CombinedErrorMessage",
+                      "type": "string"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "ReturnObjects",
+              "dataTypes": [
+                {
+                  "name": "TopTranslationListsReturnObject",
+                  "namespace": "services.Translations.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "Lists",
+                      "type": "services.Translations.BusinessObjects.TopTranslationList[]"
+                    }
+                  ]
+                },
+                {
+                  "name": "TranslationDirectionsReturnObject",
+                  "namespace": "services.Translations.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "Directions",
+                      "type": "services.Translations.BusinessObjects.TranslationDirection[]"
+                    }
+                  ]
+                },
+                {
+                  "name": "TranslationMatchesReturnObject",
+                  "namespace": "services.Translations.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "MatchedTranslations",
+                      "type": "services.Content.BusinessObjects.ContentTranslation[]"
+                    },
+                    {
+                      "name": "ValidationResults",
+                      "type": "services.Translations.BusinessObjects.TranslationValidationResult[]"
+                    }
+                  ]
+                },
+                {
+                  "name": "TranslationSuggestionsReturnObject",
+                  "namespace": "services.Translations.ReturnObjects",
+                  "fields": [
+                    {
+                      "name": "SuggestionGroups",
+                      "type": "services.Translations.BusinessObjects.TranslationSuggestionsGroup[]"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Portals",
+          "namespaces": [
+            {
+              "name": "ControlPanel",
+              "services": [
+                {
+                  "name": "LanguageDataPortal",
+                  "namespace": "services.Portals.ControlPanel",
+                  "methods": [
+                    {
+                      "name": "GetAllLanguages",
+                      "type": "services.Languages.ReturnObjects.LanguagesReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetAllLanguagesOnly",
+                      "type": "services.Languages.ReturnObjects.LanguagesReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetSubjectsForSchool",
+                      "type": "services.Languages.ReturnObjects.LanguagesReturnObject",
+                      "args": [
+                        {
+                          "name": "sessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "schoolID",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetModulesWithLanguagesForSchool",
+                      "type": "services.Modules.ReturnObjects.ModulesInfoWithLanguagesReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "SchoolID",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetContentListSummariesForModule",
+                      "type": "services.TranslationLists.ReturnObjects.TranslationListTitlesReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "ModuleID",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetTranslationDirections",
+                      "type": "services.Translations.ReturnObjects.TranslationDirectionsReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "BaseLanguage",
+                          "type": "number"
+                        },
+                        {
+                          "name": "TargetLanguage",
+                          "type": "number"
+                        },
+                        {
+                          "name": "Abbreviate",
+                          "type": "bool"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "CreateNewModule",
+                      "type": "services.Modules.ReturnObjects.ModuleInfoReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "SchoolID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "Title",
+                          "type": "string"
+                        },
+                        {
+                          "name": "Description",
+                          "type": "string"
+                        },
+                        {
+                          "name": "BaseLanguage",
+                          "type": "number"
+                        },
+                        {
+                          "name": "TargetLanguage",
+                          "type": "number"
+                        },
+                        {
+                          "name": "NewTranslations",
+                          "type": "services.Translations.BusinessObjects.TranslationForCreation[]"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "AddTranslationsToExistingModule",
+                      "type": "services.BaseClasses.ReturnObjects.ReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "SchoolID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "ModuleID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "NewTranslations",
+                          "type": "services.Translations.BusinessObjects.TranslationForCreation[]"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "AddTranslationsToExistingModule2",
+                      "type": "services.BaseClasses.ReturnObjects.ReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "SchoolID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "ModuleID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "folderPath",
+                          "type": "string"
+                        },
+                        {
+                          "name": "NewTranslations",
+                          "type": "services.Translations.BusinessObjects.TranslationForCreation[]"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "FindOrCreateTranslationsAndDefinitions",
+                      "type": "services.Translations.ReturnObjects.TranslationMatchesReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "Translations",
+                          "type": "services.Translations.BusinessObjects.TranslationForCreation[]"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetTranslationSuggestions",
+                      "type": "services.Translations.ReturnObjects.TranslationSuggestionsReturnObject",
+                      "args": [
+                        {
+                          "name": "sessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "minVotes",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "TopListsTranslationIsIn",
+                      "type": "services.Translations.ReturnObjects.TopTranslationListsReturnObject",
+                      "args": [
+                        {
+                          "name": "sessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "contentID",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "AcceptSuggestions",
+                      "type": "services.BaseClasses.ReturnObjects.ReturnObject",
+                      "args": [
+                        {
+                          "name": "sessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "suggestions",
+                          "type": "services.Translations.BusinessObjects.TranslationSuggestionAggregate[]"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "DeclineSuggestions",
+                      "type": "services.BaseClasses.ReturnObjects.ReturnObject",
+                      "args": [
+                        {
+                          "name": "sessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "suggestions",
+                          "type": "services.Translations.BusinessObjects.TranslationSuggestionAggregate[]"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetContentTemplates",
+                      "type": "services.ContentTemplates.ReturnObjects.ContentTemplatesReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetContentTemplatesForSchool",
+                      "type": "services.ContentTemplates.ReturnObjects.ContentTemplatesReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "SchoolID",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetModuleContentTemplates",
+                      "type": "services.ContentTemplates.ReturnObjects.ModuleContentTemplatesReturnObject",
+                      "args": [
+                        {
+                          "name": "sessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "moduleID",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetModuleIDsInTemplate",
+                      "type": "services.ContentTemplates.ReturnObjects.TemplateModuleIDsReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "TemplateID",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "CreateContentTemplate",
+                      "type": "services.ContentTemplates.ReturnObjects.ContentTemplateReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "Name",
+                          "type": "string"
+                        },
+                        {
+                          "name": "Description",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "EditContentTemplate",
+                      "type": "services.ContentTemplates.ReturnObjects.ContentTemplateReturnObject",
+                      "args": [
+                        {
+                          "name": "SessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "TemplateID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "Name",
+                          "type": "string"
+                        },
+                        {
+                          "name": "Description",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetLanguagePair",
+                      "type": "services.Languages.ReturnObjects.LanguagePairReturnObject",
+                      "args": [
+                        {
+                          "name": "sessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "baseLanguage",
+                          "type": "number"
+                        },
+                        {
+                          "name": "targetLanguage",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetLanguagePairForTranslationID",
+                      "type": "services.Languages.ReturnObjects.LanguagePairReturnObject",
+                      "args": [
+                        {
+                          "name": "sessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "translationID",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetDatasetTargetSubjects",
+                      "type": "services.Languages.ReturnObjects.DatasetTargetSubjectsReturnObject",
+                      "args": [
+                        {
+                          "name": "sessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "datasetID",
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "GetModulesWithLanguagesForSchoolAndClasses",
+                      "type": "services.Modules.ReturnObjects.ModulesInfoWithLanguagesReturnObject",
+                      "args": [
+                        {
+                          "name": "sessionID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "schoolID",
+                          "type": "number"
+                        },
+                        {
+                          "name": "classIDs",
+                          "type": "number[]"
+                        },
+                        {
+                          "name": "modulesAvailableToAllClasses",
+                          "type": "bool"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

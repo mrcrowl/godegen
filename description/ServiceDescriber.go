@@ -1,19 +1,20 @@
 package description
 
 import (
-	"fmt"
 	"godegen/reflect"
 	"strings"
 )
 
 type ServiceDescriber struct {
-	assemblyFile *reflect.Assembly
+	assemblyFile    *reflect.Assembly
+	typeMapper      func(reflect.Type) string
+	namespaceMapper func(string) string
 }
 
-func NewServiceDescriber(assemblyFilepath string, assemblyName string) *ServiceDescriber {
+func NewServiceDescriber(assemblyFilepath string, assemblyName string, typeMapper func(reflect.Type) string, namespaceMapper func(string) string) *ServiceDescriber {
 	loader := reflect.NewAssemblyLoader(assemblyFilepath)
 	assemblyFile, _ := loader.Load(assemblyName)
-	return &ServiceDescriber{assemblyFile}
+	return &ServiceDescriber{assemblyFile, typeMapper, namespaceMapper}
 }
 
 func (res *ServiceDescriber) Describe(serviceTypeName string) (*ServiceDescription, error) {
@@ -26,11 +27,12 @@ func (res *ServiceDescriber) Describe(serviceTypeName string) (*ServiceDescripti
 }
 
 func (res *ServiceDescriber) createDescriptionOfTypes(types []reflect.Type, serviceType reflect.Type) *ServiceDescription {
-	rootNamespaces, namespaceMap := buildNamespaceTree(types, serviceType)
+	rootNamespaces, namespaceMap := res.buildNamespaceTree(types, serviceType)
 
 	// add service
-	serviceNamespace := namespaceMap[serviceType.Namespace()]
-	service := createService(serviceType)
+	serviceTypeNamespace := res.mapNamespace(serviceType.Namespace())
+	serviceNamespace := namespaceMap[serviceTypeNamespace]
+	service := res.createService(serviceType)
 	serviceNamespace.addService(service)
 
 	// fmt.Println(rootNamespaces)
@@ -39,16 +41,16 @@ func (res *ServiceDescriber) createDescriptionOfTypes(types []reflect.Type, serv
 	}
 }
 
-func createService(serviceType reflect.Type) *Service {
-	methods := collectTypeMethods(serviceType)
+func (res *ServiceDescriber) createService(serviceType reflect.Type) *Service {
+	methods := res.collectTypeMethods(serviceType)
 
 	return &Service{
-		*createDataTypeReference(serviceType),
+		*res.createDataType(serviceType),
 		methods,
 	}
 }
 
-func buildNamespaceTree(types []reflect.Type, serviceType reflect.Type) ([]*Namespace, map[string]*Namespace) {
+func (res *ServiceDescriber) buildNamespaceTree(types []reflect.Type, serviceType reflect.Type) ([]*Namespace, map[string]*Namespace) {
 	var namespaceSeen = map[string]*Namespace{}
 	var distinctNamespaces []*Namespace
 	var rootNamespaces []*Namespace
@@ -57,7 +59,8 @@ func buildNamespaceTree(types []reflect.Type, serviceType reflect.Type) ([]*Name
 		var childNamespace *Namespace
 		var namespace *Namespace
 		var found bool
-		nsName := typ.Namespace()
+		var nsName = res.mapNamespace(typ.Namespace())
+		var nsOriginal = nsName
 		for {
 			if namespace, found = namespaceSeen[nsName]; !found {
 				namespace = newNamespace(nsName)
@@ -82,11 +85,11 @@ func buildNamespaceTree(types []reflect.Type, serviceType reflect.Type) ([]*Name
 			childNamespace = namespace
 		}
 
-		namespace = namespaceSeen[nsName]
+		namespace = namespaceSeen[nsOriginal]
 
 		// add type to namespace
 		if typ != serviceType {
-			dataType := createDataType(typ)
+			dataType := res.createDataType(typ)
 			namespace.DataTypes = append(namespace.DataTypes, dataType)
 		}
 	}
@@ -94,53 +97,65 @@ func buildNamespaceTree(types []reflect.Type, serviceType reflect.Type) ([]*Name
 	return rootNamespaces, namespaceSeen
 }
 
-func createDataType(typ reflect.Type) *DataType {
-	fields := collectTypeFields(typ)
+func (res *ServiceDescriber) createDataType(typ reflect.Type) *DataType {
+	fields := res.collectTypeFields(typ)
 
 	return &DataType{
-		*createDataTypeReference(typ),
+		DataTypeReference{
+			Name:      typ.Name(),
+			Namespace: res.mapNamespace(typ.Namespace()),
+			// QualifiedName: res.mapNamespace(typ.FullName()),
+		},
 		nil, // TODO: get base type
 		fields,
 	}
 }
 
-func createDataTypeReference(typ reflect.Type) *DataTypeReference {
-	var elementDataType *DataTypeReference
-	if elementType, isCollection := isCollectionType(typ); isCollection {
-		elementDataType = createDataTypeReference(elementType)
-	}
+// func createDataTypeReference(typ reflect.Type) *DataTypeReference {
+// 	var elementDataType *DataTypeReference
+// 	if elementType, isCollection := isCollectionType(typ); isCollection {
+// 		elementDataType = createDataTypeReference(elementType)
+// 	}
 
-	return &DataTypeReference{
-		Name:          typ.Name(),
-		Namespace:     typ.Namespace(),
-		QualifiedName: typ.FullName(),
-		ElementType:   elementDataType,
-	}
-}
+// 	return &DataTypeReference{
+// 		Name:          typ.Name(),
+// 		Namespace:     typ.Namespace(),
+// 		QualifiedName: typ.FullName(),
+// 		ElementType:   elementDataType,
+// 	}
+// }
 
-func collectTypeFields(typ reflect.Type) []*Field {
+func (res *ServiceDescriber) collectTypeFields(typ reflect.Type) []*Field {
 	var fields []*Field
 
 	for _, field := range typ.GetFields() {
-		fields = append(fields, createFieldFromField(field))
+		fields = append(fields, res.createFieldFromField(field))
 	}
 
 	for _, property := range typ.GetProperties() {
-		fields = append(fields, createFieldFromProperty(property))
+		fields = append(fields, res.createFieldFromProperty(property))
 	}
 
 	return fields
 }
 
-func collectTypeMethods(typ reflect.Type) []*Method {
+func (res *ServiceDescriber) mapType(typ reflect.Type) string {
+	return res.typeMapper(typ)
+}
+
+func (res *ServiceDescriber) mapNamespace(namespace string) string {
+	return res.namespaceMapper(namespace)
+}
+
+func (res *ServiceDescriber) collectTypeMethods(typ reflect.Type) []*Method {
 	var methods []*Method
 
 	for _, method := range typ.GetMethods() {
-		args := collectMethodArgs(method)
+		args := res.collectMethodArgs(method)
 
 		meth := &Method{
 			Name: method.Name(),
-			Type: createDataTypeReference(method.ReturnType()),
+			Type: res.mapType(method.ReturnType()),
 			Args: args,
 		}
 		methods = append(methods, meth)
@@ -149,13 +164,13 @@ func collectTypeMethods(typ reflect.Type) []*Method {
 	return methods
 }
 
-func collectMethodArgs(method *reflect.Method) []*Arg {
+func (res *ServiceDescriber) collectMethodArgs(method *reflect.Method) []*Arg {
 	var args []*Arg
 
 	for _, param := range method.Parameters() {
 		arg := &Arg{
 			Name: param.Name(),
-			Type: createDataTypeReference(param.Type()),
+			Type: res.mapType(param.Type()),
 		}
 		args = append(args, arg)
 	}
@@ -163,17 +178,17 @@ func collectMethodArgs(method *reflect.Method) []*Arg {
 	return args
 }
 
-func createFieldFromField(field *reflect.Field) *Field {
+func (res *ServiceDescriber) createFieldFromField(field *reflect.Field) *Field {
 	return &Field{
 		Name: field.Name(),
-		Type: createDataTypeReference(field.Type()),
+		Type: res.mapType(field.Type()),
 	}
 }
 
-func createFieldFromProperty(property *reflect.Property) *Field {
+func (res *ServiceDescriber) createFieldFromProperty(property *reflect.Property) *Field {
 	return &Field{
 		Name: property.Name(),
-		Type: createDataTypeReference(property.Type()),
+		Type: res.mapType(property.Type()),
 	}
 }
 
@@ -181,7 +196,7 @@ func newNamespace(namespace string) *Namespace {
 	name := getLastNamespaceSegment(namespace)
 	return &Namespace{
 		Name:          name,
-		QualifiedName: namespace,
+		qualifiedName: namespace,
 	}
 }
 
@@ -201,30 +216,16 @@ func getParentNamespace(namespace string) string {
 	return namespace[:dot]
 }
 
-func printTypes(resolvedTypes []reflect.Type) {
-	for _, t := range resolvedTypes {
-		fmt.Println(t.FullName() + ":")
-		for _, field := range t.GetFields() {
-			fieldType := field.Type()
-			if collectionType, isCollection := isCollectionType(fieldType); isCollection {
-				fmt.Println("\t" + field.Name() + ": " + collectionType.FullName() + "[]")
-			} else {
-				fmt.Println("\t" + field.Name() + ": " + field.Type().FullName())
-			}
-		}
-	}
-}
-
-func isCollectionType(typ reflect.Type) (reflect.Type, bool) {
-	if array, isArray := typ.(*reflect.ArrayType); isArray {
-		return array.ValueType(), true
-	}
-
-	if generic, isGeneric := typ.(*reflect.GenericType); isGeneric {
-		if generic.BaseType.FullName() == "System.Collections.Generic.List`1" {
-			return generic.ArgumentTypes()[0], true
-		}
-	}
-
-	return nil, false
-}
+// func printTypes(resolvedTypes []reflect.Type) {
+// 	for _, t := range resolvedTypes {
+// 		fmt.Println(t.FullName() + ":")
+// 		for _, field := range t.GetFields() {
+// 			fieldType := field.Type()
+// 			if collectionType, isCollection := isCollectionType(fieldType); isCollection {
+// 				fmt.Println("\t" + field.Name() + ": " + collectionType.FullName() + "[]")
+// 			} else {
+// 				fmt.Println("\t" + field.Name() + ": " + field.Type().FullName())
+// 			}
+// 		}
+// 	}
+// }

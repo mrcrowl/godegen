@@ -25,14 +25,14 @@ func (desc *ServiceDescription) JSON() string {
 
 type Namespace struct {
 	Name          string       `json:"name"`
-	QualifiedName string       `json:"qualifiedName"`
+	qualifiedName string       `json:"-"`
 	Namespaces    []*Namespace `json:"namespaces,omitempty"`
 	Services      []*Service   `json:"services,omitempty"`
 	DataTypes     []*DataType  `json:"dataTypes,omitempty"`
 }
 
 func (ns *Namespace) isRoot() bool {
-	return ns.Name == ns.QualifiedName
+	return ns.Name == ns.qualifiedName
 }
 
 func (ns *Namespace) addChild(child *Namespace) {
@@ -44,15 +44,15 @@ func (ns *Namespace) addService(service *Service) {
 }
 
 type DataTypeReference struct {
-	Name          string             `json:"name"`
-	Namespace     string             `json:"namespace"`
-	QualifiedName string             `json:"qualifiedName"`
-	ElementType   *DataTypeReference `json:"elementType,omitempty"`
+	Name      string `json:"name"`
+	Namespace string `json:"namespace"`
+	// QualifiedName string `json:"qualifiedName"`
+	// ElementType   *DataTypeReference `json:"elementType,omitempty"`
 }
 
-type Service struct {
+type MappedDataTypeReference struct {
 	DataTypeReference
-	Methods []*Method `json:"methods"`
+	MappedType string
 }
 
 type DataType struct {
@@ -61,24 +61,29 @@ type DataType struct {
 	Fields []*Field           `json:"fields,omitempty"`
 }
 
+type Service struct {
+	DataType
+	Methods []*Method `json:"methods"`
+}
+
 type Method struct {
-	Name string             `json:"name"`
-	Type *DataTypeReference `json:"type"`
-	Args []*Arg             `json:"args,omitempty"`
+	Name string `json:"name"`
+	Type string `json:"type"`
+	Args []*Arg `json:"args,omitempty"`
 }
 
 type Arg struct {
-	Name string             `json:"name"`
-	Type *DataTypeReference `json:"type"`
+	Name string `json:"name"`
+	Type string `json:"type"`
 }
 
 type Field struct {
-	Name string             `json:"name"`
-	Type *DataTypeReference `json:"type"`
+	Name string `json:"name"`
+	Type string `json:"type"`
 }
 
 type Const struct {
-	Name  string             `json:"name"`
-	Type  *DataTypeReference `json:"type"`
-	Value interface{}        `json:"value"`
+	Name  string      `json:"name"`
+	Type  string      `json:"type"`
+	Value interface{} `json:"value"`
 }
