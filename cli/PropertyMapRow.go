@@ -20,8 +20,8 @@ func readPropertyMapRow(
 	streams *MetadataStreams,
 	tables *TableSet,
 ) IRow {
-	parentRowNumber := ReadSimpleIndex(sr, tables, TableIdxTypeDef)
-	propertyStartRow := ReadSimpleIndex(sr, tables, TableIdxProperty)
+	parentRowNumber := readSimpleIndex(sr, tables, TableIdxTypeDef)
+	propertyStartRow := readSimpleIndex(sr, tables, TableIdxProperty)
 	return &PropertyMapRow{rowNumber, parentRowNumber, RowRange{propertyStartRow, propertyStartRow}}
 }
 

@@ -46,7 +46,7 @@ func readTypeRefRow(
 	streams *MetadataStreams,
 	tables *TableSet,
 ) IRow {
-	codedIndex := ReadCodedIndex(sr, tables, TableIdxModule, TableIdxModuleRef, TableIdxAssemblyRef, TableIdxTypeRef)
+	codedIndex := readCodedIndex(sr, tables, TableIdxModule, TableIdxModuleRef, TableIdxAssemblyRef, TableIdxTypeRef)
 	scopeIndex := NewResolutionScopeIndex(codedIndex)
 	typeName := streams.stringHeap.ReadString(sr)
 	typeNamespace := streams.stringHeap.ReadString(sr)

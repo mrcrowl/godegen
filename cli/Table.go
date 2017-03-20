@@ -5,6 +5,7 @@ import "sort"
 type Table struct {
 	tableIndex uint8
 	numRows    uint32
+	sorted     bool
 	rows       []IRow
 }
 
@@ -37,37 +38,38 @@ var rowReaderFns = [maxTableCount]RowReaderFn{
 	0x04: readFieldRow,
 	0x06: readMethodDefRow,
 	0x08: readParamRow,
-	0x09: createPlaceholderReaderOfSize(2 + 2),         // InterfaceImpl/
-	0x0A: createPlaceholderReaderOfSize(4 + 4 + 4),     // MemberRef/
-	0x0B: createPlaceholderReaderOfSize(2 + 4 + 4),     // Constant/
-	0x0C: createPlaceholderReaderOfSize(4 + 4 + 4),     // CustomAttribute/
-	0x0D: createPlaceholderReaderOfSize(4 + 4),         // FieldMarshal/
-	0x0E: createPlaceholderReaderOfSize(2 + 4 + 4),     // DeclSecurity/
-	0x0F: createPlaceholderReaderOfSize(2 + 4 + 2),     // ClassLayout/
+	0x09: createPlaceholderReaderOfSize(2 + 2),         // InterfaceImpl
+	0x0A: createPlaceholderReaderOfSize(4 + 4 + 4),     // MemberRef
+	0x0B: readConstRow,                                 // Const
+	0x0C: createPlaceholderReaderOfSize(4 + 4 + 4),     // CustomAttribute
+	0x0D: createPlaceholderReaderOfSize(4 + 4),         // FieldMarshal
+	0x0E: createPlaceholderReaderOfSize(2 + 4 + 4),     // DeclSecurity
+	0x0F: createPlaceholderReaderOfSize(2 + 4 + 2),     // ClassLayout
 	0x10: createPlaceholderReaderOfSize(4 + 2),         // FieldLayout
 	0x11: createPlaceholderReaderOfSize(4),             // StandAloneSig
-	0x12: createPlaceholderReaderOfSize(2 + 2),         // EventMap/
-	0x14: createPlaceholderReaderOfSize(2 + 4 + 2),     // Event/
-	0x15: readPropertyMapRow,                           // PropertyMap/
-	0x17: readPropertyRow,                              // Property/
+	0x12: createPlaceholderReaderOfSize(2 + 2),         // EventMap
+	0x14: createPlaceholderReaderOfSize(2 + 4 + 2),     // Event
+	0x15: readPropertyMapRow,                           // PropertyMap
+	0x17: readPropertyRow,                              // Property
 	0x18: readMethodSemanticsRow,                       // MethodSemantics
-	0x19: createPlaceholderReaderOfSize(2 + 2 + 2),     // MethodImpl/
-	0x1A: createPlaceholderReaderOfSize(4),             // ModuleRef/
-	0x1B: createPlaceholderReaderOfSize(4),             // TypeSpec/
-	0x1C: createPlaceholderReaderOfSize(2 + 4 + 4 + 2), // ImplMap	?2nd=2?
+	0x19: createPlaceholderReaderOfSize(2 + 2 + 2),     // MethodImpl
+	0x1A: createPlaceholderReaderOfSize(4),             // ModuleRef
+	0x1B: createPlaceholderReaderOfSize(4),             // TypeSpec
+	0x1C: createPlaceholderReaderOfSize(2 + 4 + 4 + 2), // ImplMap
 	0x1D: createPlaceholderReaderOfSize(4 + 2),         // FieldRVA
 	0x20: readAssemblyRow,                              // Assembly
 	0x21: createPlaceholderReaderOfSize(4),             // AssemblyProcessor
 	0x22: createPlaceholderReaderOfSize(4 + 4 + 4),     // AssemblyOS
 	0x23: readAssemblyRefRow,                           // AssemblyRef
-	// 0x18: createPlaceholderReaderOfSize(2 + 2 + 2),     // MethodSemantics/
-	// 0x20: createPlaceholderReaderOfSize(4 + 8 + 4 + 4 + 4), // Assembly
+	0x2A: readGenericParamRow,                          // GenericParam
+	// createPlaceholderReaderOfSize(2 + 4 + 4),        // Constant
 }
 
-func newTable(tableIndex uint8, numRows uint32) Table {
-	return Table{
+func newTable(tableIndex uint8, numRows uint32, isSorted bool) *Table {
+	return &Table{
 		tableIndex: tableIndex,
 		numRows:    numRows,
+		sorted:     isSorted,
 		rows:       make([]IRow, numRows),
 	}
 }

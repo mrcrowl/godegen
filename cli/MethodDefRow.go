@@ -37,7 +37,7 @@ func readMethodDefRow(sr *ShapeReader, rowNumber uint32, streams *MetadataStream
 	flags := sr.ReadUInt16()
 	name := streams.stringHeap.ReadString(sr)
 	signatureBlob := *streams.blobHeap.ReadBlob(sr)
-	paramFromIndex := ReadSimpleIndex(sr, tables, TableIdxMethodDef)
+	paramFromIndex := readSimpleIndex(sr, tables, TableIdxMethodDef)
 	paramRowRange := RowRange{paramFromIndex, paramFromIndex}
 	return &MethodDefRow{rowNumber, rva, implFlags, flags, name, signatureBlob, paramRowRange}
 }

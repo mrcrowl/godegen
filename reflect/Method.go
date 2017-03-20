@@ -19,9 +19,11 @@ const (
 )
 
 const (
-	MethodAttributesStatic  uint16 = 0x10
-	MethodAttributesFinal   uint16 = 0x20
-	MethodAttributesVirtual uint16 = 0x40
+	MethodAttributesStatic      uint16 = 0x10
+	MethodAttributesFinal       uint16 = 0x20
+	MethodAttributesVirtual     uint16 = 0x40
+	MethodAttributesAbstract    uint16 = 0x400
+	MethodAttributesSpecialName uint16 = 0x800
 )
 
 var memberAccessNames = []string{"", "private", "", "internal", "protected", "", "public"}

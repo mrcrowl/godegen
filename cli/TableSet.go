@@ -50,28 +50,30 @@ const (
 )
 
 type TableSet struct {
-	tables []Table
+	tables []*Table
 }
 
 func NewTableSet(streams *MetadataStreams) *TableSet {
 	tableIndex := uint8(0)
 	tildeStream := streams.tildeStream
-	presentRowCounts, presentTables := tildeStream.RawRowCounts, tildeStream.ValidTables
+	presentRowCounts, presentTables, sortFlags := tildeStream.RawRowCounts, tildeStream.ValidTables, tildeStream.sortedTables
 	presentRowCountsIndex := 0
-	tables := make([]Table, maxTableCount)
+	tables := make([]*Table, maxTableCount)
 	for presentTables > 0 {
 		isTablePresent := (presentTables & 0x1) > 0
+		isTableSorted := (sortFlags & 0x1) > 0
 		rowCount := uint32(0)
 		if isTablePresent {
 			rowCount = presentRowCounts[presentRowCountsIndex]
 			presentRowCountsIndex++
 		}
 
-		table := newTable(tableIndex, rowCount)
+		table := newTable(tableIndex, rowCount, isTableSorted)
 
 		tables[tableIndex] = table
 		tableIndex++
 		presentTables >>= 1
+		sortFlags >>= 1
 	}
 
 	return &TableSet{
@@ -98,7 +100,7 @@ func (set *TableSet) postRead() {
 	set.collectPropertyMapRanges()
 }
 
-func (set *TableSet) GetTable(index TableIdx) Table {
+func (set *TableSet) GetTable(index TableIdx) *Table {
 	return set.tables[index]
 }
 

@@ -15,33 +15,6 @@ func (row *TypeDefRow) RowNumber() uint32 {
 	return row.rowNumber
 }
 
-type TypeDefOrRefType uint8
-
-const (
-	TDORTypeDef TypeDefOrRefType = iota
-	TDORTypeRef
-	TDORTypeSpec
-)
-
-type TypeDefOrRefIndex struct {
-	Row  uint32
-	Type TypeDefOrRefType
-}
-
-// public static async Task<TasksForUserReturnObject> GetCurrentTasksForUser(LPSession session)
-// {13 [0 1 21 18 128 225 1 18 148 164 18 145 188]}
-//      DEFAULT   TR: TASK  CLASS      CLASS
-//        ONE PARAM       GENARGS		  TD: 3876---
-//          GENINST            TD: 529
-//             CLASS
-
-func NewTypeDefOrRefIndex(codedIndex CodedIndex) TypeDefOrRefIndex {
-	return TypeDefOrRefIndex{
-		Row:  codedIndex.Index,
-		Type: TypeDefOrRefType(codedIndex.Tag),
-	}
-}
-
 func (row *TypeDefRow) String() string {
 	return row.FullName()
 }
@@ -100,15 +73,15 @@ func readTypeDefRow(
 	flags := sr.ReadUInt32()
 	typeName := streams.stringHeap.ReadString(sr)
 	typeNamespace := streams.stringHeap.ReadString(sr)
-	codedIndex := ReadCodedIndex(sr, tables, TableIdxTypeDef, TableIdxTypeRef, TableIdxTypeSpec)
-	fieldFrom := ReadSimpleIndex(sr, tables, TableIdxField)
-	methodFrom := ReadSimpleIndex(sr, tables, TableIdxMethodDef)
+	codedIndex := readCodedIndex(sr, tables, TableIdxTypeDef, TableIdxTypeRef, TableIdxTypeSpec)
+	fieldFrom := readSimpleIndex(sr, tables, TableIdxField)
+	methodFrom := readSimpleIndex(sr, tables, TableIdxMethodDef)
 	return &TypeDefRow{
 		rowNumber:      rowNumber,
 		Flags:          flags,
 		TypeName:       typeName,
 		TypeNamespace:  typeNamespace,
-		ExtendsIndex:   NewTypeDefOrRefIndex(codedIndex),
+		ExtendsIndex:   newTypeDefOrRefIndex(codedIndex),
 		fieldRowRange:  RowRange{from: fieldFrom},
 		methodRowRange: RowRange{from: methodFrom},
 	}

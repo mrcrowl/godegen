@@ -142,12 +142,12 @@ func (res *ServiceDescriber) createDataTypeReference(typ reflect.Type) *DataType
 func (res *ServiceDescriber) collectTypeFields(typ reflect.Type) []*Field {
 	var fields []*Field
 
-	for _, field := range typ.GetFields() {
-		fields = append(fields, res.createFieldFromField(field))
-	}
-
 	for _, property := range typ.GetProperties() {
 		fields = append(fields, res.createFieldFromProperty(property))
+	}
+
+	for _, field := range typ.GetFields() {
+		fields = append(fields, res.createFieldFromField(field))
 	}
 
 	return fields
@@ -155,6 +155,13 @@ func (res *ServiceDescriber) collectTypeFields(typ reflect.Type) []*Field {
 
 func (res *ServiceDescriber) collectConsts(typ reflect.Type) []*Const {
 	var consts []*Const
+
+	for _, constant := range typ.GetFieldsWithOptions(false, false, true) {
+		if constant.Value() != nil {
+			consts = append(consts, res.createConst(constant))
+		}
+	}
+
 	return consts
 }
 
@@ -173,9 +180,10 @@ func (res *ServiceDescriber) collectTypeMethods(typ reflect.Type) []*Method {
 		args := res.collectMethodArgs(method)
 
 		meth := &Method{
-			Name: method.Name(),
-			Type: res.mapType(method.ReturnType()),
-			Args: args,
+			Name:     method.Name(),
+			Type:     res.mapType(method.ReturnType()),
+			Args:     args,
+			nameSort: strings.ToLower(method.Name()),
 		}
 		methods = append(methods, meth)
 	}
@@ -183,7 +191,7 @@ func (res *ServiceDescriber) collectTypeMethods(typ reflect.Type) []*Method {
 	slice.Sort(methods, func(i, j int) bool {
 		methodI := methods[i]
 		methodJ := methods[j]
-		if methodI.Name < methodJ.Name {
+		if methodI.nameSort < methodJ.nameSort {
 			return true
 		}
 		return false
@@ -204,6 +212,14 @@ func (res *ServiceDescriber) collectMethodArgs(method *reflect.Method) []*Arg {
 	}
 
 	return args
+}
+
+func (res *ServiceDescriber) createConst(field *reflect.Field) *Const {
+	return &Const{
+		Name:  field.Name(),
+		Type:  res.mapType(field.Type()),
+		Value: field.Value(),
+	}
 }
 
 func (res *ServiceDescriber) createFieldFromField(field *reflect.Field) *Field {

@@ -25,6 +25,10 @@ func newGenericType(templateType Type, argTypes []Type, asm *Assembly) Type {
 	}
 }
 
+func (gen *GenericType) GetFieldsWithOptions(includeNonPublic bool, includeInstance bool, includeStatic bool) []*Field {
+	return []*Field{}
+}
+
 func (gen *GenericType) Name() string {
 	var buffer bytes.Buffer
 	lexicalName := gen.LexicalName()

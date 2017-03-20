@@ -17,6 +17,7 @@ type Type interface {
 	Base() Type
 	GetMethods() []*Method
 	GetFields() []*Field
+	GetFieldsWithOptions(includeNonPublic bool, includeInstance bool, includeStatic bool) []*Field
 	GetProperties() []*Property
 	RowNumber() uint32
 }

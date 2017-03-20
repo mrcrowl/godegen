@@ -24,3 +24,7 @@ func (typ TypeBase) FullName() string {
 func (typ TypeBase) GetFields() []*Field {
 	return []*Field{}
 }
+
+func (typ TypeBase) GetFieldsWithOptions(includeNonPublic bool, includeInstance bool, includeStatic bool) []*Field {
+	return []*Field{}
+}

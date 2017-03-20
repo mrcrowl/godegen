@@ -39,7 +39,7 @@ func (typ *NormalType) GetMethods() []*Method {
 	count := 0
 	for _, row := range rows {
 		method := newMethod(row, typ.assembly)
-		includeMethod := method.memberAccess == Public && method.Name() != CONSTRUCTOR_NAME
+		includeMethod := method.memberAccess == Public && method.Name() != CONSTRUCTOR_NAME && !method.static
 		if includeMethod {
 			methods = append(methods, method)
 			count++
@@ -49,12 +49,19 @@ func (typ *NormalType) GetMethods() []*Method {
 }
 
 func (typ *NormalType) GetFields() []*Field {
+	return typ.GetFieldsWithOptions(false, true, false)
+}
+
+func (typ *NormalType) GetFieldsWithOptions(includeNonPublic bool, includeInstance bool, includeStatic bool) []*Field {
 	rows := typ.row.GetFieldRows(typ.assembly.metadata.Tables)
 	fields := make([]*Field, 0, len(rows))
 	count := 0
 	for _, row := range rows {
 		field := newField(row, typ.assembly)
-		if field.memberAccess == Public {
+		includeField := ((includeNonPublic || field.memberAccess == Public) &&
+			(includeInstance || field.static) &&
+			(includeStatic || !field.static))
+		if includeField {
 			fields = append(fields, field)
 			count++
 		}

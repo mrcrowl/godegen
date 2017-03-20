@@ -5,7 +5,7 @@ type CodedIndex struct {
 	Tag   uint8
 }
 
-func ReadSimpleIndex(reader *ShapeReader, tables *TableSet, tableIndex TableIdx) uint32 {
+func readSimpleIndex(reader *ShapeReader, tables *TableSet, tableIndex TableIdx) uint32 {
 	useBigIndex := tables.useBigIndex(tableIndex)
 	var simpleIndex uint32
 	if useBigIndex {
@@ -16,7 +16,7 @@ func ReadSimpleIndex(reader *ShapeReader, tables *TableSet, tableIndex TableIdx)
 	return simpleIndex
 }
 
-func ReadCodedIndex(reader *ShapeReader, tables *TableSet, tableIndexes ...TableIdx) CodedIndex {
+func readCodedIndex(reader *ShapeReader, tables *TableSet, tableIndexes ...TableIdx) CodedIndex {
 	readInfo := tables.getTableReadInfo(tableIndexes)
 	var codedIndex uint32
 	if readInfo.UseBigIndex {
@@ -29,4 +29,63 @@ func ReadCodedIndex(reader *ShapeReader, tables *TableSet, tableIndexes ...Table
 	tag := uint8(codedIndex & tagMask)
 	index := codedIndex >> readInfo.NumTagBits
 	return CodedIndex{Index: index, Tag: tag}
+}
+
+type TypeOrMethodDefType uint8
+
+const (
+	TOMDTypeDef TypeOrMethodDefType = iota
+	TOMDMethodDef
+)
+
+type TypeOrMethodDefIndex struct {
+	Row  uint32
+	Type TypeOrMethodDefType
+}
+
+func newTypeOrMethodDefIndex(codedIndex CodedIndex) TypeOrMethodDefIndex {
+	return TypeOrMethodDefIndex{
+		Row:  codedIndex.Index,
+		Type: TypeOrMethodDefType(codedIndex.Tag),
+	}
+}
+
+type TypeDefOrRefType uint8
+
+const (
+	TDORTypeDef TypeDefOrRefType = iota
+	TDORTypeRef
+	TDORTypeSpec
+)
+
+type TypeDefOrRefIndex struct {
+	Row  uint32
+	Type TypeDefOrRefType
+}
+
+func newTypeDefOrRefIndex(codedIndex CodedIndex) TypeDefOrRefIndex {
+	return TypeDefOrRefIndex{
+		Row:  codedIndex.Index,
+		Type: TypeDefOrRefType(codedIndex.Tag),
+	}
+}
+
+type HasConstantType uint8
+
+const (
+	HCField HasConstantType = iota
+	HCParam
+	HCProperty
+)
+
+type HasConstantIndex struct {
+	Row  uint32
+	Type HasConstantType
+}
+
+func newHasConstantIndex(codedIndex CodedIndex) HasConstantIndex {
+	return HasConstantIndex{
+		Row:  codedIndex.Index,
+		Type: HasConstantType(codedIndex.Tag),
+	}
 }

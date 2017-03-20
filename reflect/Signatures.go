@@ -172,6 +172,10 @@ func (sig *SignatureReader) ReadTypeWithID(id byte) Type {
 
 	case ELEMENT_TYPE_ARRAY:
 		return sig.ReadShapedArrayType()
+
+	case ELEMENT_TYPE_MVAR:
+	case ELEMENT_TYPE_VAR:
+
 	}
 
 	return nil

@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/binary"
 	"io"
+	"unicode/utf16"
+	"unicode/utf8"
 )
 
 type ShapeReader struct {
@@ -54,10 +56,73 @@ func (sr *ShapeReader) ReadUInt64() uint64 {
 	return u
 }
 
+// ReadInt8 =
+func (sr *ShapeReader) ReadBoolean() bool {
+	var b bool
+	binary.Read(sr.reader, binary.LittleEndian, &b)
+	return b
+}
+
+// ReadInt8 =
+func (sr *ShapeReader) ReadInt8() int8 {
+	var i int8
+	binary.Read(sr.reader, binary.LittleEndian, &i)
+	return i
+}
+
+// ReadInt16 =
+func (sr *ShapeReader) ReadInt16() int16 {
+	var i int16
+	binary.Read(sr.reader, binary.LittleEndian, &i)
+	return i
+}
+
+// ReadInt32 =
+func (sr *ShapeReader) ReadInt32() int32 {
+	var i int32
+	binary.Read(sr.reader, binary.LittleEndian, &i)
+	return i
+}
+
+// ReadInt64 =
+func (sr *ShapeReader) ReadInt64() int64 {
+	var i int64
+	binary.Read(sr.reader, binary.LittleEndian, &i)
+	return i
+}
+
+// ReadFloat32 =
+func (sr *ShapeReader) ReadFloat32() float32 {
+	var f float32
+	binary.Read(sr.reader, binary.LittleEndian, &f)
+	return f
+}
+
+// ReadFloat64 =
+func (sr *ShapeReader) ReadFloat64() float64 {
+	var f float64
+	binary.Read(sr.reader, binary.LittleEndian, &f)
+	return f
+}
+
 // ReadUTF8 =
 func (sr *ShapeReader) ReadUTF8(length uint32) string {
 	buffer := sr.ReadBytes(length)
 	return string(buffer)
+}
+
+// ReadUTF16 =
+func (sr *ShapeReader) ReadUTF16(length uint32) string {
+	b := sr.ReadBytes(length)
+	numBytes := len(b)
+	utf := make([]uint16, (length+(2-1))/2)
+	for i := 0; i+(2-1) < numBytes; i += 2 {
+		utf[i/2] = binary.LittleEndian.Uint16(b[i:])
+	}
+	if numBytes/2 < len(utf) {
+		utf[len(utf)-1] = utf8.RuneError
+	}
+	return string(utf16.Decode(utf))
 }
 
 // ReadGUID =

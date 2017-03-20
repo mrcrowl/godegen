@@ -10,6 +10,7 @@ type Property struct {
 	static    bool
 	initOnly  bool
 	literal   bool
+	special   bool
 	getter    *PropertyMethod
 	setter    *PropertyMethod
 }
@@ -29,9 +30,11 @@ type PropertyMethod struct {
 }
 
 const (
-	PropertyAttributesStatic   uint16 = 0x10
-	PropertyAttributesInitOnly uint16 = 0x20
-	PropertyAttributesLiteral  uint16 = 0x40
+	PropertyAttributesStatic      uint16 = 0x10
+	PropertyAttributesInitOnly    uint16 = 0x20
+	PropertyAttributesLiteral     uint16 = 0x40
+	PropertyAttributesSpecialName uint16 = 0x200
+	PropertyAttributesHasDefault  uint16 = 0x1000
 )
 
 func newProperty(propRow *cli.PropertyRow, semanticRowsByProp map[uint32][]*cli.MethodSemanticsRow, asm *Assembly) *Property {
@@ -40,6 +43,7 @@ func newProperty(propRow *cli.PropertyRow, semanticRowsByProp map[uint32][]*cli.
 	static := (propRow.Flags & PropertyAttributesStatic) > 0
 	initOnly := (propRow.Flags & PropertyAttributesInitOnly) > 0
 	literal := (propRow.Flags & PropertyAttributesLiteral) > 0
+	special := (propRow.Flags & PropertyAttributesSpecialName) > 0
 
 	methodSemanticsForProp := semanticRowsByProp[propRow.RowNumber()]
 	methodDefTable := asm.metadata.Tables.GetTable(cli.TableIdxMethodDef)
@@ -66,6 +70,7 @@ func newProperty(propRow *cli.PropertyRow, semanticRowsByProp map[uint32][]*cli.
 		initOnly:  initOnly,
 		literal:   literal,
 		getter:    getter,
+		special:   special,
 		setter:    setter,
 	}
 }

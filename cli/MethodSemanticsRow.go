@@ -34,8 +34,8 @@ func readMethodSemanticsRow(
 	tables *TableSet,
 ) IRow {
 	semantics := sr.ReadUInt16()
-	methodRowNumber := ReadSimpleIndex(sr, tables, TableIdxMethodDef)
-	associationCodexIndex := ReadCodedIndex(sr, tables, TableIdxEvent, TableIdxProperty)
+	methodRowNumber := readSimpleIndex(sr, tables, TableIdxMethodDef)
+	associationCodexIndex := readCodedIndex(sr, tables, TableIdxEvent, TableIdxProperty)
 	association := AssociationIndex{associationCodexIndex.Index, AssociationType(associationCodexIndex.Tag)}
 	return &MethodSemanticsRow{rowNumber, semantics, methodRowNumber, association}
 }

@@ -69,9 +69,10 @@ type Service struct {
 }
 
 type Method struct {
-	Name string `json:"name"`
-	Type string `json:"type"`
-	Args []*Arg `json:"args,omitempty"`
+	Name     string `json:"name"`
+	Type     string `json:"type"`
+	Args     []*Arg `json:"args,omitempty"`
+	nameSort string
 }
 
 type Arg struct {
