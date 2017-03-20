@@ -1,0 +1,34 @@
+{{define "service" -}}
+import { Config } from "../Config";
+import { Callback } from "../utils/Callback";
+import { JSONRPC } from "../utils/JSONRPC";
+
+var __instance: {{.Name}} = null;
+	
+export class {{.Name}} extends JSONRPC
+
+{
+	public static get instance()
+    {
+        if (__instance == null)
+        {
+            __instance = new {{.Name}}();
+        }
+
+        return __instance;
+    }
+
+	static $inject = [];
+	constructor()
+	{
+		var service: string = "{{.ServiceIdentifier}}";
+		super(Config.serviceEndpointURL(), service, true);
+	}
+	{{range .Methods}}{{$method := .}}
+	{{.Name}}({{range .Args}}{{.Name}}:{{.Type}}, {{end}}callback:Callback<{{.Type}}>, thisObj?:any):void
+	{
+		var args: any[] = [{{range $i, $arg := .Args}}{{if $i}}, {{end}}{{.Name}}{{end}}];
+		this.callRemote("{{$method.Name}}", args, callback, thisObj);
+	}
+	{{end -}}
+{{"\n"}}}{{end}}

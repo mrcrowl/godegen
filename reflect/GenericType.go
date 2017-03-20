@@ -6,7 +6,7 @@ import (
 )
 
 type GenericType struct {
-	BaseType
+	TypeBase
 	templateType Type
 	numArgs      uint32
 	argTypes     []Type
@@ -14,7 +14,7 @@ type GenericType struct {
 
 func newGenericType(templateType Type, argTypes []Type, asm *Assembly) Type {
 	return &GenericType{
-		BaseType{
+		TypeBase{
 			name:      templateType.Name(),
 			namespace: templateType.Namespace(),
 			assembly:  asm,
@@ -48,6 +48,10 @@ func (gen *GenericType) CommonName() string {
 	}
 
 	return gen.Name()
+}
+
+func (gen *GenericType) Base() Type {
+	return gen.templateType
 }
 
 func (gen *GenericType) LexicalName() string {

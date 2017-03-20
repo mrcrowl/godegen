@@ -1,4 +1,4 @@
-package description
+package codegen
 
 import (
 	"godegen/reflect"
@@ -9,6 +9,11 @@ import (
 var includedGenerics = map[string]bool{
 	"System.Nullable`1":                 false, // don't resolve int? for example, but process the "int" part
 	"System.Collections.Generic.List`1": false, // include lists
+}
+
+var excludedBaseTypes = map[string]bool{
+	"System.Object":    true,
+	"System.ValueType": true,
 }
 
 type ServiceTypesResolver struct {
@@ -39,7 +44,7 @@ func (res *ServiceTypesResolver) resolve() []reflect.Type {
 }
 
 func includeGeneric(generic *reflect.GenericType) bool {
-	baseName := generic.BaseType.FullName()
+	baseName := generic.TypeBase.FullName()
 	include := includedGenerics[baseName] == true
 	return include
 }
@@ -83,6 +88,13 @@ func (res *ServiceTypesResolver) innerResolve(targetType reflect.Type) {
 	if genericType, ok := targetType.(*reflect.GenericType); ok {
 		for _, argType := range genericType.ArgumentTypes() {
 			res.innerResolve(argType)
+		}
+	}
+
+	// base type
+	if baseType := targetType.Base(); baseType != nil {
+		if !excludedBaseTypes[baseType.FullName()] {
+			res.innerResolve(baseType)
 		}
 	}
 

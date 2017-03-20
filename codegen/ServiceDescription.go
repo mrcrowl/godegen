@@ -1,4 +1,4 @@
-package description
+package codegen
 
 import (
 	"bytes"
@@ -59,11 +59,13 @@ type DataType struct {
 	DataTypeReference
 	Base   *DataTypeReference `json:"base,omitempty"`
 	Fields []*Field           `json:"fields,omitempty"`
+	Consts []*Const           `json:"consts,omitempty"`
 }
 
 type Service struct {
 	DataType
-	Methods []*Method `json:"methods"`
+	ServiceIdentifier string
+	Methods           []*Method `json:"methods"`
 }
 
 type Method struct {

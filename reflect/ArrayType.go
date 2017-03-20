@@ -2,19 +2,23 @@ package reflect
 
 // TODO: add support for multidimensional arrays
 type ArrayType struct {
-	BaseType
+	TypeBase
 	valueType Type
 }
 
 func newArrayType(valueType Type, asm *Assembly) Type {
 	return &ArrayType{
-		BaseType{
+		TypeBase{
 			name:      valueType.Name(),
 			namespace: valueType.Namespace(),
 			assembly:  asm,
 		},
 		valueType,
 	}
+}
+
+func (array *ArrayType) Base() Type {
+	return nil
 }
 
 func (array *ArrayType) RowNumber() uint32 {

@@ -8,7 +8,7 @@ import (
 const CONSTRUCTOR_NAME = ".ctor"
 
 type NormalType struct {
-	BaseType
+	TypeBase
 	extends Type
 	row     *cli.TypeDefRow
 }
@@ -17,13 +17,13 @@ func (def *NormalType) RowNumber() uint32 {
 	return def.row.RowNumber()
 }
 
-func (def *NormalType) ExtendsType() Type {
+func (def *NormalType) Base() Type {
 	return def.extends
 }
 
 func newTypeFromDef(typeRow *cli.TypeDefRow, extendsType Type, asm *Assembly) Type {
 	return &NormalType{
-		BaseType{
+		TypeBase{
 			name:      typeRow.TypeName,
 			namespace: typeRow.TypeNamespace,
 			assembly:  asm,

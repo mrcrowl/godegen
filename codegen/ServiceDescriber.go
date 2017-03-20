@@ -1,8 +1,10 @@
-package description
+package codegen
 
 import (
 	"godegen/reflect"
 	"strings"
+
+	"github.com/bradfitz/slice"
 )
 
 type ServiceDescriber struct {
@@ -11,7 +13,12 @@ type ServiceDescriber struct {
 	namespaceMapper func(string) string
 }
 
-func NewServiceDescriber(assemblyFilepath string, assemblyName string, typeMapper func(reflect.Type) string, namespaceMapper func(string) string) *ServiceDescriber {
+func NewServiceDescriber(
+	assemblyFilepath string,
+	assemblyName string,
+	typeMapper func(reflect.Type) string,
+	namespaceMapper func(string) string,
+) *ServiceDescriber {
 	loader := reflect.NewAssemblyLoader(assemblyFilepath)
 	assemblyFile, _ := loader.Load(assemblyName)
 	return &ServiceDescriber{assemblyFile, typeMapper, namespaceMapper}
@@ -43,9 +50,11 @@ func (res *ServiceDescriber) createDescriptionOfTypes(types []reflect.Type, serv
 
 func (res *ServiceDescriber) createService(serviceType reflect.Type) *Service {
 	methods := res.collectTypeMethods(serviceType)
+	serviceIdentifier := serviceType.FullName()
 
 	return &Service{
 		*res.createDataType(serviceType),
+		serviceIdentifier,
 		methods,
 	}
 }
@@ -98,7 +107,14 @@ func (res *ServiceDescriber) buildNamespaceTree(types []reflect.Type, serviceTyp
 }
 
 func (res *ServiceDescriber) createDataType(typ reflect.Type) *DataType {
-	fields := res.collectTypeFields(typ)
+	var fields = res.collectTypeFields(typ)
+	var consts = res.collectConsts(typ)
+	var baseType = typ.Base()
+	var base *DataTypeReference
+
+	if !excludedBaseTypes[baseType.FullName()] {
+		base = res.createDataTypeReference(baseType)
+	}
 
 	return &DataType{
 		DataTypeReference{
@@ -106,24 +122,22 @@ func (res *ServiceDescriber) createDataType(typ reflect.Type) *DataType {
 			Namespace: res.mapNamespace(typ.Namespace()),
 			// QualifiedName: res.mapNamespace(typ.FullName()),
 		},
-		nil, // TODO: get base type
+		base, // TODO: get base type
 		fields,
+		consts,
 	}
 }
 
-// func createDataTypeReference(typ reflect.Type) *DataTypeReference {
-// 	var elementDataType *DataTypeReference
-// 	if elementType, isCollection := isCollectionType(typ); isCollection {
-// 		elementDataType = createDataTypeReference(elementType)
-// 	}
+func (res *ServiceDescriber) createDataTypeReference(typ reflect.Type) *DataTypeReference {
+	if typ == nil {
+		return nil
+	}
 
-// 	return &DataTypeReference{
-// 		Name:          typ.Name(),
-// 		Namespace:     typ.Namespace(),
-// 		QualifiedName: typ.FullName(),
-// 		ElementType:   elementDataType,
-// 	}
-// }
+	return &DataTypeReference{
+		Name:      typ.Name(),
+		Namespace: res.mapNamespace(typ.Namespace()),
+	}
+}
 
 func (res *ServiceDescriber) collectTypeFields(typ reflect.Type) []*Field {
 	var fields []*Field
@@ -137,6 +151,11 @@ func (res *ServiceDescriber) collectTypeFields(typ reflect.Type) []*Field {
 	}
 
 	return fields
+}
+
+func (res *ServiceDescriber) collectConsts(typ reflect.Type) []*Const {
+	var consts []*Const
+	return consts
 }
 
 func (res *ServiceDescriber) mapType(typ reflect.Type) string {
@@ -160,6 +179,15 @@ func (res *ServiceDescriber) collectTypeMethods(typ reflect.Type) []*Method {
 		}
 		methods = append(methods, meth)
 	}
+
+	slice.Sort(methods, func(i, j int) bool {
+		methodI := methods[i]
+		methodJ := methods[j]
+		if methodI.Name < methodJ.Name {
+			return true
+		}
+		return false
+	})
 
 	return methods
 }

@@ -1,0 +1,11 @@
+{{define "datatype"}}
+module {{.Namespace}}
+{
+	export interface {{.Name}}{{if .Base}} extends {{.Base.Namespace}}.{{.Base.Name}}{{end}}
+	{
+	{{range .Consts}}	// static {{.Name}}: {{.Type}} = {{if .Type eq "String"}}"{{end}}{{.Value}}{{if .type eq "String"}}"{{end}};
+	{{end -}}
+	{{range .Fields}}	{{.Name}}: {{.Type}};
+	{{end}}}
+}
+{{end}}

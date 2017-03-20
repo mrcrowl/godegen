@@ -1,26 +1,26 @@
 package reflect
 
-type BaseType struct {
+type TypeBase struct {
 	name      string
 	namespace string
 	assembly  *Assembly
 }
 
-func (typ BaseType) Name() string {
+func (typ TypeBase) Name() string {
 	return typ.name
 }
 
-func (typ BaseType) Namespace() string {
+func (typ TypeBase) Namespace() string {
 	return typ.namespace
 }
 
-func (typ BaseType) FullName() string {
+func (typ TypeBase) FullName() string {
 	// if importedNamespaces[typ.namespace] {
 	// 	return typ.name
 	// }
 	return typ.namespace + "." + typ.name
 }
 
-func (typ BaseType) GetFields() []*Field {
+func (typ TypeBase) GetFields() []*Field {
 	return []*Field{}
 }

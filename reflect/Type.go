@@ -14,6 +14,7 @@ type Type interface {
 	Name() string
 	Namespace() string
 	FullName() string
+	Base() Type
 	GetMethods() []*Method
 	GetFields() []*Field
 	GetProperties() []*Property

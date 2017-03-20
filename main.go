@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"godegen/description"
+	"godegen/codegen"
 	"godegen/reflect"
+	"os"
 	"strings"
 )
 
@@ -13,9 +14,25 @@ const (
 )
 
 func main() {
-	describer := description.NewServiceDescriber(`C:\WF\LP\server\EBS_Deployment\bin`, `Classes`, typeMapper, namespaceMapper)
+	describer := codegen.NewServiceDescriber(`C:\WF\LP\server\EBS_Deployment\bin`, `Classes`, typeMapper, namespaceMapper)
 	descr, _ := describer.Describe("nz.co.LanguagePerfect.Services.Portals.ControlPanel.LanguageDataPortal")
-	fmt.Print(descr.JSON())
+	var gen *codegen.Generator
+	var err error
+	config := &codegen.GeneratorConfig{
+		TemplatesPath: `.\templates\typescript`,
+		FileExtension: ".ts",
+	}
+	if gen, err = codegen.NewGenerator(`c:\dooschmonkey`, config); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	if err = gen.OutputServiceDescription(descr); err != nil {
+		fmt.Println(err)
+		os.Exit(2)
+	}
+
+	// fmt.Print(descr.JSON())
 }
 
 var typescriptTypeMap = map[string]string{
@@ -28,7 +45,7 @@ var typescriptTypeMap = map[string]string{
 	"System.Int32":                     "number",
 	"System.Int64":                     "number",
 	"System.String":                    "string",
-	"System.Boolean":                   "bool",
+	"System.Boolean":                   "boolean",
 	"System.DateTime":                  "Date",
 	"System.Nullable<System.Byte>":     "(number | null)",
 	"System.Nullable<System.SByte>":    "(number | null)",
@@ -54,7 +71,7 @@ func typeMapper(typ reflect.Type) string {
 
 	cleanedFullName := namespaceMapper(fullname)
 	if elemType, isCollection := isCollectionType(typ); isCollection {
-		return typeMapper(elemType) + "[]"
+		return "Array<" + typeMapper(elemType) + ">"
 	}
 
 	return cleanedFullName
@@ -66,7 +83,7 @@ func isCollectionType(typ reflect.Type) (reflect.Type, bool) {
 	}
 
 	if generic, isGeneric := typ.(*reflect.GenericType); isGeneric {
-		if generic.BaseType.FullName() == "System.Collections.Generic.List`1" {
+		if generic.TypeBase.FullName() == "System.Collections.Generic.List`1" {
 			return generic.ArgumentTypes()[0], true
 		}
 	}
