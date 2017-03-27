@@ -1,11 +1,19 @@
 {{define "datatype"}}
-module {{.Namespace}}
+package {{.Namespace}}.vo
 {
-	export interface {{.Name}}{{if .Base}} extends {{.Base.Namespace}}.{{.Base.Name}}{{end}}
-	{{"{"}}{{range .Consts}}
-		// static {{.Name}}:{{.Type}} = {{if eq .Type "string"}}"{{end}}{{.Value}}{{if eq .Type "string"}}"{{end}};{{end -}}
+  import flash.utils.ByteArray;
+  import mx.collections.ArrayCollection;
+
+	[Bindable]
+	[RemoteClass(alias="{{.Namespace}}.{{.Name}}")]
+	public class {{.Name}}{{if .Base}} extends {{.Base.Namespace}}.vo.{{.Base.Name}}{{end}}
+	{
+		public function {{.Name}}(){}
+	{{- range .Consts}}
+		public static const {{.Name}}:{{.Type}};{{end}}
 	{{range .Fields}}
-		{{.Name}}: {{.Type}};{{end}}
+		{{if .ElementType}}[Marshall(type="{{namespaceName .ElementType}}.vo.{{typeName .ElementType}}")]
+		{{end}}public var {{.Name}}:{{.Type}};{{end}}
 	}
 }
 {{end}}

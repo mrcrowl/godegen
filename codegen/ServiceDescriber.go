@@ -217,6 +217,14 @@ func (res *ServiceDescriber) mapType(typ reflect.Type) string {
 	return res.typeMapper(typ)
 }
 
+func (res *ServiceDescriber) mapElementType(typ reflect.Type) string {
+	if elementType, is := isCollectionType(typ); is {
+		return res.mapType(elementType)
+	}
+
+	return ""
+}
+
 func (res *ServiceDescriber) mapNamespace(namespace string) string {
 	return res.namespaceMapper(namespace)
 }
@@ -284,15 +292,17 @@ func (res *ServiceDescriber) createConst(field *reflect.Field) *Const {
 
 func (res *ServiceDescriber) createFieldFromField(field *reflect.Field) *Field {
 	return &Field{
-		Name: field.Name(),
-		Type: res.mapType(field.Type()),
+		Name:        field.Name(),
+		Type:        res.mapType(field.Type()),
+		ElementType: res.mapElementType(field.Type()),
 	}
 }
 
 func (res *ServiceDescriber) createFieldFromProperty(property *reflect.Property) *Field {
 	return &Field{
-		Name: property.Name(),
-		Type: res.mapType(property.Type()),
+		Name:        property.Name(),
+		Type:        res.mapType(property.Type()),
+		ElementType: res.mapElementType(property.Type()),
 	}
 }
 

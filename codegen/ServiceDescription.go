@@ -82,8 +82,9 @@ type Arg struct {
 }
 
 type Field struct {
-	Name string `json:"name"`
-	Type string `json:"type"`
+	Name        string `json:"name"`
+	Type        string `json:"type"`
+	ElementType string `json:"elementType"`
 }
 
 type Const struct {

@@ -24,6 +24,13 @@ var additionalTemplateFns = template.FuncMap{
 		}
 		return fullyQualifiedTypeName
 	},
+	"namespaceName": func(fullyQualifiedTypeName string) string {
+		lastDot := strings.LastIndexByte(fullyQualifiedTypeName, '.')
+		if lastDot >= 0 {
+			return fullyQualifiedTypeName[:lastDot]
+		}
+		return fullyQualifiedTypeName
+	},
 }
 
 type Generator struct {
