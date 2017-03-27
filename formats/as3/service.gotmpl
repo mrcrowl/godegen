@@ -74,14 +74,14 @@ package {{.Namespace}}
 		
 		// =====================================================================
        
-	{{range .Methods}}{{$method := .}}
-      public function {{.Name}}({{range .Args}}{{.Name}}:{{.Type}},{{end}} responder:IResponder = null ):void
+    {{range .Methods}}{{$method := .}}
+      public function {{.Name}}({{range .Args}}{{.Name}}:{{typeName .Type}},{{end}} responder:IResponder = null ):void
       {
         var asyncToken:AsyncToken = remoteObject.{{.Name}}({{range $i, $arg := .Args}}{{if $i}},{{end}}{{.Name}}{{end}});
         
         if( responder != null )
 		{
-			{{if ne .Type "void"}}asyncToken.addResponder(emulateAMFResponder(responder, {{.Type}}));{{else}}asyncToken.addResponder(responder);{{end}}
+			{{if ne .Type "void"}}asyncToken.addResponder(emulateAMFResponder(responder, {{typeName .Type}}));{{else}}asyncToken.addResponder(responder);{{end}}
 		}
       }
     {{end}}

@@ -17,6 +17,13 @@ var additionalTemplateFns = template.FuncMap{
 	"replace": func(s, old, new string) string {
 		return strings.Replace(s, old, new, -1)
 	},
+	"typeName": func(fullyQualifiedTypeName string) string {
+		lastDot := strings.LastIndexByte(fullyQualifiedTypeName, '.')
+		if lastDot >= 0 {
+			return fullyQualifiedTypeName[lastDot+1:]
+		}
+		return fullyQualifiedTypeName
+	},
 }
 
 type Generator struct {
