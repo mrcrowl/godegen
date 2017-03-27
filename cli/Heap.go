@@ -11,3 +11,11 @@ func (heap *Heap) GetIndexSizeInBytes() int32 {
 	}
 	return 2
 }
+
+func (heap *Heap) ReadAndDiscard(sr *ShapeReader) {
+	if heap.useBigIndex {
+		sr.ReadUInt32()
+	} else {
+		sr.ReadUInt16()
+	}
+}

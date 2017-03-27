@@ -1,45 +1,78 @@
 package codegen
 
 import (
+	"errors"
 	"godegen/reflect"
+	"path/filepath"
 	"strings"
 
 	"github.com/bradfitz/slice"
 )
 
+type TypeMapperFn func(reflect.Type) string
+type NamespaceMapperFn func(string) string
+
 type ServiceDescriber struct {
 	assemblyFile    *reflect.Assembly
-	typeMapper      func(reflect.Type) string
-	namespaceMapper func(string) string
+	typeMapper      TypeMapperFn
+	namespaceMapper NamespaceMapperFn
 }
 
-func NewServiceDescriber(
-	assemblyFilepath string,
+func (descr *ServiceDescriber) GetTypesMatchingPattern(globPattern string) []reflect.Type {
+	return descr.assemblyFile.GetTypesMatchingPattern(globPattern, true)
+}
+
+func (descr *ServiceDescriber) GetType(typeName string) []reflect.Type {
+	return []reflect.Type{descr.assemblyFile.GetType(typeName)}
+}
+
+func NewServiceDescriber(config *GeneratorConfig) (*ServiceDescriber, error) {
+	assemblyPath, assemblyName := filepath.Split(config.Assembly)
+
+	return NewServiceDescriberManual(
+		assemblyPath,
+		assemblyName,
+		config.createTypeMapper(),
+		config.createNamespaceMapper(),
+	)
+}
+
+func NewServiceDescriberManual(
+	assemblyPath string,
 	assemblyName string,
 	typeMapper func(reflect.Type) string,
 	namespaceMapper func(string) string,
-) *ServiceDescriber {
-	loader := reflect.NewAssemblyLoader(assemblyFilepath)
-	assemblyFile, _ := loader.Load(assemblyName)
-	return &ServiceDescriber{assemblyFile, typeMapper, namespaceMapper}
+) (*ServiceDescriber, error) {
+	loader := reflect.NewAssemblyLoader(assemblyPath)
+	assemblyFile, err := loader.Load(assemblyName)
+	if err == nil {
+		return &ServiceDescriber{assemblyFile, typeMapper, namespaceMapper}, nil
+	}
+
+	return nil, errors.New("Can't load assembly '" + assemblyName + "' in: " + assemblyPath)
 }
 
 func (res *ServiceDescriber) Describe(serviceTypeName string) (*ServiceDescription, error) {
-	serviceType := res.assemblyFile.GetType(serviceTypeName)
-	resolvedTypes := ResolveServiceDependencyTypes(res.assemblyFile, serviceType)
-	// printTypes(resolvedTypes)
+	if serviceType := res.assemblyFile.GetType(serviceTypeName); serviceType != nil {
+		return res.DescribeType(serviceType)
+	}
 
+	return nil, errors.New("Can't find type: " + serviceTypeName)
+}
+
+func (res *ServiceDescriber) DescribeType(serviceType reflect.Type) (*ServiceDescription, error) {
+	resolvedTypes := ResolveServiceDependencyTypes(res.assemblyFile, serviceType)
 	description := res.createDescriptionOfTypes(resolvedTypes, serviceType)
 	return description, nil
 }
 
 func (res *ServiceDescriber) createDescriptionOfTypes(types []reflect.Type, serviceType reflect.Type) *ServiceDescription {
-	rootNamespaces, namespaceMap := res.buildNamespaceTree(types, serviceType)
+	rootNamespaces, namespaceMap, referencedNamespaces := res.buildNamespaceTree(types, serviceType)
 
 	// add service
 	serviceTypeNamespace := res.mapNamespace(serviceType.Namespace())
 	serviceNamespace := namespaceMap[serviceTypeNamespace]
-	service := res.createService(serviceType)
+	service := res.createService(serviceType, referencedNamespaces)
 	serviceNamespace.addService(service)
 
 	// fmt.Println(rootNamespaces)
@@ -48,21 +81,29 @@ func (res *ServiceDescriber) createDescriptionOfTypes(types []reflect.Type, serv
 	}
 }
 
-func (res *ServiceDescriber) createService(serviceType reflect.Type) *Service {
+func (res *ServiceDescriber) createService(serviceType reflect.Type, referencedNamespaces []string) *Service {
 	methods := res.collectTypeMethods(serviceType)
 	serviceIdentifier := serviceType.FullName()
+
+	slice.Sort(referencedNamespaces, func(i, j int) bool {
+		nsi := referencedNamespaces[i]
+		nsj := referencedNamespaces[j]
+		return nsi < nsj
+	})
 
 	return &Service{
 		*res.createDataType(serviceType),
 		serviceIdentifier,
 		methods,
+		referencedNamespaces,
 	}
 }
 
-func (res *ServiceDescriber) buildNamespaceTree(types []reflect.Type, serviceType reflect.Type) ([]*Namespace, map[string]*Namespace) {
+func (res *ServiceDescriber) buildNamespaceTree(types []reflect.Type, serviceType reflect.Type) ([]*Namespace, map[string]*Namespace, []string) {
 	var namespaceSeen = map[string]*Namespace{}
 	var distinctNamespaces []*Namespace
 	var rootNamespaces []*Namespace
+	var namespacesWithTypes = make(map[string]bool)
 
 	for _, typ := range append(types, serviceType) {
 		var childNamespace *Namespace
@@ -100,10 +141,17 @@ func (res *ServiceDescriber) buildNamespaceTree(types []reflect.Type, serviceTyp
 		if typ != serviceType {
 			dataType := res.createDataType(typ)
 			namespace.DataTypes = append(namespace.DataTypes, dataType)
+			namespacesWithTypes[namespace.qualifiedName] = true
 		}
 	}
 
-	return rootNamespaces, namespaceSeen
+	referencedNamespaces := make([]string, 0, len(namespacesWithTypes))
+
+	for namespace, _ := range namespacesWithTypes {
+		referencedNamespaces = append(referencedNamespaces, namespace)
+	}
+
+	return rootNamespaces, namespaceSeen, referencedNamespaces
 }
 
 func (res *ServiceDescriber) createDataType(typ reflect.Type) *DataType {
@@ -173,15 +221,27 @@ func (res *ServiceDescriber) mapNamespace(namespace string) string {
 	return res.namespaceMapper(namespace)
 }
 
+func (res *ServiceDescriber) collapseReturnType(returnType reflect.Type) reflect.Type {
+	if genericType, isGeneric := returnType.(*reflect.GenericType); isGeneric {
+		if genericType.Namespace() == "System.Threading.Tasks" &&
+			genericType.LexicalName() == "Task" {
+			return genericType.ArgumentTypes()[0]
+		}
+	}
+
+	return returnType
+}
+
 func (res *ServiceDescriber) collectTypeMethods(typ reflect.Type) []*Method {
 	var methods []*Method
 
 	for _, method := range typ.GetMethods() {
 		args := res.collectMethodArgs(method)
+		returnType := res.collapseReturnType(method.ReturnType())
 
 		meth := &Method{
 			Name:     method.Name(),
-			Type:     res.mapType(method.ReturnType()),
+			Type:     res.mapType(returnType),
 			Args:     args,
 			nameSort: strings.ToLower(method.Name()),
 		}

@@ -1,9 +1,5 @@
 package cli
 
-import (
-	"math"
-)
-
 const maxTableCount = 0x2d
 
 type TableIdx uint8
@@ -88,6 +84,7 @@ func (set *TableSet) GetRows(tableIndex TableIdx) []IRow {
 func (set *TableSet) readAll(streams *MetadataStreams) {
 	tablesReader := streams.tildeStream.GetTablesReader()
 	for _, table := range set.tables {
+		// fmt.Printf("%v: %v\n", table.tableIndex, table.numRows)
 		table.readRows(tablesReader, streams, set)
 	}
 
@@ -163,10 +160,18 @@ type tableReadInfo struct {
 	NumTagBits  uint8
 }
 
+var bitsForNTables = []uint8{
+	0,                      // 0
+	0, 1, 2, 2, 3, 3, 3, 3, // 1 -> 8
+	4, 4, 4, 4, 4, 4, 4, 4, // 9 -> 16
+	5, 5, 5, 5, 5, 5, 5, 5, // 17 -> 32
+	5, 5, 5, 5, 5, 5, 5, 5, //
+}
+
 func (set *TableSet) getTableReadInfo(tableIndexes []TableIdx) tableReadInfo {
 	maxRowCount := uint32(0)
-	numTables := float64(len(tableIndexes))
-	bitsRequiredForTables := uint8(math.Ceil(math.Log2(numTables)))
+	numTables := len(tableIndexes)
+	bitsRequiredForTables := bitsForNTables[numTables] //uint8(math.Ceil(math.Log2(numTables)))
 	upperRowLimit := uint32(1 << (16 - bitsRequiredForTables))
 	for _, tableIndex := range tableIndexes {
 		rowCount := set.GetRowCount(tableIndex)
@@ -189,5 +194,8 @@ func (set *TableSet) useBigIndex(tableIndex TableIdx) bool {
 }
 
 func (set *TableSet) GetRowCount(tableIndex TableIdx) uint32 {
-	return set.tables[tableIndex].numRows
+	if tableIndex < maxTableCount {
+		return set.tables[tableIndex].numRows
+	}
+	return 0
 }

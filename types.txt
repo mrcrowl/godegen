@@ -1,4 +1,0 @@
-8200public void .ctor()
-public static nz.co.LanguagePerfect.Services.Sessions.BusinessObjects.LPSession FromDynamoDocument(Amazon.DynamoDBv2.DocumentModel.Document doc)
-public Amazon.DynamoDBv2.DocumentModel.Document toDynamoDocument()
-1137

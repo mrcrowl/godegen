@@ -35,9 +35,11 @@ func (gen *GenericType) Name() string {
 	buffer.WriteString(lexicalName)
 	buffer.WriteByte('<')
 	for i, arg := range gen.argTypes {
-		buffer.WriteString(arg.FullName())
-		if uint32(i+1) < gen.numArgs {
-			buffer.WriteByte(',')
+		if arg != nil {
+			buffer.WriteString(arg.FullName())
+			if uint32(i+1) < gen.numArgs {
+				buffer.WriteByte(',')
+			}
 		}
 	}
 	buffer.WriteByte('>')

@@ -1,5 +1,0 @@
-
-* SZArray
-* MethodSpecs
-* TypeSpecs
-* Cross-assemblt type loading

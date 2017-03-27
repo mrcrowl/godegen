@@ -1,0 +1,42 @@
+{
+    "assembly": "C:\\WF\\LP\\server\\EBS_Deployment\\bin\\Classes.dll",
+    "servicePattern": [ 
+        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.FeedbackPortal"
+    ],
+    "outputPath": "c:\\dooschmonkey\\services",
+    "templatesPath": ".\\formats\\typescript",
+    "fileExtension": ".ts",
+    "typeMap": {
+        "System.Boolean":                   "boolean",
+        "System.Byte":                      "number",
+        "System.UInt16":                    "number",
+        "System.UInt32":                    "number",
+        "System.UInt64":                    "number",
+        "System.SByte":                     "number",
+        "System.Int16":                     "number",
+        "System.Int32":                     "number",
+        "System.Int64":                     "number",
+        "System.Decimal":                   "number",
+        "System.Double":                    "number",
+        "System.DateTime":                  "Date",
+        "System.Nullable<System.Byte>":     "number | null",
+        "System.Nullable<System.SByte>":    "number | null",
+        "System.Nullable<System.Int16>":    "number | null",
+        "System.Nullable<System.Int32>":    "number | null",
+        "System.Nullable<System.Int64>":    "number | null",
+        "System.Nullable<System.Decimal>":  "number | null",
+        "System.Nullable<System.Double>":   "number | null",
+        "System.Nullable<System.DateTime>": "Date | null",
+        "System.String":                    "string",
+        "System.Object":                    "any",
+        "System.ValueType":                 "any",
+        "System.Void":                      "void"     
+    },
+    "namespaceMap": {
+        "nz.co.LanguagePerfect.Service": "service"
+    },
+    "collectionFormats": {
+        "system": "%s[]",
+        "default": "Array<%s>"
+    }
+}

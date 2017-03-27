@@ -31,6 +31,30 @@ func readCodedIndex(reader *ShapeReader, tables *TableSet, tableIndexes ...Table
 	return CodedIndex{Index: index, Tag: tag}
 }
 
+func readTypeDefOrRefCodedIndex(reader *ShapeReader, tables *TableSet) CodedIndex {
+	return readCodedIndex(reader, tables, TableIdxTypeDef, TableIdxTypeRef, TableIdxTypeSpec)
+}
+
+func readMemberRefParentCodedIndex(reader *ShapeReader, tables *TableSet) CodedIndex {
+	return readCodedIndex(reader, tables, TableIdxMethodDef, TableIdxModuleRef, TableIdxTypeDef, TableIdxTypeRef, TableIdxTypeSpec)
+}
+
+func readHasCustomAttributeCodedIndex(reader *ShapeReader, tables *TableSet) CodedIndex {
+	return readCodedIndex(reader, tables, TableIdxMethodDef, TableIdxField, TableIdxTypeRef, TableIdxTypeDef, TableIdxParam, TableIdxInterfaceImpl, TableIdxMemberRef, TableIdxModule, TableIdxDeclSecurity, TableIdxProperty, TableIdxEvent, TableIdxStandAloneSig, TableIdxModuleRef, TableIdxTypeSpec, TableIdxAssembly, TableIdxAssemblyRef, TableIdxFile, TableIdxExportedType, TableIdxManifestResource, TableIdxGenericParam, TableIdxGenericParamConstraint, TableIdxMethodSpec)
+}
+
+func readCustomAttributeTypeCodedIndex(reader *ShapeReader, tables *TableSet) CodedIndex {
+	return readCodedIndex(reader, tables, 0xFF, 0xFF, TableIdxMethodDef, TableIdxMemberRef, 0xFF)
+}
+
+func readHasDeclSecurityCodedIndex(reader *ShapeReader, tables *TableSet) CodedIndex {
+	return readCodedIndex(reader, tables, TableIdxTypeDef, TableIdxMethodDef, TableIdxAssembly)
+}
+
+func readHasFieldMarshalCodedIndex(reader *ShapeReader, tables *TableSet) CodedIndex {
+	return readCodedIndex(reader, tables, TableIdxField, TableIdxParam)
+}
+
 type TypeOrMethodDefType uint8
 
 const (

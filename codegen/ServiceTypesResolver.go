@@ -50,23 +50,26 @@ func includeGeneric(generic *reflect.GenericType) bool {
 }
 
 func (res *ServiceTypesResolver) innerResolve(targetType reflect.Type) {
-	include := targetType != res.serviceType
+	isServiceType := targetType == res.serviceType
+	include := !isServiceType
 
 	// exclude nil types
 	if targetType == nil {
 		return
 	}
 
-	// exclude built-in types
-	if _, isBuiltIn := targetType.(*reflect.BuiltInType); isBuiltIn {
-		return
-	}
-
 	// exclude generics, except specific types
-	if generic, isGeneric := targetType.(*reflect.GenericType); isGeneric {
+	var isGeneric bool
+	var generic *reflect.GenericType
+	if generic, isGeneric = targetType.(*reflect.GenericType); isGeneric {
 		if !includeGeneric(generic) {
 			include = false
 		}
+	}
+
+	// exclude built-in types
+	if _, isBuiltIn := targetType.(*reflect.BuiltInType); isBuiltIn && !isGeneric {
+		return
 	}
 
 	// exclude arrays
@@ -74,13 +77,16 @@ func (res *ServiceTypesResolver) innerResolve(targetType reflect.Type) {
 		include = false
 	}
 
+	// name := targetType.Name()
+	// fmt.Println(name)
+
 	typeName := targetType.FullName()
 	if res.typesByName[typeName] != nil {
 		return
 	}
 
+	res.typesByName[typeName] = targetType
 	if include {
-		res.typesByName[typeName] = targetType
 		res.typesFindOrder = append(res.typesFindOrder, targetType)
 	}
 
@@ -92,9 +98,11 @@ func (res *ServiceTypesResolver) innerResolve(targetType reflect.Type) {
 	}
 
 	// base type
-	if baseType := targetType.Base(); baseType != nil {
-		if !excludedBaseTypes[baseType.FullName()] {
-			res.innerResolve(baseType)
+	if include {
+		if baseType := targetType.Base(); baseType != nil {
+			if !excludedBaseTypes[baseType.FullName()] {
+				res.innerResolve(baseType)
+			}
 		}
 	}
 
@@ -104,12 +112,14 @@ func (res *ServiceTypesResolver) innerResolve(targetType reflect.Type) {
 	}
 
 	// methods
-	methods := targetType.GetMethods()
-	for _, method := range methods {
-		returnType := method.ReturnType()
-		res.innerResolve(returnType)
-		for _, param := range method.Parameters() {
-			res.innerResolve(param.Type())
+	if isServiceType {
+		methods := targetType.GetMethods()
+		for _, method := range methods {
+			returnType := method.ReturnType()
+			res.innerResolve(returnType)
+			for _, param := range method.Parameters() {
+				res.innerResolve(param.Type())
+			}
 		}
 	}
 
@@ -129,14 +139,8 @@ func (res *ServiceTypesResolver) innerResolve(targetType reflect.Type) {
 }
 
 func (res *ServiceTypesResolver) outputTypesAsSlice() []reflect.Type {
-	//return res.typesFindOrder
-
-	values := make([]reflect.Type, len(res.typesByName))
-	i := 0
-	for _, value := range res.typesByName {
-		values[i] = value
-		i++
-	}
+	values := make([]reflect.Type, len(res.typesFindOrder))
+	copy(values, res.typesFindOrder)
 
 	slice.Sort(values, func(i, j int) bool {
 		typeI := values[i]

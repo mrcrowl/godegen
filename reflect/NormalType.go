@@ -70,7 +70,8 @@ func (typ *NormalType) GetFieldsWithOptions(includeNonPublic bool, includeInstan
 }
 
 func (typ *NormalType) GetProperties() []*Property {
-	rows := typ.row.GetPropertyRows(typ.assembly.metadata.Tables)
+	assembly := typ.assembly
+	rows := typ.row.GetPropertyRows(assembly.metadata.Tables)
 	numRows := len(rows)
 	if numRows > 0 {
 		propRowRange := cli.NewRowRange(rows[0].RowNumber(), rows[numRows-1].RowNumber()+1)
@@ -91,10 +92,12 @@ func (typ *NormalType) GetProperties() []*Property {
 	return []*Property{}
 }
 
-func splitFullname(name string) (string, string, bool) {
-	parts := strings.SplitN(name, ".", 2)
-	if len(parts) == 2 {
-		return parts[0], parts[1], true
+func splitFullname(fullname string) (string, string, bool) {
+	dot := strings.LastIndex(fullname, ".")
+	if dot >= 0 {
+		namespace := fullname[0:dot]
+		name := fullname[dot+1:]
+		return namespace, name, true
 	}
 
 	return "", "", false

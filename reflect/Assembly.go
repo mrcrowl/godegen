@@ -1,7 +1,12 @@
 package reflect
 
-import "godegen/cli"
-import "fmt"
+import (
+	"fmt"
+	"godegen/cli"
+
+	"github.com/bradfitz/slice"
+	"github.com/ryanuber/go-glob"
+)
 
 type Assembly struct {
 	metadata  *cli.Metadata
@@ -27,6 +32,39 @@ func (asm *Assembly) GetType(name string) Type {
 		}
 	}
 	return t
+}
+
+func (asm *Assembly) GetTypesMatchingPattern(globPattern string, sorted bool) []Type {
+	typeDefTable := asm.metadata.Tables.GetTable(cli.TableIdxTypeDef)
+	typeMatchesPattern := func(row cli.IRow) bool {
+		typeDef := row.(*cli.TypeDefRow)
+		return glob.Glob(globPattern, typeDef.FullName())
+	}
+	typeRows := typeDefTable.Where(typeMatchesPattern)
+	var matchingTypes []Type
+
+	for _, row := range typeRows {
+		typeDefRow := row.(*cli.TypeDefRow)
+		matchedType := asm.typeCache.get(typeDefRow.FullName())
+		if matchedType == nil {
+			extendsType := asm.getTypeByIndex(typeDefRow.ExtendsIndex)
+			matchedType = newTypeFromDef(typeDefRow, extendsType, asm)
+		}
+		matchingTypes = append(matchingTypes, matchedType)
+	}
+
+	// sort results
+	if sorted {
+		slice.Sort(matchingTypes, func(i, j int) bool {
+			typeI := matchingTypes[i]
+			typeJ := matchingTypes[j]
+			if typeI.FullName() < typeJ.FullName() {
+				return true
+			}
+			return false
+		})
+	}
+	return matchingTypes
 }
 
 func (asm *Assembly) Test() {
@@ -62,13 +100,16 @@ func (asm *Assembly) getTypeByIndex(index cli.TypeDefOrRefIndex) Type {
 	switch index.Type {
 	case cli.TDORTypeDef:
 		table := asm.metadata.Tables.GetTable(cli.TableIdxTypeDef)
-		tdrow := table.GetRow(index.Row).(*cli.TypeDefRow)
-		fullName := tdrow.FullName()
-		if typ = asm.typeCache.get(fullName); typ == nil {
-			extendsType := asm.getTypeByIndex(tdrow.ExtendsIndex)
-			typ = newTypeFromDef(tdrow, extendsType, asm)
-			if typ != nil {
-				asm.typeCache.set(typ.FullName(), typ)
+		irow := table.GetRow(index.Row)
+		if irow != nil {
+			tdrow := irow.(*cli.TypeDefRow)
+			fullName := tdrow.FullName()
+			if typ = asm.typeCache.get(fullName); typ == nil {
+				extendsType := asm.getTypeByIndex(tdrow.ExtendsIndex)
+				typ = newTypeFromDef(tdrow, extendsType, asm)
+				if typ != nil {
+					asm.typeCache.set(typ.FullName(), typ)
+				}
 			}
 		}
 

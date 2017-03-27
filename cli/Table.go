@@ -31,6 +31,70 @@ func createPlaceholderReaderOfSize(nBytes uint32) RowReaderFn {
 	}
 }
 
+func readInterfaceImpl(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	readSimpleIndex(sr, tables, TableIdxTypeDef)
+	readTypeDefOrRefCodedIndex(sr, tables)
+	return nil
+}
+
+func readMemberRef(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	readMemberRefParentCodedIndex(sr, tables)
+	streams.stringHeap.ReadAndDiscard(sr)
+	streams.blobHeap.ReadAndDiscard(sr)
+	return nil
+}
+
+func readCustomAttribute(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	readHasCustomAttributeCodedIndex(sr, tables)
+	readCustomAttributeTypeCodedIndex(sr, tables)
+	streams.blobHeap.ReadAndDiscard(sr)
+	return nil
+}
+
+func readFieldMarshal(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	readHasFieldMarshalCodedIndex(sr, tables)
+	streams.blobHeap.ReadAndDiscard(sr)
+	return nil
+}
+
+func readDeclSecurity(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	sr.ReadUInt16()
+	readHasDeclSecurityCodedIndex(sr, tables)
+	streams.blobHeap.ReadAndDiscard(sr)
+	return nil
+}
+
+func readClassLayout(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	sr.ReadBytes(2)
+	sr.ReadBytes(4)
+	readSimpleIndex(sr, tables, TableIdxTypeDef)
+	return nil
+}
+
+func readFieldLayout(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	sr.ReadBytes(4)
+	readSimpleIndex(sr, tables, TableIdxField)
+	return nil
+}
+
+func readStandAloneSig(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	streams.blobHeap.ReadAndDiscard(sr)
+	return nil
+}
+
+func readEventMap(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	readSimpleIndex(sr, tables, TableIdxTypeDef)
+	readSimpleIndex(sr, tables, TableIdxEvent)
+	return nil
+}
+
+func readEvent(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	sr.ReadBytes(2)
+	streams.stringHeap.ReadString(sr)
+	readTypeDefOrRefCodedIndex(sr, tables)
+	return nil
+}
+
 var rowReaderFns = [maxTableCount]RowReaderFn{
 	0x00: readModuleRow,
 	0x01: readTypeRefRow,
@@ -38,17 +102,17 @@ var rowReaderFns = [maxTableCount]RowReaderFn{
 	0x04: readFieldRow,
 	0x06: readMethodDefRow,
 	0x08: readParamRow,
-	0x09: createPlaceholderReaderOfSize(2 + 2),         // InterfaceImpl
-	0x0A: createPlaceholderReaderOfSize(4 + 4 + 4),     // MemberRef
+	0x09: readInterfaceImpl,                            // InterfaceImpl
+	0x0A: readMemberRef,                                // MemberRef
 	0x0B: readConstRow,                                 // Const
-	0x0C: createPlaceholderReaderOfSize(4 + 4 + 4),     // CustomAttribute
-	0x0D: createPlaceholderReaderOfSize(4 + 4),         // FieldMarshal
-	0x0E: createPlaceholderReaderOfSize(2 + 4 + 4),     // DeclSecurity
-	0x0F: createPlaceholderReaderOfSize(2 + 4 + 2),     // ClassLayout
-	0x10: createPlaceholderReaderOfSize(4 + 2),         // FieldLayout
-	0x11: createPlaceholderReaderOfSize(4),             // StandAloneSig
-	0x12: createPlaceholderReaderOfSize(2 + 2),         // EventMap
-	0x14: createPlaceholderReaderOfSize(2 + 4 + 2),     // Event
+	0x0C: readCustomAttribute,                          // CustomAttribute
+	0x0D: readFieldMarshal,                             // FieldMarshal
+	0x0E: readDeclSecurity,                             // DeclSecurity
+	0x0F: readClassLayout,                              // ClassLayout
+	0x10: readFieldLayout,                              // FieldLayout
+	0x11: readStandAloneSig,                            // StandAloneSig
+	0x12: readEventMap,                                 // EventMap
+	0x14: readEvent,                                    // Event
 	0x15: readPropertyMapRow,                           // PropertyMap
 	0x17: readPropertyRow,                              // Property
 	0x18: readMethodSemanticsRow,                       // MethodSemantics

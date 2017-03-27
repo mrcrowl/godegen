@@ -1,0 +1,95 @@
+{{define "service"}}  
+package {{.Namespace}}
+{
+    import com.educationperfect.rpc.emulation.JSONEmulatingAMFResponder;
+    import com.educationperfect.rpc.json.JSONRPCObject;
+	
+    import flash.events.EventDispatcher;
+	
+    import mx.collections.ArrayCollection;
+    import mx.controls.Alert;
+    import mx.messaging.ChannelSet;
+    import mx.messaging.channels.AMFChannel;
+    import mx.messaging.channels.SecureAMFChannel;
+    import mx.rpc.AsyncToken;
+    import mx.rpc.IResponder;
+    import mx.rpc.events.FaultEvent;
+    import mx.rpc.events.ResultEvent;
+    import mx.rpc.remoting.RemoteObject;
+	{{range .ReferencedNamespaces}}
+    import {{.}}.vo.*;{{end}}
+        
+    public class {{.Name}} extends EventDispatcher
+    {
+		private var remoteObject: Object;
+		private var useJsonRPC: Boolean;
+
+		public function {{.Name}}( targetURL:String="https://services.languageperfect.com/weborb.aspx", useJsonRPC: Boolean=false)
+		{
+			new {{.Name}}DataTypeInitializer();
+		
+			this.useJsonRPC = useJsonRPC;
+			if (useJsonRPC)
+			{
+				this.remoteObject = new JSONRPCObject(targetURL);
+				this.remoteObject.source = "{{replace .ServiceIdentifier "Portals." "PortalsAsync."}}";
+			}
+			else
+			{
+				this.remoteObject  = new RemoteObject("GenericDestination");
+				this.remoteObject.source = "{{replace .ServiceIdentifier "PortalsAsync." "Portals."}}";
+				this.remoteObject.channelSet = createChannelSet(targetURL);
+			}
+        }
+		
+        // Create a new channel set, so that we can reference an external server
+		private function createChannelSet(targetURL:String):ChannelSet
+		{
+			var channelSet:ChannelSet = new ChannelSet();
+			var channel:AMFChannel;
+			if(targetURL.substr(0, 8) == "https://")
+			{
+				channel = new SecureAMFChannel("my-amf", targetURL);
+			}
+			else
+			{
+				channel = new AMFChannel("my-amf", targetURL);
+			}
+			channelSet.addChannel(channel);
+			return channelSet;
+		}		
+		
+		private function emulateAMFResponder(amfResponder:IResponder, resultType: Class):IResponder
+		{
+			if (this.useJsonRPC)
+			{
+				var emulatingResponder: IResponder = new JSONEmulatingAMFResponder(amfResponder, resultType);
+				return emulatingResponder;
+			}
+			else
+			{
+				return amfResponder;
+			}
+		}
+		
+		// =====================================================================
+       
+	{{range .Methods}}{{$method := .}}
+      public function {{.Name}}({{range .Args}}{{.Name}}:{{.Type}},{{end}} responder:IResponder = null ):void
+      {
+        var asyncToken:AsyncToken = remoteObject.{{.Name}}({{range $i, $arg := .Args}}{{if $i}},{{end}}{{.Name}}{{end}});
+        
+        if( responder != null )
+		{
+			{{if ne .Type "void"}}asyncToken.addResponder(emulateAMFResponder(responder, {{.Type}}));{{else}}asyncToken.addResponder(responder);{{end}}
+		}
+      }
+    {{end}}
+      public function onFault (event:FaultEvent):void
+      {
+		  this.dispatchEvent(event.clone());
+          trace(event.fault.faultString);
+      }
+    }
+  } 
+  {{end}}

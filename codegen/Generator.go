@@ -3,7 +3,8 @@ package codegen
 import (
 	"errors"
 	"os"
-	"path"
+	"path/filepath"
+	"strings"
 	"text/template"
 )
 
@@ -12,19 +13,21 @@ const (
 	templateNameService  = "service"
 )
 
+var additionalTemplateFns = template.FuncMap{
+	"replace": func(s, old, new string) string {
+		return strings.Replace(s, old, new, -1)
+	},
+}
+
 type Generator struct {
 	outputPath string
 	config     *GeneratorConfig
 	templates  *template.Template
 }
 
-type GeneratorConfig struct {
-	TemplatesPath string
-	FileExtension string
-}
-
-func NewGenerator(outputPath string, config *GeneratorConfig) (*Generator, error) {
+func NewGenerator(config *GeneratorConfig) (*Generator, error) {
 	// validate output path
+	outputPath := config.OutputPath
 	if !isValidDirectory(outputPath) {
 		return nil, errors.New("Invalid output path: " + outputPath)
 	}
@@ -34,11 +37,12 @@ func NewGenerator(outputPath string, config *GeneratorConfig) (*Generator, error
 		return nil, errors.New("Invalid templates path: " + config.TemplatesPath)
 	}
 
-	templatePattern := path.Join(config.TemplatesPath, "*.gotmpl")
-	templates, err := template.ParseGlob(templatePattern)
+	templatePattern := filepath.Join(config.TemplatesPath, "*.gotmpl")
+	templates, err := template.New("main").Funcs(additionalTemplateFns).ParseGlob(templatePattern)
 	if err != nil {
 		return nil, err
 	}
+
 	for _, templateName := range []string{templateNameDataType, templateNameService} {
 		if templates.Lookup(templateName) == nil {
 			return nil, errors.New("Could not find template '" + templateName + "' in: " + config.TemplatesPath)
@@ -70,8 +74,16 @@ func (gen *Generator) OutputServiceDescription(descr *ServiceDescription) error 
 	return nil
 }
 
+func joinNamespaceToOutputPath(outputPath string, namespace string) string {
+	if filepath.Base(outputPath) == namespace {
+		return outputPath
+	}
+
+	return filepath.Join(outputPath, namespace)
+}
+
 func (gen *Generator) outputNamespace(outputPath string, namespace *Namespace) error {
-	namespacePath := path.Join(outputPath, namespace.Name)
+	namespacePath := joinNamespaceToOutputPath(outputPath, namespace.Name)
 	os.Mkdir(namespacePath, os.ModePerm)
 
 	// datatype
@@ -84,7 +96,13 @@ func (gen *Generator) outputNamespace(outputPath string, namespace *Namespace) e
 
 	// service
 	for _, service := range namespace.Services {
-		err := gen.outputService(namespacePath, service)
+		var servicePath string
+		if gen.config.KeepServicesInNamespace {
+			servicePath = namespacePath
+		} else {
+			servicePath = gen.config.OutputPath
+		}
+		err := gen.outputService(servicePath, service)
 		if err != nil {
 			return err
 		}
@@ -103,7 +121,7 @@ func (gen *Generator) outputNamespace(outputPath string, namespace *Namespace) e
 
 func (gen *Generator) outputDataType(outputPath string, dataType *DataType) error {
 	dataTypeFilename := dataType.Name + gen.config.FileExtension
-	dataTypePath := path.Join(outputPath, dataTypeFilename)
+	dataTypePath := filepath.Join(outputPath, dataTypeFilename)
 	file, err := os.Create(dataTypePath)
 	if err != nil {
 		return err
@@ -115,7 +133,7 @@ func (gen *Generator) outputDataType(outputPath string, dataType *DataType) erro
 
 func (gen *Generator) outputService(outputPath string, service *Service) error {
 	serviceFilename := service.Name + gen.config.FileExtension
-	servicePath := path.Join(outputPath, serviceFilename)
+	servicePath := filepath.Join(outputPath, serviceFilename)
 	file, err := os.Create(servicePath)
 	if err != nil {
 		return err

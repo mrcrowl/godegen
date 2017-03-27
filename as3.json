@@ -1,0 +1,41 @@
+{
+    "assembly": "C:\\WF\\LP\\server\\EBS_Deployment\\bin\\Classes.dll",
+    "servicePattern": [
+        "nz.co.LanguagePerfect.Services.Portals.App.AppServicesPortal"
+    ],
+    "outputPath": "c:\\as3monkey\\services",
+    "keepServicesInNamespace": true,
+    "templatesPath": ".\\formats\\as3",
+    "fileExtension": ".as",
+    "typeMap": {
+        "System.Boolean": "Boolean",
+        "System.Byte": "Number",
+        "System.UInt16": "Number",
+        "System.UInt32": "uint",
+        "System.UInt64": "Number",
+        "System.SByte": "int",
+        "System.Int16": "Number",
+        "System.Int32": "int",
+        "System.Int64": "Number",
+        "System.Decimal": "Number",
+        "System.Double": "Number",
+        "System.DateTime": "Date",
+        "System.Nullable<System.Byte>": "Number",
+        "System.Nullable<System.SByte>": "Number",
+        "System.Nullable<System.Int16>": "Number",
+        "System.Nullable<System.Int32>": "Number",
+        "System.Nullable<System.Int64>": "Number",
+        "System.Nullable<System.Decimal>": "Number",
+        "System.Nullable<System.Double>": "Number",
+        "System.Nullable<System.DateTime>": "Date",
+        "System.String": "String",
+        "System.Object": "Object",
+        "System.ValueType": "Object",
+        "System.Void": "void"
+    },
+    "namespaceMap": {},
+    "collectionFormats": {
+        "system": "Array",
+        "default": "Array"
+    }
+}

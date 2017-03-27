@@ -64,8 +64,9 @@ type DataType struct {
 
 type Service struct {
 	DataType
-	ServiceIdentifier string
-	Methods           []*Method `json:"methods"`
+	ServiceIdentifier    string
+	Methods              []*Method `json:"methods"`
+	ReferencedNamespaces []string
 }
 
 type Method struct {
