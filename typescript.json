@@ -1,9 +1,9 @@
 {
     "assembly": "C:\\WF\\LP\\server\\EBS_Deployment\\bin\\Classes.dll",
     "servicePattern": [ 
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.FeedbackPortal"
+        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.UserTasksPortal"
     ],
-    "outputPath": "c:\\dooschmonkey\\services",
+    "outputPath": "C:\\WF\\LP\\web\\App\\services",
     "templatesPath": ".\\formats\\typescript",
     "fileExtension": ".ts",
     "typeMap": {
@@ -19,14 +19,14 @@
         "System.Decimal":                   "number",
         "System.Double":                    "number",
         "System.DateTime":                  "Date",
-        "System.Nullable<System.Byte>":     "number | null",
-        "System.Nullable<System.SByte>":    "number | null",
-        "System.Nullable<System.Int16>":    "number | null",
-        "System.Nullable<System.Int32>":    "number | null",
-        "System.Nullable<System.Int64>":    "number | null",
-        "System.Nullable<System.Decimal>":  "number | null",
-        "System.Nullable<System.Double>":   "number | null",
-        "System.Nullable<System.DateTime>": "Date | null",
+        "System.Nullable<System.Byte>":     "number",
+        "System.Nullable<System.SByte>":    "number",
+        "System.Nullable<System.Int16>":    "number",
+        "System.Nullable<System.Int32>":    "number",
+        "System.Nullable<System.Int64>":    "number",
+        "System.Nullable<System.Decimal>":  "number",
+        "System.Nullable<System.Double>":   "number",
+        "System.Nullable<System.DateTime>": "Date",
         "System.String":                    "string",
         "System.Object":                    "any",
         "System.ValueType":                 "any",

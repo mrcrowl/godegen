@@ -134,9 +134,17 @@ func (gen *Generator) outputNamespace(outputPath string, namespace *Namespace) e
 }
 
 func (gen *Generator) outputDataType(outputPath string, dataType *DataType) error {
-	dataTypeFilename := dataType.Name + gen.config.FileExtension
-	dataTypePath := filepath.Join(outputPath, dataTypeFilename)
-	file, err := os.Create(dataTypePath)
+	var dataTypeFilename = dataType.Name + gen.config.FileExtension
+	var dataTypePath string
+	if gen.config.DataTypePathSubfolder != "" {
+		dataTypePath = filepath.Join(outputPath, gen.config.DataTypePathSubfolder)
+		os.MkdirAll(dataTypePath, os.ModePerm)
+	} else {
+		dataTypePath = outputPath
+	}
+
+	dataTypeFilePath := filepath.Join(dataTypePath, dataTypeFilename)
+	file, err := os.Create(dataTypeFilePath)
 	if err != nil {
 		return err
 	}

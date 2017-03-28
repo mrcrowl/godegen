@@ -6,6 +6,7 @@
     "outputPath": "c:\\as3monkey\\services",
     "keepServicesInNamespace": true,
     "templatesPath": ".\\formats\\as3",
+    "dataTypePathSubfolder": "vo",
     "fileExtension": ".as",
     "typeMap": {
         "System.Boolean": "Boolean",

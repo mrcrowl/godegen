@@ -1,19 +1,32 @@
-{{define "datatype"}}
+{{define "datatype"}}/*******************************************************************
+* {{.Name}}.as
+* Copyright (C) 2006-2010 Midnight Coders, Inc.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+* LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+* OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+* WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+********************************************************************/
+
 package {{.Namespace}}.vo
 {
   import flash.utils.ByteArray;
   import mx.collections.ArrayCollection;
-
+{{range .Fields}}{{if ne (namespaceName .Type) (typeName .Type)}}import {{namespaceName .Type}}.vo.{{typeName .Type}};{{end}}{{end}}{{if .Base}}  import {{.Base.Namespace}}.vo.{{.Base.Name}};
+{{end}}
 	[Bindable]
 	[RemoteClass(alias="{{.Namespace}}.{{.Name}}")]
 	public class {{.Name}}{{if .Base}} extends {{.Base.Namespace}}.vo.{{.Base.Name}}{{end}}
 	{
 		public function {{.Name}}(){}
 	{{- range .Consts}}
-		public static const {{.Name}}:{{.Type}};{{end}}
+		public static const {{.Name}}:{{.Type}} = {{if eq .Type "string"}}"{{end}}{{.Value}}{{if eq .Type "string"}}"{{end}};{{end}}
 	{{range .Fields}}
-		{{if .ElementType}}[Marshall(type="{{namespaceName .ElementType}}.vo.{{typeName .ElementType}}")]
-		{{end}}public var {{.Name}}:{{.Type}};{{end}}
+		{{if and (ne .ElementType "") (ne (namespaceName .ElementType) (typeName .ElementType))}}[Marshall(type="{{namespaceName .ElementType}}.vo.{{typeName .ElementType}}")]
+		{{end}}public var {{.Name}}:{{if eq (namespaceName .Type) (typeName .Type)}}{{.Type}}{{else}}{{namespaceName .Type}}.vo.{{typeName .Type}}{{end}};{{end}}
 	}
 }
 {{end}}

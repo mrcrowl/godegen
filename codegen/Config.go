@@ -15,6 +15,7 @@ type GeneratorConfig struct {
 	ServicePattern          []string                          `json:"servicePattern"`
 	OutputPath              string                            `json:"outputPath"`
 	TemplatesPath           string                            `json:"templatesPath"`
+	DataTypePathSubfolder   string                            `json:"dataTypePathSubfolder"`
 	FileExtension           string                            `json:"fileExtension"`
 	TypeMap                 map[string]string                 `json:"typeMap"`
 	NamespaceMap            map[string]string                 `json:"namespaceMap"`
