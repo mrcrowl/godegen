@@ -1,14 +1,17 @@
 {{define "service" -}}
+
 import { Config } from "../Config";
 import { Callback } from "../utils/Callback";
 import { JSONRPC } from "../utils/JSONRPC";
-{{range .ReferencedTypes}}import {{"{"}} {{.Name}} {{"}"}} from "{{.RelativePath}}/{{.Name}}";
+{{range .ReferencedTypes}}import {{"{"}} {{.Name}}{{if .Alias }} as {{.Alias}}{{ end }} {{"}"}} from "{{.RelativePath}}/{{.Name}}";
 {{end}}
 
 var __instance: {{.Name}} = null;
 
+/**
+ * services.{{.Namespace}}.{{.Name}} [CODE-GEN]
+ */
 export class {{.Name}} extends JSONRPC
-
 {
 	public static get instance()
     {

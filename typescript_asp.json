@@ -1,24 +1,7 @@
 {
     "assembly": "C:\\WF\\LP\\server\\EBS_Deployment\\bin\\Classes.dll",
     "servicePattern": [
-        "nz.co.LanguagePerfect.Services.PortalsAsync.App.AppServicesPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.App.AppNotificationsPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.App.UserProfileFactsPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.App.UserDetailsPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.Website.GenericScoreboardPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.CPNotificationPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.CPSessionsPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.ClassesPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.ContentPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.FeedbackPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.FilePortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.LanguageDataPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.NewsPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.QualityPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.QuestionsPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.SchoolsPortal",   
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.UserTasksPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.UsersPortal"
+        "nz.co.LanguagePerfect.Services.PortalsAsync.App.AppServicesPortal"
     ],
     "outputPath": "C:\\WF\\LP\\web\\App\\services",
     "templatesPath": ".\\formats\\typescript",

@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"strconv"
+
 	"github.com/bradfitz/slice"
 )
 
@@ -91,8 +93,15 @@ func (res *ServiceDescriber) createService(serviceType reflect.Type, referencedN
 		return nsi < nsj
 	})
 
+	serviceDataType := res.createDataType(serviceType, true)
+	if serviceDataType.aliasMap.nonEmpty() {
+		for _, m := range methods {
+			m.ApplyAliases(serviceDataType.aliasMap)
+		}
+	}
+
 	return &Service{
-		*res.createDataType(serviceType, true),
+		*serviceDataType,
 		serviceIdentifier,
 		methods,
 		referencedNamespaces,
@@ -165,6 +174,16 @@ func (res *ServiceDescriber) createDataType(typ reflect.Type, includeMethods boo
 	}
 
 	referencedTypes := res.collectReferencedTypes(typ, includeMethods)
+	aliasMap := res.createDuplicateNameAliasMap(referencedTypes)
+
+	if aliasMap.nonEmpty() {
+		for _, f := range fields {
+			f.ApplyAliases(aliasMap)
+		}
+		for _, c := range consts {
+			c.ApplyAliases(aliasMap)
+		}
+	}
 
 	return &DataType{
 		DataTypeReference{
@@ -176,6 +195,7 @@ func (res *ServiceDescriber) createDataType(typ reflect.Type, includeMethods boo
 		referencedTypes,
 		fields,
 		consts,
+		aliasMap,
 	}
 }
 
@@ -196,10 +216,10 @@ func (res *ServiceDescriber) createRelativeDataTypeReference(typ reflect.Type, r
 		fromPath := strings.Replace(namespace, ".", "/", -1)
 		toNamespace := res.mapNamespace(relativeTo.Namespace())
 		toPath := strings.Replace(toNamespace, ".", "/", -1)
-		println(fromPath)
-		println(toPath)
+		// println(fromPath)
+		// println(toPath)
 		relativePath = calculateRelativePath(fromPath, toPath)
-		println(relativePath)
+		// println(relativePath)
 	}
 	return &RelativeDataTypeReference{
 		DataTypeReference: *dataTypeRef,
@@ -212,6 +232,36 @@ func calculateRelativePath(fromPath string, toPath string) string {
 		return filepath.ToSlash(relativePath)
 	}
 	return ""
+}
+
+func (res *ServiceDescriber) createDuplicateNameAliasMap(referencedTypes []*RelativeDataTypeReference) aliasMap { // map[fullName] --> alias
+	// group by name
+	var typesByName = map[string][]*RelativeDataTypeReference{}
+	var duplicateNames = map[string]bool{}
+
+	for _, ref := range referencedTypes {
+		name := ref.Name
+		existing := append(typesByName[name], ref)
+		typesByName[name] = existing
+
+		// keep track of duplicates
+		if len(existing) > 1 {
+			duplicateNames[name] = true
+		}
+	}
+
+	var aliasesByFullname = aliasMap{}
+	for duplicateName := range duplicateNames {
+		references := typesByName[duplicateName]
+		for i, ref := range references {
+			fullName := ref.Namespace + "." + ref.Name
+			alias := ref.Name + "_" + strconv.Itoa(i+1)
+			aliasesByFullname[fullName] = alias
+			ref.Alias = alias
+		}
+	}
+
+	return aliasesByFullname
 }
 
 func (res *ServiceDescriber) collectReferencedTypes(sourceType reflect.Type, includeMethods bool) []*RelativeDataTypeReference {

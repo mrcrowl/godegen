@@ -53,6 +53,7 @@ type DataTypeReference struct {
 type RelativeDataTypeReference struct {
 	DataTypeReference
 	RelativePath string
+	Alias        string
 }
 
 type DataType struct {
@@ -61,6 +62,7 @@ type DataType struct {
 	ReferencedTypes []*RelativeDataTypeReference `json:"referencedTypes,omitempty"`
 	Fields          []*Field                     `json:"fields,omitempty"`
 	Consts          []*Const                     `json:"consts,omitempty"`
+	aliasMap        aliasMap
 }
 
 type Service struct {
@@ -97,4 +99,42 @@ type Const struct {
 	Type     string      `json:"type"`
 	TypeName string      `json:"typeName"`
 	Value    interface{} `json:"value"`
+}
+
+type aliasMap map[string]string
+
+func (aliases aliasMap) nonEmpty() bool {
+	return len(aliases) > 0
+}
+
+func (meth *Method) ApplyAliases(aliases aliasMap) {
+	if alias, contains := aliases[meth.Type]; contains {
+		meth.TypeName = alias
+	}
+
+	for _, arg := range meth.Args {
+		if alias, contains := aliases[arg.Type]; contains {
+			arg.TypeName = alias
+		}
+	}
+}
+
+func (field *Field) ApplyAliases(aliases aliasMap) {
+	if alias, contains := aliases[field.Type]; contains {
+		field.TypeName = alias
+	}
+
+	if alias, contains := aliases[field.ElementType]; contains {
+		field.ElementTypeName = alias
+	}
+}
+
+func (con *Const) ApplyAliases(aliases aliasMap) {
+	if alias, contains := aliases[con.Type]; contains {
+		con.TypeName = alias
+	}
+}
+
+type Aliaser interface {
+	ApplyAliases(aliasMap aliasMap)
 }

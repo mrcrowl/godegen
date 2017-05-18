@@ -2,6 +2,7 @@ package codegen
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -114,7 +115,11 @@ func (gen *Generator) outputNamespace(outputPath string, namespace *Namespace) e
 		if gen.config.KeepServicesInNamespace {
 			servicePath = namespacePath
 		} else {
+			// hacky workaround for changing portals output path
 			servicePath = gen.config.OutputPath
+			for _, typ := range service.ReferencedTypes {
+				typ.RelativePath = strings.Replace(typ.RelativePath, "../../", "./", -1)
+			}
 		}
 		err := gen.outputService(servicePath, service)
 		if err != nil {
@@ -148,6 +153,8 @@ func (gen *Generator) outputDataType(outputPath string, dataType *DataType) erro
 	if err != nil {
 		return err
 	}
+
+	fmt.Println(dataTypeFilePath)
 	defer file.Close()
 
 	return gen.templates.ExecuteTemplate(file, templateNameDataType, dataType)
@@ -161,6 +168,7 @@ func (gen *Generator) outputService(outputPath string, service *Service) error {
 		return err
 	}
 
+	fmt.Println(servicePath)
 	defer file.Close()
 
 	return gen.templates.ExecuteTemplate(file, templateNameService, service)
