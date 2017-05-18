@@ -14,11 +14,11 @@
 
 module {{.Namespace}}
 {
-	export interface {{.Name}}{{if .Base}} extends {{.Base.Namespace}}.{{.Base.Name}}{{end}}
+	export interface {{.Name}}{{if .Base}} extends {{.Base.Name}}{{end}}
 	{{"{"}}{{range .Consts}}
-		// static {{.Name}}:{{.Type}} = {{if eq .Type "string"}}"{{end}}{{.Value}}{{if eq .Type "string"}}"{{end}};{{end -}}
+		// static {{.Name}}:{{.TypeName}} = {{if eq .TypeName "string"}}"{{end}}{{.Value}}{{if eq .TypeName "string"}}"{{end}};{{end -}}
 	{{range .Fields}}
-		{{.Name}}: {{.Type}};{{end}}
+		{{.Name}}: {{.TypeName}};{{end}}
 	}
 }
 {{end}}

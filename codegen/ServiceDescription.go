@@ -72,23 +72,28 @@ type Service struct {
 type Method struct {
 	Name     string `json:"name"`
 	Type     string `json:"type"`
+	TypeName string `json:"typeName"`
 	Args     []*Arg `json:"args,omitempty"`
 	nameSort string
 }
 
 type Arg struct {
-	Name string `json:"name"`
-	Type string `json:"type"`
+	Name     string `json:"name"`
+	Type     string `json:"type"`
+	TypeName string `json:"typeName"`
 }
 
 type Field struct {
-	Name        string `json:"name"`
-	Type        string `json:"type"`
-	ElementType string `json:"elementType"`
+	Name            string `json:"name"`
+	Type            string `json:"type"`
+	TypeName        string `json:"typeName"`
+	ElementType     string `json:"elementType"`
+	ElementTypeName string `json:"elementTypeName"`
 }
 
 type Const struct {
-	Name  string      `json:"name"`
-	Type  string      `json:"type"`
-	Value interface{} `json:"value"`
+	Name     string      `json:"name"`
+	Type     string      `json:"type"`
+	TypeName string      `json:"typeName"`
+	Value    interface{} `json:"value"`
 }

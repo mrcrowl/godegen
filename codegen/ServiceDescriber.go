@@ -213,13 +213,18 @@ func (res *ServiceDescriber) collectConsts(typ reflect.Type) []*Const {
 	return consts
 }
 
-func (res *ServiceDescriber) mapType(typ reflect.Type) string {
-	return res.typeMapper(typ)
+func (res *ServiceDescriber) mapType(typ reflect.Type, nameOnly bool) string {
+	mappedFullName := res.typeMapper(typ)
+	if nameOnly {
+		name := getLastNamespaceSegment(mappedFullName)
+		return name
+	}
+	return mappedFullName
 }
 
-func (res *ServiceDescriber) mapElementType(typ reflect.Type) string {
+func (res *ServiceDescriber) mapElementType(typ reflect.Type, nameOnly bool) string {
 	if elementType, is := isCollectionType(typ); is {
-		return res.mapType(elementType)
+		return res.mapType(elementType, nameOnly)
 	}
 
 	return ""
@@ -249,7 +254,8 @@ func (res *ServiceDescriber) collectTypeMethods(typ reflect.Type) []*Method {
 
 		meth := &Method{
 			Name:     method.Name(),
-			Type:     res.mapType(returnType),
+			Type:     res.mapType(returnType, false),
+			TypeName: res.mapType(returnType, true),
 			Args:     args,
 			nameSort: strings.ToLower(method.Name()),
 		}
@@ -273,8 +279,9 @@ func (res *ServiceDescriber) collectMethodArgs(method *reflect.Method) []*Arg {
 
 	for _, param := range method.Parameters() {
 		arg := &Arg{
-			Name: param.Name(),
-			Type: res.mapType(param.Type()),
+			Name:     param.Name(),
+			Type:     res.mapType(param.Type(), false),
+			TypeName: res.mapType(param.Type(), true),
 		}
 		args = append(args, arg)
 	}
@@ -284,25 +291,34 @@ func (res *ServiceDescriber) collectMethodArgs(method *reflect.Method) []*Arg {
 
 func (res *ServiceDescriber) createConst(field *reflect.Field) *Const {
 	return &Const{
-		Name:  field.Name(),
-		Type:  res.mapType(field.Type()),
-		Value: field.Value(),
+		Name:     field.Name(),
+		Type:     res.mapType(field.Type(), false),
+		TypeName: res.mapType(field.Type(), true),
+		Value:    field.Value(),
 	}
 }
 
 func (res *ServiceDescriber) createFieldFromField(field *reflect.Field) *Field {
+	fieldType := field.Type()
+
 	return &Field{
-		Name:        field.Name(),
-		Type:        res.mapType(field.Type()),
-		ElementType: res.mapElementType(field.Type()),
+		Name:            field.Name(),
+		Type:            res.mapType(fieldType, false),
+		TypeName:        res.mapType(fieldType, true),
+		ElementType:     res.mapElementType(fieldType, false),
+		ElementTypeName: res.mapElementType(fieldType, true),
 	}
 }
 
 func (res *ServiceDescriber) createFieldFromProperty(property *reflect.Property) *Field {
+	propertyType := property.Type()
+
 	return &Field{
-		Name:        property.Name(),
-		Type:        res.mapType(property.Type()),
-		ElementType: res.mapElementType(property.Type()),
+		Name:            property.Name(),
+		Type:            res.mapType(propertyType, false),
+		TypeName:        res.mapType(propertyType, true),
+		ElementType:     res.mapElementType(propertyType, false),
+		ElementTypeName: res.mapElementType(propertyType, true),
 	}
 }
 

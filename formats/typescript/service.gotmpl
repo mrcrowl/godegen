@@ -4,7 +4,11 @@ import { Callback } from "../utils/Callback";
 import { JSONRPC } from "../utils/JSONRPC";
 
 var __instance: {{.Name}} = null;
-	
+
+{{range .ReferencedNamespaces}}
+{{.}}
+{{end}}
+
 export class {{.Name}} extends JSONRPC
 
 {
