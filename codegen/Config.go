@@ -11,16 +11,16 @@ import (
 )
 
 type GeneratorConfig struct {
-	Assembly                string                            `json:"assembly"`
-	ServicePattern          []string                          `json:"servicePattern"`
-	OutputPath              string                            `json:"outputPath"`
-	TemplatesPath           string                            `json:"templatesPath"`
-	DataTypePathSubfolder   string                            `json:"dataTypePathSubfolder"`
-	FileExtension           string                            `json:"fileExtension"`
-	TypeMap                 map[string]string                 `json:"typeMap"`
-	NamespaceMap            map[string]string                 `json:"namespaceMap"`
-	CollectionFormats       *GeneratorConfigCollectionFormats `json:"collectionFormats"`
-	KeepServicesInNamespace bool                              `json:"keepServicesInNamespace"`
+	Assembly                string            `json:"assembly"`
+	ServicePattern          []string          `json:"servicePattern"`
+	OutputPath              string            `json:"outputPath"`
+	TemplatesPath           string            `json:"templatesPath"`
+	DataTypePathSubfolder   string            `json:"dataTypePathSubfolder"`
+	FileExtension           string            `json:"fileExtension"`
+	TypeMap                 map[string]string `json:"typeMap"`
+	NamespaceMap            map[string]string `json:"namespaceMap"`
+	CollectionFormats       map[string]string `json:"collectionFormats"`
+	KeepServicesInNamespace bool              `json:"keepServicesInNamespace"`
 }
 
 type GeneratorConfigCollectionFormats struct {
@@ -50,34 +50,37 @@ func (config *GeneratorConfig) createTypeMapper() TypeMapperFn {
 	var typeMap = config.TypeMap
 	var namespaceMapperFn = config.createNamespaceMapper()
 	var typeMapperFn TypeMapperFn
-	var defaultFormat = config.CollectionFormats.Default
-	var systemFormat = config.CollectionFormats.System
+	var defaultFormat = config.CollectionFormats["default"]
+	var systemFormat = config.CollectionFormats["system"]
 	var defaultFormatContainsVariable = strings.Contains(defaultFormat, "%")
 	var systemFormatContainsVariable = strings.Contains(systemFormat, "%")
 
-	typeMapperFn = func(typ reflect.Type) string {
+	typeMapperFn = func(typ reflect.Type, nameOnly bool) string {
 		fullname := typ.FullName()
 
 		if mappedName, found := typeMap[fullname]; found {
 			return mappedName
 		}
 
-		cleanedFullName := namespaceMapperFn(fullname)
 		if elemType, isCollection := isCollectionType(typ); isCollection {
-			mappedTypeName := typeMapperFn(elemType)
+			mappedTypeName := typeMapperFn(elemType, nameOnly)
 			if isBuiltIn(elemType) {
-				if defaultFormatContainsVariable {
+				if systemFormatContainsVariable {
 					return fmt.Sprintf(systemFormat, mappedTypeName)
 				}
 				return systemFormat
 			}
-			if systemFormatContainsVariable {
+			if defaultFormatContainsVariable {
 				return fmt.Sprintf(defaultFormat, mappedTypeName)
 			}
 			return defaultFormat
 		}
 
-		return cleanedFullName
+		if nameOnly {
+			return typ.Name()
+		}
+		mappedFullName := namespaceMapperFn(fullname)
+		return mappedFullName
 	}
 
 	return typeMapperFn
@@ -99,6 +102,28 @@ func (config *GeneratorConfig) createNamespaceMapper() NamespaceMapperFn {
 func isBuiltIn(typ reflect.Type) bool {
 	_, isBuiltIn := typ.(*reflect.BuiltInType)
 	return isBuiltIn
+}
+
+func isCollection(typ reflect.Type) bool {
+	if _, isArray := typ.(*reflect.ArrayType); isArray {
+		return true
+	}
+
+	if generic, isGeneric := typ.(*reflect.GenericType); isGeneric {
+		if generic.TypeBase.FullName() == "System.Collections.Generic.List`1" {
+			return true
+		}
+	}
+
+	return false
+}
+
+func isGeneric(typ reflect.Type) bool {
+	if _, isGeneric := typ.(*reflect.GenericType); isGeneric {
+		return true
+	}
+
+	return false
 }
 
 func isCollectionType(typ reflect.Type) (reflect.Type, bool) {

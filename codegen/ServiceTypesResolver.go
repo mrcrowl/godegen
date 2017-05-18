@@ -6,14 +6,18 @@ import (
 	"github.com/bradfitz/slice"
 )
 
-var includedGenerics = map[string]bool{
+var genericsWhitelist = map[string]bool{ // false indicates don't include the generic itself
 	"System.Nullable`1":                 false, // don't resolve int? for example, but process the "int" part
-	"System.Collections.Generic.List`1": false, // include lists
+	"System.Collections.Generic.List`1": false, // include list elements
+	"System.Threading.Tasks.Task`1":     false, // include task wrapped types
 }
 
 var excludedBaseTypes = map[string]bool{
-	"System.Object":    true,
-	"System.ValueType": true,
+	"System.Object":                                               true,
+	"System.ValueType":                                            true,
+	"nz.co.LanguagePerfect.Services.PortalsAsync.AsyncPortalBase": true,
+	"System.Web.Services.WebService":                              true,
+	"System.ComponentModel.MarshalByValueComponent":               true,
 }
 
 type ServiceTypesResolver struct {
@@ -45,7 +49,7 @@ func (res *ServiceTypesResolver) resolve() []reflect.Type {
 
 func includeGeneric(generic *reflect.GenericType) bool {
 	baseName := generic.TypeBase.FullName()
-	include := includedGenerics[baseName] == true
+	include := genericsWhitelist[baseName] == true
 	return include
 }
 

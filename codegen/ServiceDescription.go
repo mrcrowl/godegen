@@ -50,16 +50,17 @@ type DataTypeReference struct {
 	// ElementType   *DataTypeReference `json:"elementType,omitempty"`
 }
 
-type MappedDataTypeReference struct {
+type RelativeDataTypeReference struct {
 	DataTypeReference
-	MappedType string
+	RelativePath string
 }
 
 type DataType struct {
 	DataTypeReference
-	Base   *DataTypeReference `json:"base,omitempty"`
-	Fields []*Field           `json:"fields,omitempty"`
-	Consts []*Const           `json:"consts,omitempty"`
+	Base            *RelativeDataTypeReference   `json:"base,omitempty"`
+	ReferencedTypes []*RelativeDataTypeReference `json:"referencedTypes,omitempty"`
+	Fields          []*Field                     `json:"fields,omitempty"`
+	Consts          []*Const                     `json:"consts,omitempty"`
 }
 
 type Service struct {

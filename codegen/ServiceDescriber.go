@@ -9,7 +9,7 @@ import (
 	"github.com/bradfitz/slice"
 )
 
-type TypeMapperFn func(reflect.Type) string
+type TypeMapperFn func(reflect.Type, bool) string
 type NamespaceMapperFn func(string) string
 
 type ServiceDescriber struct {
@@ -18,12 +18,12 @@ type ServiceDescriber struct {
 	namespaceMapper NamespaceMapperFn
 }
 
-func (descr *ServiceDescriber) GetTypesMatchingPattern(globPattern string) []reflect.Type {
-	return descr.assemblyFile.GetTypesMatchingPattern(globPattern, true)
+func (res *ServiceDescriber) GetTypesMatchingPattern(globPattern string) []reflect.Type {
+	return res.assemblyFile.GetTypesMatchingPattern(globPattern, true)
 }
 
-func (descr *ServiceDescriber) GetType(typeName string) []reflect.Type {
-	return []reflect.Type{descr.assemblyFile.GetType(typeName)}
+func (res *ServiceDescriber) GetType(typeName string) []reflect.Type {
+	return []reflect.Type{res.assemblyFile.GetType(typeName)}
 }
 
 func NewServiceDescriber(config *GeneratorConfig) (*ServiceDescriber, error) {
@@ -40,7 +40,7 @@ func NewServiceDescriber(config *GeneratorConfig) (*ServiceDescriber, error) {
 func NewServiceDescriberManual(
 	assemblyPath string,
 	assemblyName string,
-	typeMapper func(reflect.Type) string,
+	typeMapper func(reflect.Type, bool) string,
 	namespaceMapper func(string) string,
 ) (*ServiceDescriber, error) {
 	loader := reflect.NewAssemblyLoader(assemblyPath)
@@ -92,7 +92,7 @@ func (res *ServiceDescriber) createService(serviceType reflect.Type, referencedN
 	})
 
 	return &Service{
-		*res.createDataType(serviceType),
+		*res.createDataType(serviceType, true),
 		serviceIdentifier,
 		methods,
 		referencedNamespaces,
@@ -139,7 +139,7 @@ func (res *ServiceDescriber) buildNamespaceTree(types []reflect.Type, serviceTyp
 
 		// add type to namespace
 		if typ != serviceType {
-			dataType := res.createDataType(typ)
+			dataType := res.createDataType(typ, false)
 			namespace.DataTypes = append(namespace.DataTypes, dataType)
 			namespacesWithTypes[namespace.qualifiedName] = true
 		}
@@ -147,22 +147,24 @@ func (res *ServiceDescriber) buildNamespaceTree(types []reflect.Type, serviceTyp
 
 	referencedNamespaces := make([]string, 0, len(namespacesWithTypes))
 
-	for namespace, _ := range namespacesWithTypes {
+	for namespace := range namespacesWithTypes {
 		referencedNamespaces = append(referencedNamespaces, namespace)
 	}
 
 	return rootNamespaces, namespaceSeen, referencedNamespaces
 }
 
-func (res *ServiceDescriber) createDataType(typ reflect.Type) *DataType {
+func (res *ServiceDescriber) createDataType(typ reflect.Type, includeMethods bool) *DataType {
 	var fields = res.collectTypeFields(typ)
 	var consts = res.collectConsts(typ)
 	var baseType = typ.Base()
-	var base *DataTypeReference
+	var base *RelativeDataTypeReference
 
 	if !excludedBaseTypes[baseType.FullName()] {
-		base = res.createDataTypeReference(baseType)
+		base = res.createRelativeDataTypeReference(baseType, typ)
 	}
+
+	referencedTypes := res.collectReferencedTypes(typ, includeMethods)
 
 	return &DataType{
 		DataTypeReference{
@@ -170,21 +172,114 @@ func (res *ServiceDescriber) createDataType(typ reflect.Type) *DataType {
 			Namespace: res.mapNamespace(typ.Namespace()),
 			// QualifiedName: res.mapNamespace(typ.FullName()),
 		},
-		base, // TODO: get base type
+		base,
+		referencedTypes,
 		fields,
 		consts,
 	}
 }
 
-func (res *ServiceDescriber) createDataTypeReference(typ reflect.Type) *DataTypeReference {
+func (res *ServiceDescriber) createRelativeDataTypeReference(typ reflect.Type, relativeTo reflect.Type) *RelativeDataTypeReference {
 	if typ == nil {
 		return nil
 	}
 
-	return &DataTypeReference{
-		Name:      typ.Name(),
-		Namespace: res.mapNamespace(typ.Namespace()),
+	name := typ.Name()
+	namespace := res.mapNamespace(typ.Namespace())
+
+	dataTypeRef := &DataTypeReference{name, namespace}
+
+	var relativePath string
+	if isBuiltIn(typ) || isBuiltIn(relativeTo) || isGeneric(typ) || isGeneric(relativeTo) {
+		relativePath = ""
+	} else {
+		fromPath := strings.Replace(namespace, ".", "/", -1)
+		toNamespace := res.mapNamespace(relativeTo.Namespace())
+		toPath := strings.Replace(toNamespace, ".", "/", -1)
+		println(fromPath)
+		println(toPath)
+		relativePath = calculateRelativePath(fromPath, toPath)
+		println(relativePath)
 	}
+	return &RelativeDataTypeReference{
+		DataTypeReference: *dataTypeRef,
+		RelativePath:      relativePath,
+	}
+}
+
+func calculateRelativePath(fromPath string, toPath string) string {
+	if relativePath, err := filepath.Rel(toPath, fromPath); err == nil {
+		return filepath.ToSlash(relativePath)
+	}
+	return ""
+}
+
+func (res *ServiceDescriber) collectReferencedTypes(sourceType reflect.Type, includeMethods bool) []*RelativeDataTypeReference {
+	var types []reflect.Type
+	var typesSeen = map[string]bool{}
+
+	var collect func(reflect.Type)
+	collect = func(typ reflect.Type) {
+		if isBuiltIn(typ) {
+			return
+		}
+
+		if generic, isGeneric := typ.(*reflect.GenericType); isGeneric {
+			fullName := generic.TypeBase.FullName()
+
+			if _, inWhiteList := genericsWhitelist[fullName]; inWhiteList {
+				collect(generic.ArgumentTypes()[0])
+			}
+			return
+		}
+
+		if elementType, isCollection := isCollectionType(typ); isCollection {
+			collect(elementType)
+			return
+		}
+
+		fullname := typ.FullName()
+		if _, seen := typesSeen[fullname]; seen {
+			return
+		}
+
+		types = append(types, typ)
+		typesSeen[fullname] = true
+	}
+
+	// base type
+	var baseType = sourceType.Base()
+	if !excludedBaseTypes[baseType.FullName()] {
+		collect(baseType)
+	}
+
+	// method
+	if includeMethods {
+		for _, method := range sourceType.GetMethods() {
+			collect(method.ReturnType())
+			for _, param := range method.Parameters() {
+				collect(param.Type())
+			}
+		}
+	}
+
+	// properties
+	for _, property := range sourceType.GetProperties() {
+		collect(property.Type())
+	}
+
+	// fields
+	for _, field := range sourceType.GetFields() {
+		collect(field.Type())
+	}
+
+	var dataTypeReferences []*RelativeDataTypeReference
+	for _, typ := range types {
+		ref := res.createRelativeDataTypeReference(typ, sourceType)
+		dataTypeReferences = append(dataTypeReferences, ref)
+	}
+
+	return dataTypeReferences
 }
 
 func (res *ServiceDescriber) collectTypeFields(typ reflect.Type) []*Field {
@@ -214,12 +309,8 @@ func (res *ServiceDescriber) collectConsts(typ reflect.Type) []*Const {
 }
 
 func (res *ServiceDescriber) mapType(typ reflect.Type, nameOnly bool) string {
-	mappedFullName := res.typeMapper(typ)
-	if nameOnly {
-		name := getLastNamespaceSegment(mappedFullName)
-		return name
-	}
-	return mappedFullName
+	mappedName := res.typeMapper(typ, nameOnly)
+	return mappedName
 }
 
 func (res *ServiceDescriber) mapElementType(typ reflect.Type, nameOnly bool) string {
