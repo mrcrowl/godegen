@@ -1,7 +1,7 @@
 {
     "assembly": "C:\\WF\\LP\\server\\EBS_Deployment\\bin\\Classes.dll",
     "servicePattern": [
-        "nz.co.LanguagePerfect.Services.PortalsAsync.App.AppServicesPortal"
+        "nz.co.LanguagePerfect.Services.PortalsAsync.App.QuestionsPortal"
     ],
     "outputPath": "C:\\WF\\LP\\web\\App\\services",
     "templatesPath": ".\\formats\\typescript",

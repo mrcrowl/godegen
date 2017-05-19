@@ -81,6 +81,11 @@ func (res *ServiceTypesResolver) innerResolve(targetType reflect.Type) {
 		include = false
 	}
 
+	// exclude enums
+	if isEnum(targetType) {
+		include = false
+	}
+
 	// name := targetType.Name()
 	// fmt.Println(name)
 

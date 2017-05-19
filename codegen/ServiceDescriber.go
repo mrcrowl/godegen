@@ -228,8 +228,16 @@ func (res *ServiceDescriber) createRelativeDataTypeReference(typ reflect.Type, r
 }
 
 func calculateRelativePath(fromPath string, toPath string) string {
+	if fromPath == toPath {
+		return "."
+	}
+
 	if relativePath, err := filepath.Rel(toPath, fromPath); err == nil {
-		return filepath.ToSlash(relativePath)
+		slashedPath := filepath.ToSlash(relativePath)
+		if strings.HasPrefix(slashedPath, ".") {
+			return slashedPath
+		}
+		return "./" + slashedPath
 	}
 	return ""
 }
@@ -271,6 +279,10 @@ func (res *ServiceDescriber) collectReferencedTypes(sourceType reflect.Type, inc
 	var collect func(reflect.Type)
 	collect = func(typ reflect.Type) {
 		if isBuiltIn(typ) {
+			return
+		}
+
+		if isEnum(typ) {
 			return
 		}
 

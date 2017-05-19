@@ -10,6 +10,7 @@
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.CPSessionsPortal",
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.ClassesPortal",
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.ContentPortal",
+        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.CRMPortal",
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.FeedbackPortal",
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.FilePortal",
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.LanguageDataPortal",
@@ -17,6 +18,7 @@
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.QualityPortal",
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.QuestionsPortal",
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.SchoolsPortal",   
+        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.StatsPortal",   
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.UserTasksPortal",
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.UsersPortal"
     ],

@@ -76,6 +76,11 @@ func (config *GeneratorConfig) createTypeMapper() TypeMapperFn {
 			return defaultFormat
 		}
 
+		// special handling for enum
+		if isEnum(typ) {
+			return "string"
+		}
+
 		if nameOnly {
 			return typ.Name()
 		}
@@ -115,6 +120,15 @@ func isCollection(typ reflect.Type) bool {
 		}
 	}
 
+	return false
+}
+
+func isEnum(typ reflect.Type) bool {
+	// special handling for enum
+	base := typ.Base()
+	if base != nil && base.FullName() == "System.Enum" {
+		return true
+	}
 	return false
 }
 
