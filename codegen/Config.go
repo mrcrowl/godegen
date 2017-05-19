@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+// GeneratorConfig is the internal representation of the JSON configuration file
 type GeneratorConfig struct {
 	Assembly                string            `json:"assembly"`
 	ServicePattern          []string          `json:"servicePattern"`
@@ -23,11 +24,13 @@ type GeneratorConfig struct {
 	KeepServicesInNamespace bool              `json:"keepServicesInNamespace"`
 }
 
+// GeneratorConfigCollectionFormats are the collection formats used for arrays/lists
 type GeneratorConfigCollectionFormats struct {
 	System  string `json:"system"`
 	Default string `json:"default"`
 }
 
+// LoadConfig loads a JSON configuration file
 func LoadConfig(configFilename string) (*GeneratorConfig, error) {
 	if filepath.Ext(configFilename) == "" {
 		configFilename += ".json"

@@ -36,12 +36,14 @@ var additionalTemplateFns = template.FuncMap{
 	},
 }
 
+// Generator is used to apply a set of templates to a ServiceDescription and output to files
 type Generator struct {
 	outputPath string
 	config     *GeneratorConfig
 	templates  *template.Template
 }
 
+// NewGenerator creates a new Generator
 func NewGenerator(config *GeneratorConfig) (*Generator, error) {
 	// validate output path
 	outputPath := config.OutputPath
@@ -73,6 +75,7 @@ func NewGenerator(config *GeneratorConfig) (*Generator, error) {
 	}, nil
 }
 
+// OutputServiceDescription writes a service description to file
 func (gen *Generator) OutputServiceDescription(descr *ServiceDescription) (int, error) {
 	totalChanges := 0
 	for _, namespace := range descr.Namespaces {

@@ -14,24 +14,28 @@ import (
 type typeMapperFunc func(reflect.Type, bool) string
 type namespaceMapperFunc func(string) string
 
+// ServiceDescriber is used to create a ServiceDescription to be output by a GeneratorConfig
 type ServiceDescriber struct {
 	assemblyFile    *reflect.Assembly
 	typeMapper      typeMapperFunc
 	namespaceMapper namespaceMapperFunc
 }
 
+// GetTypesMatchingPattern matches types in an assembly using a glob pattern
 func (res *ServiceDescriber) GetTypesMatchingPattern(globPattern string) []reflect.Type {
 	return res.assemblyFile.GetTypesMatchingPattern(globPattern, true)
 }
 
+// GetType returns a specific type from an assembly
 func (res *ServiceDescriber) GetType(typeName string) []reflect.Type {
 	return []reflect.Type{res.assemblyFile.GetType(typeName)}
 }
 
+// NewServiceDescriber returns a new ServiceDescriber for a GeneratorConfig
 func NewServiceDescriber(config *GeneratorConfig) (*ServiceDescriber, error) {
 	assemblyPath, assemblyName := filepath.Split(config.Assembly)
 
-	return NewServiceDescriberManual(
+	return newServiceDescriberManual(
 		assemblyPath,
 		assemblyName,
 		config.createTypeMapper(),
@@ -39,7 +43,7 @@ func NewServiceDescriber(config *GeneratorConfig) (*ServiceDescriber, error) {
 	)
 }
 
-func NewServiceDescriberManual(
+func newServiceDescriberManual(
 	assemblyPath string,
 	assemblyName string,
 	typeMapper func(reflect.Type, bool) string,
@@ -54,6 +58,7 @@ func NewServiceDescriberManual(
 	return nil, errors.New("Can't load assembly '" + assemblyName + "' in: " + assemblyPath)
 }
 
+// Describe outputs a ServiceDecsription for a given type name
 func (res *ServiceDescriber) Describe(serviceTypeName string) (*ServiceDescription, error) {
 	if serviceType := res.assemblyFile.GetType(serviceTypeName); serviceType != nil {
 		return res.DescribeType(serviceType)
@@ -62,6 +67,7 @@ func (res *ServiceDescriber) Describe(serviceTypeName string) (*ServiceDescripti
 	return nil, errors.New("Can't find type: " + serviceTypeName)
 }
 
+// DescribeType describes a Type
 func (res *ServiceDescriber) DescribeType(serviceType reflect.Type) (*ServiceDescription, error) {
 	resolvedTypes := ResolveServiceDependencyTypes(res.assemblyFile, serviceType)
 	description := res.createDescriptionOfTypes(resolvedTypes, serviceType)

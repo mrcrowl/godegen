@@ -20,6 +20,7 @@ var excludedBaseTypes = map[string]bool{
 	"System.ComponentModel.MarshalByValueComponent":               true,
 }
 
+// ServiceTypesResolver resolves a graph of Type dependencies for a service
 type ServiceTypesResolver struct {
 	assembly       *reflect.Assembly
 	serviceType    reflect.Type
@@ -27,6 +28,7 @@ type ServiceTypesResolver struct {
 	typesFindOrder []reflect.Type
 }
 
+// ResolveServiceDependencyTypes is a facade function for resolving a graph of Type dependencies
 func ResolveServiceDependencyTypes(sourceAssembly *reflect.Assembly, serviceType reflect.Type) []reflect.Type {
 	resolver := newServiceTypesResolver(sourceAssembly, serviceType)
 	return resolver.resolve()
