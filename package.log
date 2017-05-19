@@ -1,0 +1,16 @@
+======== 
+C:\Users\mrcrowl\go\src\godegen\codegen.exe -> C:\WF\lp\tools\WeborbCodegen\libs\godegen\codegen.exe
+1 File(s) copied
+ 
+C:\Users\mrcrowl\go\src\godegen\formats\as3\datatype.gotmpl -> C:\WF\lp\tools\WeborbCodegen\libs\godegen\as3\datatype.gotmpl
+C:\Users\mrcrowl\go\src\godegen\formats\as3\service.gotmpl -> C:\WF\lp\tools\WeborbCodegen\libs\godegen\as3\service.gotmpl
+C:\Users\mrcrowl\go\src\godegen\formats\typescript\datatype.gotmpl -> C:\WF\lp\tools\WeborbCodegen\libs\godegen\typescript\datatype.gotmpl
+C:\Users\mrcrowl\go\src\godegen\formats\typescript\service.gotmpl -> C:\WF\lp\tools\WeborbCodegen\libs\godegen\typescript\service.gotmpl
+4 File(s) copied
+ 
+C:\Users\mrcrowl\go\src\godegen\as3.json -> C:\WF\lp\tools\WeborbCodegen\libs\godegen\as3.json
+1 File(s) copied
+ 
+C:\Users\mrcrowl\go\src\godegen\typescript.json -> C:\WF\lp\tools\WeborbCodegen\libs\godegen\typescript.json
+1 File(s) copied
+ 
