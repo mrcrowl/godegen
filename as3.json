@@ -1,9 +1,24 @@
 {
     "assembly": "C:\\WF\\LP\\server\\EBS_Deployment\\bin\\Classes.dll",
     "servicePattern": [
-        "nz.co.LanguagePerfect.Services.Portals.App.AppServicesPortal"
+        "nz.co.LanguagePerfect.Services.Portals.Website.GenericScoreboardPortal",
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.CPNotificationPortal",
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.CPSessionsPortal",
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.ClassesPortal",
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.ContentPortal",
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.CRMPortal",
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.FeedbackPortal",
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.FilePortal",
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.LanguageDataPortal",
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.NewsPortal",
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.QualityPortal",
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.QuestionsPortal",
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.SchoolsPortal",   
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.StatsPortal",   
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.UserTasksPortal",
+        "nz.co.LanguagePerfect.Services.Portals.ControlPanel.UsersPortal"
     ],
-    "outputPath": "c:\\as3monkey\\services",
+    "outputPath": "c:\\WF\\LP\\client\\Services\\src",
     "keepServicesInNamespace": true,
     "templatesPath": ".\\formats\\as3",
     "dataTypePathSubfolder": "vo",

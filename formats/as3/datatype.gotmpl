@@ -22,11 +22,12 @@ package {{.Namespace}}.vo
 	public class {{.Name}}{{if .Base}} extends {{.Base.Namespace}}.vo.{{.Base.Name}}{{end}}
 	{
 		public function {{.Name}}(){}
-	{{- range .Consts}}
-		public static const {{.Name}}:{{.Type}} = {{if eq .Type "string"}}"{{end}}{{.Value}}{{if eq .Type "string"}}"{{end}};{{end}}
-	{{range .Fields}}
-		{{if and (ne .ElementType "") (ne (namespaceName .ElementType) (typeName .ElementType))}}[Marshall(type="{{namespaceName .ElementType}}.vo.{{typeName .ElementType}}")]
-		{{end}}public var {{.Name}}:{{if eq (namespaceName .Type) (typeName .Type)}}{{.Type}}{{else}}{{namespaceName .Type}}.vo.{{typeName .Type}}{{end}};{{end}}
-	}
+	
+{{range .Consts}}		public static const {{.Name}}:{{.Type}} = {{if eq .Type "String"}}"{{end}}{{.Value}}{{if eq .Type "String"}}"{{end}};
+{{end}}{{range .Fields}}		{{if and (ne .ElementType "") (ne (namespaceName .ElementType) (typeName .ElementType))}}[Marshall(type="{{namespaceName .ElementType}}.vo.{{typeName .ElementType}}")]
+		{{end}}public var {{.Name}}:{{if eq (namespaceName .Type) (typeName .Type)}}{{.Type}}{{else}}{{namespaceName .Type}}.vo.{{typeName .Type}}{{end}};
+{{end -}}
+
+{{"\t}"}}
 }
 {{end}}
