@@ -1,8 +1,10 @@
 package codegen
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -71,41 +73,33 @@ func NewGenerator(config *GeneratorConfig) (*Generator, error) {
 	}, nil
 }
 
-func isValidDirectory(path string) bool {
-	if stat, err := os.Stat(path); os.IsNotExist(err) || !stat.IsDir() {
-		return false
-	}
-	return true
-}
-
-func (gen *Generator) OutputServiceDescription(descr *ServiceDescription) error {
+func (gen *Generator) OutputServiceDescription(descr *ServiceDescription) (int, error) {
+	totalChanges := 0
 	for _, namespace := range descr.Namespaces {
-		err := gen.outputNamespace(gen.outputPath, namespace)
+		numChanges, err := gen.outputNamespace(gen.outputPath, namespace)
+		totalChanges += numChanges
 		if err != nil {
-			return err
+			return totalChanges, err
 		}
 	}
 
-	return nil
+	return totalChanges, nil
 }
 
-func joinNamespaceToOutputPath(outputPath string, namespace string) string {
-	if filepath.Base(outputPath) == namespace {
-		return outputPath
-	}
-
-	return filepath.Join(outputPath, namespace)
-}
-
-func (gen *Generator) outputNamespace(outputPath string, namespace *Namespace) error {
+func (gen *Generator) outputNamespace(outputPath string, namespace *Namespace) (int, error) {
+	numChanges := 0
 	namespacePath := joinNamespaceToOutputPath(outputPath, namespace.Name)
 	os.Mkdir(namespacePath, os.ModePerm)
 
 	// datatype
 	for _, dataType := range namespace.DataTypes {
-		err := gen.outputDataType(namespacePath, dataType)
+		filename, changed, err := gen.outputDataType(namespacePath, dataType)
 		if err != nil {
-			return err
+			return 0, err
+		}
+		if changed {
+			numChanges++
+			fmt.Printf("\n - %s.%s", namespace.Name, filename)
 		}
 	}
 
@@ -121,24 +115,29 @@ func (gen *Generator) outputNamespace(outputPath string, namespace *Namespace) e
 				typ.RelativePath = strings.Replace(typ.RelativePath, "../../", "./", -1)
 			}
 		}
-		err := gen.outputService(servicePath, service)
+		filename, changed, err := gen.outputService(servicePath, service)
 		if err != nil {
-			return err
+			return 0, err
+		}
+		if changed {
+			numChanges++
+			fmt.Printf("\n - %s", filename)
 		}
 	}
 
 	// sub-namespaces
 	for _, namespace := range namespace.Namespaces {
-		err := gen.outputNamespace(namespacePath, namespace)
+		numSubChanges, err := gen.outputNamespace(namespacePath, namespace)
+		numChanges += numSubChanges
 		if err != nil {
-			return err
+			return 0, err
 		}
 	}
 
-	return nil
+	return numChanges, nil
 }
 
-func (gen *Generator) outputDataType(outputPath string, dataType *DataType) error {
+func (gen *Generator) outputDataType(outputPath string, dataType *DataType) (string, bool, error) {
 	var dataTypeFilename = dataType.Name + gen.config.FileExtension
 	var dataTypePath string
 	if gen.config.DataTypePathSubfolder != "" {
@@ -147,29 +146,72 @@ func (gen *Generator) outputDataType(outputPath string, dataType *DataType) erro
 	} else {
 		dataTypePath = outputPath
 	}
-
 	dataTypeFilePath := filepath.Join(dataTypePath, dataTypeFilename)
-	file, err := os.Create(dataTypeFilePath)
-	if err != nil {
-		return err
-	}
 
-	fmt.Println(dataTypeFilePath)
-	defer file.Close()
-
-	return gen.templates.ExecuteTemplate(file, templateNameDataType, dataType)
+	changed, err := gen.outputTemplateIfChanged(dataTypeFilePath, templateNameDataType, dataType)
+	return dataTypeFilename, changed, err
 }
 
-func (gen *Generator) outputService(outputPath string, service *Service) error {
+func (gen *Generator) outputService(outputPath string, service *Service) (string, bool, error) {
 	serviceFilename := service.Name + gen.config.FileExtension
 	servicePath := filepath.Join(outputPath, serviceFilename)
-	file, err := os.Create(servicePath)
-	if err != nil {
-		return err
+	changed, err := gen.outputTemplateIfChanged(servicePath, templateNameService, service)
+	return serviceFilename, changed, err
+}
+
+func (gen *Generator) outputTemplateIfChanged(filename string, templateName string, data interface{}) (bool, error) {
+	// get previous contents of file
+	previousOutput := ""
+	exists := exists(filename)
+	if exists {
+		var filebytes []byte
+		var err error
+		if filebytes, err = ioutil.ReadFile(filename); err != nil {
+			return false, err
+		}
+		previousOutput = string(filebytes)
 	}
 
-	fmt.Println(servicePath)
-	defer file.Close()
+	// template --> string
+	var buffer bytes.Buffer
+	if err := gen.templates.ExecuteTemplate(&buffer, templateName, data); err != nil {
+		return false, err
+	}
+	output := buffer.String()
 
-	return gen.templates.ExecuteTemplate(file, templateNameService, service)
+	// no change
+	if exists && output == previousOutput {
+		return false, nil
+	}
+
+	// write to os
+	buffer.Reset()
+	buffer.WriteString(output)
+	if err := ioutil.WriteFile(filename, buffer.Bytes(), os.ModePerm); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func exists(filename string) bool {
+	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		return false
+	}
+	return true
+}
+
+func isValidDirectory(path string) bool {
+	if stat, err := os.Stat(path); os.IsNotExist(err) || !stat.IsDir() {
+		return false
+	}
+	return true
+}
+
+func joinNamespaceToOutputPath(outputPath string, namespace string) string {
+	if filepath.Base(outputPath) == namespace {
+		return outputPath
+	}
+
+	return filepath.Join(outputPath, namespace)
 }

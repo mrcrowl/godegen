@@ -11,13 +11,13 @@ import (
 	"github.com/bradfitz/slice"
 )
 
-type TypeMapperFn func(reflect.Type, bool) string
-type NamespaceMapperFn func(string) string
+type typeMapperFunc func(reflect.Type, bool) string
+type namespaceMapperFunc func(string) string
 
 type ServiceDescriber struct {
 	assemblyFile    *reflect.Assembly
-	typeMapper      TypeMapperFn
-	namespaceMapper NamespaceMapperFn
+	typeMapper      typeMapperFunc
+	namespaceMapper namespaceMapperFunc
 }
 
 func (res *ServiceDescriber) GetTypesMatchingPattern(globPattern string) []reflect.Type {

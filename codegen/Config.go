@@ -46,10 +46,10 @@ func LoadConfig(configFilename string) (*GeneratorConfig, error) {
 	return config, nil
 }
 
-func (config *GeneratorConfig) createTypeMapper() TypeMapperFn {
+func (config *GeneratorConfig) createTypeMapper() typeMapperFunc {
 	var typeMap = config.TypeMap
 	var namespaceMapperFn = config.createNamespaceMapper()
-	var typeMapperFn TypeMapperFn
+	var typeMapperFn typeMapperFunc
 	var defaultFormat = config.CollectionFormats["default"]
 	var systemFormat = config.CollectionFormats["system"]
 	var defaultFormatContainsVariable = strings.Contains(defaultFormat, "%")
@@ -91,7 +91,7 @@ func (config *GeneratorConfig) createTypeMapper() TypeMapperFn {
 	return typeMapperFn
 }
 
-func (config *GeneratorConfig) createNamespaceMapper() NamespaceMapperFn {
+func (config *GeneratorConfig) createNamespaceMapper() namespaceMapperFunc {
 	namespaceMap := config.NamespaceMap
 	return func(namespace string) string {
 		for prefix, replacement := range namespaceMap {

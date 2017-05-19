@@ -1,0 +1,1 @@
+go build -o codegen.exe -ldflags "-s -w"
