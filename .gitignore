@@ -1,4 +1,5 @@
 debug
 codegen.exe
 godegen.exe
+package.log
 *.txt
