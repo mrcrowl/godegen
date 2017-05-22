@@ -4,13 +4,14 @@ echo Package: > package.log
 echo ======== > package.log
 
 call build.bat > package.log
+set dest=c:\WF\lp\tools\WeborbCodegen\libs\codegen
 
-FOR %%a in (
-    "codegen.exe"
-    "formats"
-    "*.json"
-) DO (
-    xcopy /s /y /f "%%~a" c:\WF\lp\tools\WeborbCodegen\libs\codegen\ >> package.log
-    echo: >> package.log
-)
+xcopy /y /f "codegen.exe" "%dest%" >> package.log
+xcopy /y /f "*.json" "%dest%" >> package.log
+if not exist "%dest%\formats" mkdir "%dest%\formats" >> package.log
+if not exist "%dest%\formats\as3" mkdir "%dest%\formats\as3" >> package.log
+if not exist "%dest%\formats\typescript" mkdir "%dest%\formats\typescript" >> package.log
+xcopy /s /y /f formats\*.gotmpl "%dest%\formats" >> package.log
+
+echo: >> package.log
 echo Done. See package.log for details

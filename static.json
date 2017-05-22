@@ -1,0 +1,51 @@
+{
+    "assembly": "C:\\WF\\LP\\server\\EBS_Deployment\\bin\\Classes.dll",
+    "servicePattern": [
+        "nz.co.LanguagePerfect.Services.PortalsAsync.App.AppServicesPortal",
+        "nz.co.LanguagePerfect.Services.PortalsAsync.App.UserDetailsPortal",
+        "nz.co.LanguagePerfect.Services.PortalsAsync.Website.GenericScoreboardPortal",
+        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.CPSessionsPortal"
+    ],
+    "outputPath": "C:\\WF\\LP\\web\\static.languageperfect.com\\scripts\\services",
+    "templatesPath": ".\\formats\\typescript",
+    "fileExtension": ".ts",
+    "keepServicesInNamespace": false,
+    "typeMap": {
+        "System.Boolean": "boolean",
+        "System.Byte": "number",
+        "System.Char": "string",
+        "System.UInt16": "number",
+        "System.UInt32": "number",
+        "System.UInt64": "number",
+        "System.SByte": "number",
+        "System.Int16": "number",
+        "System.Int32": "number",
+        "System.Int64": "number",
+        "System.Decimal": "number",
+        "System.Double": "number",
+        "System.DateTime": "Date",
+        "System.Guid": "string",
+        "System.Nullable<System.Boolean>": "boolean",
+        "System.Nullable<System.Byte>": "number",
+        "System.Nullable<System.Char>": "string",
+        "System.Nullable<System.SByte>": "number",
+        "System.Nullable<System.Int16>": "number",
+        "System.Nullable<System.Int32>": "number",
+        "System.Nullable<System.Int64>": "number",
+        "System.Nullable<System.Decimal>": "number",
+        "System.Nullable<System.Double>": "number",
+        "System.Nullable<System.DateTime>": "Date",
+        "System.Nullable<System.Guid>": "string",
+        "System.String": "string",
+        "System.Object": "any",
+        "System.ValueType": "any",
+        "System.Void": "void"
+    },
+    "namespaceMap": {
+        "nz.co.LanguagePerfect.Services.": ""
+    },
+    "collectionFormats": {
+        "system": "%s[]",
+        "default": "Array<%s>"
+    }
+}

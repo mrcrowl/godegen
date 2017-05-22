@@ -82,6 +82,11 @@ func readStandAloneSig(sr *ShapeReader, rowNumber uint32, streams *MetadataStrea
 	return nil
 }
 
+func readTypeSpec(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	streams.blobHeap.ReadAndDiscard(sr)
+	return nil
+}
+
 func readEventMap(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
 	readSimpleIndex(sr, tables, TableIdxTypeDef)
 	readSimpleIndex(sr, tables, TableIdxEvent)
@@ -95,6 +100,32 @@ func readEvent(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tabl
 	return nil
 }
 
+func readMethodImpl(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	readSimpleIndex(sr, tables, TableIdxTypeDef)
+	readCodedIndex(sr, tables, TableIdxMethodDef, TableIdxMemberRef)
+	readCodedIndex(sr, tables, TableIdxMethodDef, TableIdxMemberRef)
+	return nil
+}
+
+func readModuleRef(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	streams.stringHeap.ReadString(sr)
+	return nil
+}
+
+func readImplMap(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	sr.ReadBytes(2)
+	readCodedIndex(sr, tables, TableIdxField, TableIdxMethodDef)
+	streams.stringHeap.ReadString(sr)
+	readSimpleIndex(sr, tables, TableIdxModuleRef)
+	return nil
+}
+
+func readFieldRVA(sr *ShapeReader, rowNumber uint32, streams *MetadataStreams, tables *TableSet) IRow {
+	sr.ReadBytes(4)
+	readSimpleIndex(sr, tables, TableIdxField)
+	return nil
+}
+
 var rowReaderFns = [maxTableCount]RowReaderFn{
 	0x00: readModuleRow,
 	0x01: readTypeRefRow,
@@ -102,30 +133,30 @@ var rowReaderFns = [maxTableCount]RowReaderFn{
 	0x04: readFieldRow,
 	0x06: readMethodDefRow,
 	0x08: readParamRow,
-	0x09: readInterfaceImpl,                            // InterfaceImpl
-	0x0A: readMemberRef,                                // MemberRef
-	0x0B: readConstRow,                                 // Const
-	0x0C: readCustomAttribute,                          // CustomAttribute
-	0x0D: readFieldMarshal,                             // FieldMarshal
-	0x0E: readDeclSecurity,                             // DeclSecurity
-	0x0F: readClassLayout,                              // ClassLayout
-	0x10: readFieldLayout,                              // FieldLayout
-	0x11: readStandAloneSig,                            // StandAloneSig
-	0x12: readEventMap,                                 // EventMap
-	0x14: readEvent,                                    // Event
-	0x15: readPropertyMapRow,                           // PropertyMap
-	0x17: readPropertyRow,                              // Property
-	0x18: readMethodSemanticsRow,                       // MethodSemantics
-	0x19: createPlaceholderReaderOfSize(2 + 2 + 2),     // MethodImpl
-	0x1A: createPlaceholderReaderOfSize(4),             // ModuleRef
-	0x1B: createPlaceholderReaderOfSize(4),             // TypeSpec
-	0x1C: createPlaceholderReaderOfSize(2 + 4 + 4 + 2), // ImplMap
-	0x1D: createPlaceholderReaderOfSize(4 + 2),         // FieldRVA
-	0x20: readAssemblyRow,                              // Assembly
-	0x21: createPlaceholderReaderOfSize(4),             // AssemblyProcessor
-	0x22: createPlaceholderReaderOfSize(4 + 4 + 4),     // AssemblyOS
-	0x23: readAssemblyRefRow,                           // AssemblyRef
-	0x2A: readGenericParamRow,                          // GenericParam
+	0x09: readInterfaceImpl,                        // InterfaceImpl
+	0x0A: readMemberRef,                            // MemberRef
+	0x0B: readConstRow,                             // Const
+	0x0C: readCustomAttribute,                      // CustomAttribute
+	0x0D: readFieldMarshal,                         // FieldMarshal
+	0x0E: readDeclSecurity,                         // DeclSecurity
+	0x0F: readClassLayout,                          // ClassLayout
+	0x10: readFieldLayout,                          // FieldLayout
+	0x11: readStandAloneSig,                        // StandAloneSig
+	0x12: readEventMap,                             // EventMap
+	0x14: readEvent,                                // Event
+	0x15: readPropertyMapRow,                       // PropertyMap
+	0x17: readPropertyRow,                          // Property
+	0x18: readMethodSemanticsRow,                   // MethodSemantics
+	0x19: readMethodImpl,                           // MethodImpl -- createPlaceholderReaderOfSize(4 + 2 + 2)
+	0x1A: readModuleRef,                            // ModuleRef
+	0x1B: readTypeSpec,                             // TypeSpec
+	0x1C: readImplMap,                              // ImplMap
+	0x1D: readFieldRVA,                             // FieldRVA
+	0x20: readAssemblyRow,                          // Assembly
+	0x21: createPlaceholderReaderOfSize(4),         // AssemblyProcessor
+	0x22: createPlaceholderReaderOfSize(4 + 4 + 4), // AssemblyOS
+	0x23: readAssemblyRefRow,                       // AssemblyRef
+	0x2A: readGenericParamRow,                      // GenericParam
 	// createPlaceholderReaderOfSize(2 + 4 + 4),        // Constant
 }
 

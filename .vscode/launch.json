@@ -11,7 +11,7 @@
             "host": "127.0.0.1",
             "program": "${workspaceRoot}",
             "env": {},
-            "args": ["-service=blah", "typescript"],
+            "args": ["-service=nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.FeedbackPortal", "typescript"],
             "showLog": true
         }
     ]
