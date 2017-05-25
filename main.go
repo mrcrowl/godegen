@@ -51,6 +51,10 @@ func main() {
 		serviceTypes := describer.GetTypesMatchingPattern(servicePattern)
 		for _, serviceType := range serviceTypes {
 			serviceName := getServiceName(serviceType.FullName())
+			if !strings.Contains(serviceName, "PortalsAsync") {
+				fmt.Println("ERROR: Not an async portal!")
+				continue
+			}
 			fmt.Printf("\n%s ", serviceName)
 			descr, _ := describer.DescribeType(serviceType)
 
