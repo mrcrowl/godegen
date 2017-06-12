@@ -6,7 +6,7 @@ import { JSONRPC } from "../utils/JSONRPC";
 {{range .ReferencedTypes}}import {{"{"}} {{.Name}}{{if .Alias }} as {{.Alias}}{{ end }} {{"}"}} from "{{.RelativePath}}/{{.Name}}";
 {{end}}
 
-var __instance: {{.Name}} = null;
+var __instance: {{.Name}} | undefined = undefined;
 
 /**
  * services.{{.Namespace}}.{{.Name}} [CODE-GEN]
@@ -15,7 +15,7 @@ export class {{.Name}} extends JSONRPC
 {
 	public static get instance()
     {
-        if (__instance === null)
+        if (!__instance)
         {
             __instance = new {{.Name}}();
         }
@@ -30,10 +30,10 @@ export class {{.Name}} extends JSONRPC
 		super(Config.serviceEndpointURL(), service, true);
 	}
 	{{range .Methods}}{{$method := .}}
-	{{.Name}}({{range .Args}}{{.Name}}:{{.TypeName}}, {{end}}callback:Callback<{{.TypeName}}>, thisObj?:any):void
+	{{.Name}}({{range .Args}}{{.Name}}: {{.TypeName}}, {{end}}callback?: Callback<{{.TypeName}}>, thisObj?: any): Promise<{{.TypeName}}>
 	{
 		var args: any[] = [{{range $i, $arg := .Args}}{{if $i}}, {{end}}{{.Name}}{{end}}];
-		this.callRemote("{{$method.Name}}", args, callback, thisObj);
+		return this.callRemote("{{$method.Name}}", args, callback, thisObj);
 	}
 	{{end -}}
 {{"\n"}}}{{end}}
