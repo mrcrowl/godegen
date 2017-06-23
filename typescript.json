@@ -20,7 +20,8 @@
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.SchoolsPortal",   
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.StatsPortal",   
         "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.UserTasksPortal",
-        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.UsersPortal"
+        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.UsersPortal",
+        "nz.co.LanguagePerfect.Services.PortalsAsync.ControlPanel.AdhocPortal"
     ],
     "outputPath": "C:\\WF\\LP\\web\\App\\services",
     "templatesPath": ".\\formats\\typescript",
