@@ -22,6 +22,7 @@ type GeneratorConfig struct {
 	NamespaceMap            map[string]string `json:"namespaceMap"`
 	CollectionFormats       map[string]string `json:"collectionFormats"`
 	KeepServicesInNamespace bool              `json:"keepServicesInNamespace"`
+	ServiceRelocationMap    map[string]string `json:"serviceRelocationMap"`
 }
 
 // GeneratorConfigCollectionFormats are the collection formats used for arrays/lists
@@ -47,6 +48,14 @@ func LoadConfig(configFilename string) (*GeneratorConfig, error) {
 		return nil, errors.New("Invalid JSON in config file: " + err.Error())
 	}
 	return config, nil
+}
+
+func (config *GeneratorConfig) getEnumType() string {
+	if mappedName, found := config.TypeMap["System.Enum"]; found {
+		return mappedName
+	}
+
+	return "string"
 }
 
 func (config *GeneratorConfig) createTypeMapper() typeMapperFunc {
@@ -81,7 +90,7 @@ func (config *GeneratorConfig) createTypeMapper() typeMapperFunc {
 
 		// special handling for enum
 		if isEnum(typ) {
-			return "string"
+			return config.getEnumType()
 		}
 
 		if nameOnly {
