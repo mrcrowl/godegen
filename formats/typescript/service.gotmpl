@@ -30,10 +30,10 @@ export class {{.Name}} extends JSONRPC
 		super(Config.serviceEndpointURL(), service, true);
 	}
 	{{range .Methods}}{{$method := .}}
-	{{.Name}}({{range .Args}}{{.Name}}: {{.TypeName}}, {{end}}callback?: Callback<{{.TypeName}}>, thisObj?: any): Promise<{{.TypeName}}>
+	{{.Name}}({{range .Args}}{{.Name}}: {{.TypeName}}, {{end}}callback?: Callback<{{.TypeName}}>, thisObj?: any, allowRetry: boolean = true): Promise<{{.TypeName}}>
 	{
 		var args: any[] = [{{range $i, $arg := .Args}}{{if $i}}, {{end}}{{.Name}}{{end}}];
-		return this.callRemote("{{$method.Name}}", args, callback, thisObj);
+		return this.callRemote("{{$method.Name}}", args, callback, thisObj, allowRetry);
 	}
 	{{end -}}
 {{"\n"}}}{{end}}
