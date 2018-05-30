@@ -84,6 +84,9 @@ func (set *TableSet) GetRows(tableIndex TableIdx) []IRow {
 func (set *TableSet) readAll(streams *MetadataStreams) {
 	tablesReader := streams.tildeStream.GetTablesReader()
 	for _, table := range set.tables {
+		if table == nil {
+			continue
+		}
 		// fmt.Printf("%v: %v\n", table.tableIndex, table.numRows)
 		table.readRows(tablesReader, streams, set)
 	}
@@ -195,6 +198,9 @@ func (set *TableSet) useBigIndex(tableIndex TableIdx) bool {
 
 func (set *TableSet) GetRowCount(tableIndex TableIdx) uint32 {
 	if tableIndex < maxTableCount {
+		if set.tables[tableIndex] == nil {
+			return 0
+		}
 		return set.tables[tableIndex].numRows
 	}
 	return 0

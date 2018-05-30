@@ -11,11 +11,12 @@ import (
 var maxServicePatternLen = 50
 
 func usage() {
-	fmt.Println("Usage: codegen.exe  [-service=glob] <configFile>")
+	fmt.Println("Usage: codegen.exe  [-service=glob] [-assembly=filepath] <configFile>")
 }
 
 func main() {
 	serviceName := flag.String("service", "", "")
+	assemblyName := flag.String("assembly", "", "")
 	flag.Parse()
 
 	configName := flag.Arg(0)
@@ -32,6 +33,10 @@ func main() {
 
 	if (*serviceName) != "" {
 		config.ServicePattern = []string{*serviceName}
+	}
+
+	if (*assemblyName) != "" {
+		config.Assembly = *assemblyName
 	}
 
 	describer, err := codegen.NewServiceDescriber(config)
@@ -51,8 +56,13 @@ func main() {
 		serviceTypes := describer.GetTypesMatchingPattern(servicePattern)
 		for _, serviceType := range serviceTypes {
 			serviceName := getServiceName(serviceType.FullName())
-			if !strings.Contains(serviceName, "PortalsAsync") {
-				fmt.Println("ERROR: Not an async portal!")
+			invalidServiceName := !strings.HasPrefix(serviceName, "EP.API") &&
+				!strings.Contains(serviceName, "PortalsAsync") &&
+				!strings.Contains(serviceName, "CodeGenHelper") &&
+				config.FileExtension == ".ts"
+
+			if invalidServiceName {
+				fmt.Println("ERROR: Not a valid portal (must contain 'PortalsAsync' or 'CodeGenHelper' or start with 'EP.API')")
 				continue
 			}
 			fmt.Printf("\n%s ", serviceName)

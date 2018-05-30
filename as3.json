@@ -36,6 +36,7 @@
         "System.Decimal": "Number",
         "System.Double": "Number",
         "System.DateTime": "Date",
+        "System.Enum": "int",
         "System.Nullable<System.Byte>": "Number",
         "System.Nullable<System.SByte>": "Number",
         "System.Nullable<System.Int16>": "Number",

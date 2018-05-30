@@ -109,13 +109,19 @@ func (gen *Generator) outputNamespace(outputPath string, namespace *Namespace) (
 	// service
 	for _, service := range namespace.Services {
 		var servicePath string
+		var serviceRelocationMap map[string]string
 		if gen.config.KeepServicesInNamespace {
 			servicePath = namespacePath
 		} else {
 			// hacky workaround for changing portals output path
 			servicePath = gen.config.OutputPath
-			for _, typ := range service.ReferencedTypes {
-				typ.RelativePath = strings.Replace(typ.RelativePath, "../../", "./", -1)
+			serviceRelocationMap = gen.config.ServiceRelocationMap
+			if serviceRelocationMap != nil {
+				for _, typ := range service.ReferencedTypes {
+					for find, replace := range serviceRelocationMap {
+						typ.RelativePath = strings.Replace(typ.RelativePath, find, replace, -1)
+					}
+				}
 			}
 		}
 		filename, changed, err := gen.outputService(servicePath, service)
