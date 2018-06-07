@@ -1,11 +1,16 @@
 {
     "assembly": "C:\\WF\\LP\\server\\CompetitionsInterface\\bin\\Release\\CompetitionsInterface.dll",
-    "servicePattern": ["EP.API.CompetitionsPortal"],
+    "servicePattern": [
+        "EP.API.CompetitionsPortal"
+    ],
     "outputPath": "C:\\WF\\LP\\web\\App\\services",
     "templatesPath": ".\\formats\\typescript",
     "fileExtension": ".ts",
     "keepServicesInNamespace": false,
-    "serviceRelocationMap": { "../": "./EP/" },
+    "serviceRelocationMap": {
+        "../../": "./",
+        "../": "./EP/"
+    },
     "typeMap": {
         "System.Boolean": "boolean",
         "System.Byte": "number",
@@ -23,24 +28,26 @@
         "System.DateTime": "Date",
         "System.Enum": "number",
         "System.Guid": "string",
-        "System.Nullable<System.Boolean>": "boolean",
-        "System.Nullable<System.Byte>": "number",
-        "System.Nullable<System.Char>": "string",
-        "System.Nullable<System.SByte>": "number",
-        "System.Nullable<System.Int16>": "number",
-        "System.Nullable<System.Int32>": "number",
-        "System.Nullable<System.Int64>": "number",
-        "System.Nullable<System.Decimal>": "number",
-        "System.Nullable<System.Single>": "number",
-        "System.Nullable<System.Double>": "number",
-        "System.Nullable<System.DateTime>": "Date",
-        "System.Nullable<System.Guid>": "string",
+        "System.Nullable<System.Boolean>": "boolean | null",
+        "System.Nullable<System.Byte>": "number | null",
+        "System.Nullable<System.Char>": "string | null",
+        "System.Nullable<System.SByte>": "number | null",
+        "System.Nullable<System.Int16>": "number | null",
+        "System.Nullable<System.Int32>": "number | null",
+        "System.Nullable<System.Int64>": "number | null",
+        "System.Nullable<System.Decimal>": "number | null",
+        "System.Nullable<System.Single>": "number | null",
+        "System.Nullable<System.Double>": "number | null",
+        "System.Nullable<System.DateTime>": "Date | null",
+        "System.Nullable<System.Guid>": "string | null",
         "System.String": "string",
         "System.Object": "any",
         "System.ValueType": "any",
         "System.Void": "void"
     },
-    "namespaceMap": {},
+    "namespaceMap": {
+        "nz.co.LanguagePerfect.Services.": ""
+    },
     "collectionFormats": {
         "system": "%s[]",
         "default": "Array<%s>"
