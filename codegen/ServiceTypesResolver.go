@@ -1,7 +1,7 @@
 package codegen
 
 import (
-	"godegen/reflect"
+	"educationperfect.com/godegen/reflect"
 
 	"github.com/bradfitz/slice"
 )

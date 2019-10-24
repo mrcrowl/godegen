@@ -2,7 +2,7 @@ package reflect
 
 import (
 	"fmt"
-	"godegen/cli"
+	"educationperfect.com/godegen/cli"
 
 	"github.com/bradfitz/slice"
 	"github.com/ryanuber/go-glob"

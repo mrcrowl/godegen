@@ -2,7 +2,7 @@ package reflect
 
 import (
 	"bytes"
-	"godegen/cli"
+	"educationperfect.com/godegen/cli"
 )
 
 type MemberAccess uint8

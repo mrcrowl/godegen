@@ -1,6 +1,6 @@
 package reflect
 
-import "godegen/cli"
+import "educationperfect.com/godegen/cli"
 
 type Field struct {
 	name         string

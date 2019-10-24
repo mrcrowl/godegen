@@ -1,7 +1,7 @@
 package reflect
 
 import (
-	"godegen/cli"
+	"educationperfect.com/godegen/cli"
 	"strings"
 )
 

@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"godegen/codegen"
+	"educationperfect.com/godegen/codegen"
 	"os"
 	"strings"
 )

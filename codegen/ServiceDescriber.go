@@ -2,7 +2,7 @@ package codegen
 
 import (
 	"errors"
-	"godegen/reflect"
+	"educationperfect.com/godegen/reflect"
 	"path/filepath"
 	"strings"
 

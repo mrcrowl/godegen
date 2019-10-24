@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"godegen/reflect"
+	"educationperfect.com/godegen/reflect"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
